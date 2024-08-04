@@ -22,7 +22,7 @@ jobs:
 
       - name: Build Docs Website
         run: | 
-          ls docs
+          ls
 
       # - uses: actions/checkout@v3
       #   with:
