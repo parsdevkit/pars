@@ -14,5 +14,4 @@ mkdocs-material
 mkdocs-material-extensions
 mkdocs-mermaid2-plugin
 mkdocs-minify-plugin
-mkdocs-plugins
 mkdocs-static-i18n
