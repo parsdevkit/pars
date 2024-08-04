@@ -20,7 +20,7 @@ jobs:
           TAG_NAME=$(echo "${{ github.ref }}" | sed 's/refs\/tags\///')
           echo "tag_name=$TAG_NAME" >> $GITHUB_ENV
 
-          - uses: actions/checkout@v3
+      - uses: actions/checkout@v3
         with:
           fetch-depth: 0
       - uses: actions/setup-python@v4
