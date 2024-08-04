@@ -1,0 +1,33 @@
+{% macro render_tree_item(item) %}
+<li>
+    {{ item.name }}
+    {% if item.is_folder %}
+        <ul>
+            {% for child in item.children %}
+                {{ render_tree_item(child) }}
+            {% endfor %}
+        </ul>
+    {% else %}
+        <span class="icon-container">
+            {% if item.view %}
+                <a href="{{ item.view }}" target="_blank"><i class="fas fa-eye"></i> View</a>
+            {% endif %}
+            {% if item.download %}
+                <a href="{{ item.download }}" download><i class="fas fa-download"></i> Download</a>
+            {% endif %}
+            {% if item.download_7z %}
+                <a href="{{ item.download_7z }}" download><i class="fas fa-file-archive"></i> 7Z</a>
+            {% endif %}
+            {% if item.download_zip %}
+                <a href="{{ item.download_zip }}" download><i class="fas fa-file-archive"></i> ZIP</a>
+            {% endif %}
+            {% if item.download_rar %}
+                <a href="{{ item.download_rar }}" download><i class="fas fa-file-archive"></i> RAR</a>
+            {% endif %}
+            {% if item.download_targz %}
+                <a href="{{ item.download_targz }}" download><i class="fas fa-file-archive"></i> TAR.GZ</a>
+            {% endif %}
+        </span>
+    {% endif %}
+</li>
+{% endmacro %}

@@ -1,0 +1,31 @@
+/* :root > * {
+  --md-code-hl-string-color: #0FF1CE;
+} */
+
+/* .highlight {
+    color: #cf6527;
+  } */
+
+/* 
+  .md-typeset .admonition,
+  .md-typeset details {
+    border-width: 0;
+    border-left-width: 4px;
+  } */
+
+  .youtube {
+    color: #EE0F0F;
+  }
+
+
+  @keyframes heart {
+    0%, 40%, 80%, 100% {
+      transform: scale(1);
+    }
+    20%, 60% {
+      transform: scale(1.15);
+    }
+  }
+  .heart {
+    animation: heart 1000ms infinite;
+  }

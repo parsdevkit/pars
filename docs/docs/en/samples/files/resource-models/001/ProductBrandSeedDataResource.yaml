@@ -1,0 +1,18 @@
+type: Resource
+kind: Data
+name: ProductBrand_SeedData
+metadata:
+specifications:
+  name: ProductBrand
+  set: EShopping
+  data:
+    - id: 9ae4671e-8d35-522e-8315-dd562f19f102
+      name: Nike
+    - id: 00470e36-9c22-58e5-8436-93391a6f4baa
+      name: Apple
+    - id: 3f137853-eb58-52b3-a0f0-be81dbf690ef
+      name: Samsung
+    - id: 05a1fa28-d547-57fd-a66d-e9a3a31ca736
+      name: Adidas
+    - id: 153c2af3-3943-5f1b-aa67-d31c72f476e2
+      name: Sony

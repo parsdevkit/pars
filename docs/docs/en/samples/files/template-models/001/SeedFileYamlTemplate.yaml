@@ -1,0 +1,13 @@
+type: Template
+kind: File
+name: SeedFileYaml_Template
+metadata:
+  tags:
+specifications:
+  name: SeedFile_Yaml
+  output: "{{.Resource.Name}}.yaml"
+  set: EShopping
+  layers:
+  template:
+    content: |
+      {{ .Resource.Data }}

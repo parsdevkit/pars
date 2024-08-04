@@ -1,0 +1,16 @@
+multilanguage sample
+https://github.com/squidfunk/mkdocs-material/discussions/2346
+
+
+installation sample
+https://docs.flutter.dev/get-started/install
+
+releases sample
+https://docs.flutter.dev/release/archive
+
+
+related documents section eklenebilir
+
+
+command samples
+https://docs.docker.com/reference/cli/docker/compose/build/

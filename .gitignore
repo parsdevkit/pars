@@ -1,0 +1,34 @@
+/binaries/**
+/temp/**
+/workspace**/**
+pars*.db
+
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+
+
+*.out
+
+go.work
+
+
+
+*.swp
+*.*~
+project.lock.json
+.DS_Store
+*.pyc
+
+# Visual Studio Code
+.vscode
+
+# User-specific files
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+samples/**

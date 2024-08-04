@@ -1,0 +1,29 @@
+type: Project
+kind: Application
+name: Example.DotnetProject
+metadata:
+  tags: [backend, dotnet]
+specifications:
+  name: DotnetProject
+  platform:
+    type: Dotnet
+    version: 6
+  runtime:
+    type: Dotnet
+    version: 6
+  language:
+    type: CSharp
+    version: 9
+  project_type: webapi
+  package: com.example.dotnetproject
+  path: /services/dotnetproject
+  configuration:
+    layers:
+    - name: Library:Data:BaseEntity
+      path: entities
+      package: entities
+    dependencies:
+    - name: Microsoft.EntityFrameworkCore
+      version: 5.0.0
+    - name: Microsoft.AspNetCore.Mvc
+      version: 2.2.0
