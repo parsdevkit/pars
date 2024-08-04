@@ -29,7 +29,7 @@ jobs:
       - name: Build Docs Website
         run: |
           cd docs
-          ls
+          ls docs
 
       # - uses: actions/setup-python@v4
       #   with:
