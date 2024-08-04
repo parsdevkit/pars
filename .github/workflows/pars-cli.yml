@@ -56,10 +56,8 @@ jobs:
           go build -o release/pars-windows-amd64.exe ./pars.go
 
       - name: Archive Windows Build
-        run: |
-          Add-Type -AssemblyName System.IO.Compression.FileSystem
-          [System.IO.Compression.ZipFile]::CreateFromDirectory('release', 'release/pars-windows-amd64.zip')
-        shell: pwsh
+        run: zip release/pars-windows-amd64.zip ./* -r
+
 
       - name: Upload Windows Artifact
         uses: actions/upload-artifact@v2
@@ -126,6 +124,16 @@ jobs:
           asset_path: ./release/pars-windows-amd64.zip
           asset_name: pars-windows-amd64.zip
           asset_content_type: application/zip
+
+      - name: Upload Windows Release Asset (exe)
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./release/pars-windows-amd64.exe
+          asset_name: pars-windows-amd64.exe
+          asset_content_type: application/octet-stream
 
   deploy-documents:
     needs: [create_release]
