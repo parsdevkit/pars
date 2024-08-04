@@ -35,7 +35,7 @@ jobs:
           git config --global user.name "Docs Deploy"
           git config --global user.email "docs.deploy@example.co.uk"
       - name: Build Docs Website
-        run: ls & cd ./docs/ & mike deploy --push --update-aliases ${{ env.tag_name }} latest
+        run: cd ./docs/ & ls & mike deploy --push --update-aliases ${{ env.tag_name }} latest
 
 
   # build-linux:
