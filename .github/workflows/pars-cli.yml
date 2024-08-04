@@ -27,9 +27,9 @@ jobs:
           echo "tag_name=$TAG_NAME" >> $GITHUB_ENV
 
       - name: Build Docs Website
+        working-directory: ./docs
         run: |
-          cd docs
-          ls docs
+          ls
 
       # - uses: actions/setup-python@v4
       #   with:
