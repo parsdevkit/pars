@@ -33,6 +33,7 @@ jobs:
         run: |
           pip install mkdocs-material
           pip install pillow cairosvg mike
+          pip install mkdocs-tree-plugin mkdocs-i18n-plugin mkdocs-ezglossary-plugin
       - name: Setup Docs Deploy
         run: |
           git config --global user.name "Docs Deploy"
