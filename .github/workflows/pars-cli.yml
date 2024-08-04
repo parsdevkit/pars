@@ -21,8 +21,7 @@ jobs:
           echo "tag_name=$TAG_NAME" >> $GITHUB_ENV
 
       - name: Build Docs Website
-        run: | 
-          ls
+        run: ls
 
       # - uses: actions/checkout@v3
       #   with:
