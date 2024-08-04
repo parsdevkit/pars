@@ -39,7 +39,6 @@ jobs:
       - name: Build Docs Website
         working-directory: ./docs
         run: | 
-          pip install -e .
           mike deploy --allow-empty --push --update-aliases ${{ env.tag_name }} latest
 
 
