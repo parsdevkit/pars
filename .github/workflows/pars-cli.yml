@@ -57,8 +57,9 @@ jobs:
 
       - name: Archive Windows Build
         run: |
-          cd release
-          zip pars-windows-amd64.zip pars-windows-amd64.exe
+          Add-Type -AssemblyName System.IO.Compression.FileSystem
+          [System.IO.Compression.ZipFile]::CreateFromDirectory('release', 'release/pars-windows-amd64.zip')
+        shell: pwsh
 
       - name: Upload Windows Artifact
         uses: actions/upload-artifact@v2
@@ -127,6 +128,7 @@ jobs:
           asset_content_type: application/zip
 
   deploy-documents:
+    needs: [create_release]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
