@@ -22,7 +22,6 @@ jobs:
 
       - name: Build Docs Website
         run: | 
-          cd docs
           ls docs
 
       # - uses: actions/checkout@v3
