@@ -56,7 +56,7 @@ jobs:
           go build -o release/pars-windows-amd64.exe ./pars.go
 
       - name: Archive Windows Build
-        run: zip release/pars-windows-amd64.zip ./* -r
+        run: Compress-Archive -Path release/* -Destination release/pars-windows-amd64.zip
 
 
       - name: Upload Windows Artifact
