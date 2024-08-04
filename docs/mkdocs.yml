@@ -3,7 +3,7 @@ site_url: https://docs.parsdevkit.net/
 site_description: Pars Documentation
 repo_url: https://github.com/parsdevkit/pars
 repo_name: parsdevkit/pars
-edit_uri: edit/main/docs/
+edit_uri: edit/main/docs/docs/
 nav:
   - Home: index.md
   - Getting started:
