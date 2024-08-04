@@ -26,10 +26,10 @@ jobs:
   #     - name: Build Linux x64
   #       run: |
   #         mkdir -p release
-  #         GOOS=linux GOARCH=amd64 go build -o release/pars-linux-amd64 ./pars.go
+  #         GOOS=linux GOARCH=amd64 go build -o release/pars ./pars.go
 
   #     - name: Archive Linux Build
-  #       run: tar -czvf release/pars-linux-amd64.tar.gz -C release pars-linux-amd64
+  #       run: tar -czvf release/pars-linux-amd64.tar.gz -C release pars
 
   #     - name: Upload Linux Artifact
   #       uses: actions/upload-artifact@v2
@@ -53,17 +53,24 @@ jobs:
           mkdir -p release
           set GOOS=windows
           set GOARCH=amd64
-          go build -o release/pars-windows-amd64.exe ./pars.go
+          go build -o release/pars.exe ./pars.go
 
-      - name: Archive Windows Build
-        run: Compress-Archive -Path release/* -Destination release/pars-windows-amd64.zip
+      # - name: Archive Windows Build
+      #   run: Compress-Archive -Path release/* -Destination release/pars-windows-amd64.zip
 
 
-      - name: Upload Windows Artifact
+      # - name: Upload Windows Artifact
+      #   uses: actions/upload-artifact@v2
+      #   with:
+      #     name: windows-build
+      #     path: release/pars-windows-amd64.zip
+
+
+      - name: Upload Windows Artifact (exe)
         uses: actions/upload-artifact@v2
         with:
           name: windows-build
-          path: release/pars-windows-amd64.zip
+          path: release/pars.exe
 
   create_release:
     # needs: [build-linux, build-windows]
@@ -93,17 +100,20 @@ jobs:
           name: windows-build
           path: release
 
-      - name: Create GitHub Release
-        id: create_release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          tag_name: ${{ env.tag_name }}
-          release_name: Release ${{ env.tag_name }}
-          body_path: docs/docs/en/setup/changelogs/${{ env.tag_name }}.md
-          draft: false
-          prerelease: false
+      - name: Get win ls
+        run: ls
+
+      # - name: Create GitHub Release
+      #   id: create_release
+      #   uses: actions/create-release@v1
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      #   with:
+      #     tag_name: ${{ env.tag_name }}
+      #     release_name: Release ${{ env.tag_name }}
+      #     body_path: docs/docs/en/setup/changelogs/${{ env.tag_name }}.md
+      #     draft: false
+      #     prerelease: false
 
       # - name: Upload Linux Release Asset
       #   uses: actions/upload-release-asset@v1
@@ -115,54 +125,54 @@ jobs:
       #     asset_name: pars-linux-amd64.tar.gz
       #     asset_content_type: application/gzip
 
-      - name: Upload Windows Release Asset
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./release/pars-windows-amd64.zip
-          asset_name: pars-windows-amd64.zip
-          asset_content_type: application/zip
-
-      # - name: Upload Windows Release Asset (exe)
+      # - name: Upload Windows Release Asset
       #   uses: actions/upload-release-asset@v1
       #   env:
       #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       #   with:
       #     upload_url: ${{ steps.create_release.outputs.upload_url }}
-      #     asset_path: ./release/pars-windows-amd64.exe
-      #     asset_name: pars-windows-amd64.exe
-      #     asset_content_type: application/octet-stream
+      #     asset_path: ./release/pars-windows-amd64.zip
+      #     asset_name: pars-windows-amd64.zip
+      #     asset_content_type: application/zip
 
-  deploy-documents:
-    needs: [create_release]
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
+      - name: Upload Windows Release Asset (exe)
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          fetch-depth: 0
-          sparse-checkout: 'docs/'
-          sparse-checkout-cone-mode: false
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./release/pars.exe
+          asset_name: pars.exe
+          asset_content_type: application/octet-stream
 
-      - name: Get Tag Name
-        id: get_tag_name
-        run: |
-          echo "Tag name is: ${{ github.ref }}"
-          TAG_NAME=$(echo "${{ github.ref }}" | sed 's/refs\/tags\///')
-          echo "tag_name=$TAG_NAME" >> $GITHUB_ENV
+  # deploy-documents:
+  #   needs: [create_release]
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/checkout@v3
+  #       with:
+  #         fetch-depth: 0
+  #         sparse-checkout: 'docs/'
+  #         sparse-checkout-cone-mode: false
 
-      - uses: actions/setup-python@v4
-        with:
-          python-version: 3.10.6
-      - name: Install Dependencies
-        run: |
-          pip install -r docs/requirements.txt
-      - name: Setup Docs Deploy
-        run: |
-          git config --global user.name "Docs Deploy"
-          git config --global user.email "docs.deploy@example.co.uk"
-      - name: Build Docs Website
-        working-directory: ./docs
-        run: | 
-          mike deploy --allow-empty --push --update-aliases ${{ env.tag_name }} latest
+  #     - name: Get Tag Name
+  #       id: get_tag_name
+  #       run: |
+  #         echo "Tag name is: ${{ github.ref }}"
+  #         TAG_NAME=$(echo "${{ github.ref }}" | sed 's/refs\/tags\///')
+  #         echo "tag_name=$TAG_NAME" >> $GITHUB_ENV
+
+  #     - uses: actions/setup-python@v4
+  #       with:
+  #         python-version: 3.10.6
+  #     - name: Install Dependencies
+  #       run: |
+  #         pip install -r docs/requirements.txt
+  #     - name: Setup Docs Deploy
+  #       run: |
+  #         git config --global user.name "Docs Deploy"
+  #         git config --global user.email "docs.deploy@example.co.uk"
+  #     - name: Build Docs Website
+  #       working-directory: ./docs
+  #       run: | 
+  #         mike deploy --allow-empty --push --update-aliases ${{ env.tag_name }} latest
