@@ -40,7 +40,7 @@ jobs:
         working-directory: ./docs
         run: | 
           pip install -e .
-          mike deploy --push --update-aliases ${{ env.tag_name }} latest
+          mike deploy --allow-empty --push --update-aliases ${{ env.tag_name }} latest
 
 
   # build-linux:
