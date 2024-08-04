@@ -10,17 +10,9 @@ on:
     - '!*-rc[0-9]+'
 
 jobs:
-  documents:
+  deploy:
     runs-on: ubuntu-latest
     steps:
-
-      - name: Get Tag Name
-        id: get_tag_name
-        run: |
-          echo "Tag name is: ${{ github.ref }}"
-          TAG_NAME=$(echo "${{ github.ref }}" | sed 's/refs\/tags\///')
-          echo "tag_name=$TAG_NAME" >> $GITHUB_ENV
-
       - uses: actions/checkout@v3
         with:
           fetch-depth: 0
@@ -36,11 +28,36 @@ jobs:
           git config --global user.name "Docs Deploy"
           git config --global user.email "docs.deploy@example.co.uk"
       - name: Build Docs Website
-        run: mike deploy --push --update-aliases ${{ env.tag_name }} latest
+        run: mike deploy --push --update-aliases ${{ github.event.release.tag_name }} latest
 
+  
+  build-linux:
+    runs-on: ubuntu-latest
 
-  # build-linux:
-  #   runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: '1.21'
+
+      - name: Build Linux x64
+        run: |
+          mkdir -p release
+          GOOS=linux GOARCH=amd64 go build -o release/pars-linux-amd64 ./pars.go
+
+      - name: Archive Linux Build
+        run: tar -czvf release/pars-linux-amd64.tar.gz -C release pars-linux-amd64
+
+      - name: Upload Linux Artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: linux-build
+          path: release/pars-linux-amd64.tar.gz
+
+  # build-windows:
+  #   runs-on: windows-latest
 
   #   steps:
   #     - uses: actions/checkout@v4
@@ -50,102 +67,77 @@ jobs:
   #       with:
   #         go-version: '1.21'
 
-  #     - name: Build Linux x64
+  #     - name: Build Windows x64
   #       run: |
   #         mkdir -p release
-  #         GOOS=linux GOARCH=amd64 go build -o release/pars-linux-amd64 ./pars.go
+  #         set GOOS=windows
+  #         set GOARCH=amd64
+  #         go build -o release/pars-windows-amd64.exe ./pars.go
 
-  #     - name: Archive Linux Build
-  #       run: tar -czvf release/pars-linux-amd64.tar.gz -C release pars-linux-amd64
+  #     - name: Archive Windows Build
+  #       run: tar -czvf release/pars-windows-amd64.tar.gz -C release pars-windows-amd64.exe
 
-  #     - name: Upload Linux Artifact
+  #     - name: Upload Windows Artifact
   #       uses: actions/upload-artifact@v2
   #       with:
-  #         name: linux-build
-  #         path: release/pars-linux-amd64.tar.gz
+  #         name: windows-build
+  #         path: release/pars-windows-amd64.tar.gz
 
-  # # build-windows:
-  # #   runs-on: windows-latest
+  create_release:
+    # needs: [build-linux, build-windows]
+    needs: [build-linux]
+    runs-on: ubuntu-latest
 
-  # #   steps:
-  # #     - uses: actions/checkout@v4
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-  # #     - name: Set up Go
-  # #       uses: actions/setup-go@v4
-  # #       with:
-  # #         go-version: '1.21'
+      - name: Get Tag Name
+        id: get_tag_name
+        run: |
+          echo "Tag name is: ${{ github.ref }}"
+          TAG_NAME=$(echo "${{ github.ref }}" | sed 's/refs\/tags\///')
+          echo "tag_name=$TAG_NAME" >> $GITHUB_ENV
 
-  # #     - name: Build Windows x64
-  # #       run: |
-  # #         mkdir -p release
-  # #         set GOOS=windows
-  # #         set GOARCH=amd64
-  # #         go build -o release/pars-windows-amd64.exe ./pars.go
+      - name: Download Linux Artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: linux-build
+          path: release
 
-  # #     - name: Archive Windows Build
-  # #       run: tar -czvf release/pars-windows-amd64.tar.gz -C release pars-windows-amd64.exe
+      # - name: Download Windows Artifact
+      #   uses: actions/download-artifact@v2
+      #   with:
+      #     name: windows-build
 
-  # #     - name: Upload Windows Artifact
-  # #       uses: actions/upload-artifact@v2
-  # #       with:
-  # #         name: windows-build
-  # #         path: release/pars-windows-amd64.tar.gz
+      - name: Create GitHub Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ env.tag_name }}
+          release_name: Release ${{ env.tag_name }}
+          body_path: docs/docs/en/setup/changelogs/${{ env.tag_name }}.md
+          draft: false
+          prerelease: false
 
-  # create_release:
-  #   # needs: [build-linux, build-windows]
-  #   needs: [build-linux]
-  #   runs-on: ubuntu-latest
+      - name: Upload Linux Release Asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./release/pars-linux-amd64.tar.gz
+          asset_name: pars-linux-amd64.tar.gz
+          asset_content_type: application/gzip
 
-  #   steps:
-  #     - name: Checkout code
-  #       uses: actions/checkout@v4
-
-  #     - name: Get Tag Name
-  #       id: get_tag_name
-  #       run: |
-  #         echo "Tag name is: ${{ github.ref }}"
-  #         TAG_NAME=$(echo "${{ github.ref }}" | sed 's/refs\/tags\///')
-  #         echo "tag_name=$TAG_NAME" >> $GITHUB_ENV
-
-  #     - name: Download Linux Artifact
-  #       uses: actions/download-artifact@v2
-  #       with:
-  #         name: linux-build
-  #         path: release
-
-  #     # - name: Download Windows Artifact
-  #     #   uses: actions/download-artifact@v2
-  #     #   with:
-  #     #     name: windows-build
-
-  #     - name: Create GitHub Release
-  #       id: create_release
-  #       uses: actions/create-release@v1
-  #       env:
-  #         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-  #       with:
-  #         tag_name: ${{ env.tag_name }}
-  #         release_name: Release ${{ env.tag_name }}
-  #         body_path: docs/docs/en/setup/changelogs/${{ env.tag_name }}.md
-  #         draft: false
-  #         prerelease: false
-
-  #     - name: Upload Linux Release Asset
-  #       uses: actions/upload-release-asset@v1
-  #       env:
-  #         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-  #       with:
-  #         upload_url: ${{ steps.create_release.outputs.upload_url }}
-  #         asset_path: ./release/pars-linux-amd64.tar.gz
-  #         asset_name: pars-linux-amd64.tar.gz
-  #         asset_content_type: application/gzip
-
-  #     # - name: Upload Windows Release Asset
-  #     #   uses: actions/upload-release-asset@v1
-  #     #   env:
-  #     #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-  #     #   with:
-  #     #     upload_url: ${{ steps.create_release.outputs.upload_url }}
-  #     #     asset_path: ./release/pars-windows-amd64.tar.gz
-  #     #     asset_name: pars-windows-amd64.tar.gz
-  #     #     asset_content_type: application/gzip
+      # - name: Upload Windows Release Asset
+      #   uses: actions/upload-release-asset@v1
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      #   with:
+      #     upload_url: ${{ steps.create_release.outputs.upload_url }}
+      #     asset_path: ./release/pars-windows-amd64.tar.gz
+      #     asset_name: pars-windows-amd64.tar.gz
+      #     asset_content_type: application/gzip
