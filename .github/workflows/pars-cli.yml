@@ -101,6 +101,7 @@ jobs:
           path: release
 
       - name: Get win ls
+        working-directory: ./release
         run: ls
 
       # - name: Create GitHub Release
