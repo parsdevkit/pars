@@ -1,0 +1,13 @@
+type: Template
+kind: File
+name: SeedFileJson_Template
+metadata:
+  tags:
+specifications:
+  name: SeedFile_Json
+  output: "{{.Resource.Name}}.json"
+  set: EShopping
+  layers:
+  template:
+    content: |
+      {{ prettifyjson (tojson .Resource.Data) }}
