@@ -1,0 +1,14 @@
+type: Resource
+kind: Data
+name: ProductCategory_SeedData
+metadata:
+specifications:
+  name: ProductCategory
+  set: EShopping
+  data:
+    - id: 0e56e7b1-1635-5733-a6c0-9b9328db5e3a
+      name: Shoes
+    - id: 84309aec-6025-5ab7-9e40-d19eb6d4c217
+      name: Smart Phone
+    - id: 671fd8be-295d-5484-8a2a-9661b2f940fb
+      name: Electronic
