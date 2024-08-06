@@ -55,7 +55,7 @@ jobs:
           mkdir -p ../release
           set GOOS=windows
           set GOARCH=amd64
-          go build -o release/pars.exe ./pars.go
+          go build -o ../release/pars.exe ./pars.go
 
       - name: Archive Windows Build
         run: Compress-Archive -Path release/* -Destination release/pars-windows-amd64.zip
@@ -100,10 +100,6 @@ jobs:
         with:
           name: windows-build
           path: release
-
-      - name: Get win ls
-        working-directory: ./release
-        run: ls
 
       - name: Create GitHub Release
         id: create_release
