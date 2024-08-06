@@ -6,7 +6,6 @@ import (
 	"testing"
 
 	"parsdevkit.net/core/utils"
-	"parsdevkit.net/operation/services"
 
 	"parsdevkit.net/core/test"
 
@@ -63,11 +62,7 @@ func (suite *ListTestSuite) TestListCurrentWorkspace() {
 		"list",
 	}
 
-	service := services.NewWorkspaceService(suite.environment)
-	workspace, err := service.GetByName(name)
-	require.NoError(suite.T(), err, "Failed to get workspace by name.")
-
-	listOutput, err := common.ExecuteCommandWithSelectorOnPath(common.CommanderTypes.GO, suite.T(), suite.environment, workspace.Specifications.GetAbsolutePath(), commands...)
+	listOutput, err := common.ExecuteCommandWithSelector(common.CommanderTypes.GO, suite.T(), suite.environment, commands...)
 	require.NoError(suite.T(), err, "failed to retrieve workspace description")
 
 	require.NotEmpty(suite.T(), listOutput, "Workspace description is not valid")

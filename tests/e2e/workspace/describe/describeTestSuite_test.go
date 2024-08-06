@@ -6,7 +6,6 @@ import (
 	"testing"
 
 	"parsdevkit.net/core/utils"
-	"parsdevkit.net/operation/services"
 
 	"parsdevkit.net/core/test"
 
@@ -63,11 +62,7 @@ func (suite *DescribeTestSuite) TestDescribeCurrentWorkspace() {
 		"describe",
 	}
 
-	service := services.NewWorkspaceService(suite.environment)
-	workspace, err := service.GetByName(name)
-	require.NoError(suite.T(), err, "Failed to get workspace by name.")
-
-	describeOutput, err := common.ExecuteCommandWithSelectorOnPath(common.CommanderTypes.GO, suite.T(), suite.environment, workspace.Specifications.GetAbsolutePath(), commands...)
+	describeOutput, err := common.ExecuteCommandWithSelector(common.CommanderTypes.GO, suite.T(), suite.environment, commands...)
 	require.NoError(suite.T(), err, "failed to retrieve workspace description")
 
 	require.NotEmpty(suite.T(), describeOutput, "Workspace description is not valid")
@@ -89,11 +84,7 @@ func (suite *DescribeTestSuite) TestDescribeSelectedWorkspace() {
 		name,
 	}
 
-	service := services.NewWorkspaceService(suite.environment)
-	workspace, err := service.GetByName(name)
-	require.NoError(suite.T(), err, "Failed to get workspace by name.")
-
-	describeOutput, err := common.ExecuteCommandWithSelectorOnPath(common.CommanderTypes.GO, suite.T(), suite.environment, workspace.Specifications.GetAbsolutePath(), commands...)
+	describeOutput, err := common.ExecuteCommandWithSelector(common.CommanderTypes.GO, suite.T(), suite.environment, commands...)
 	require.NoError(suite.T(), err, "failed to retrieve workspace description")
 
 	require.NotEmpty(suite.T(), describeOutput, "Workspace description is not valid")
@@ -117,11 +108,7 @@ func (suite *DescribeTestSuite) TestDescribeWorkspaceWithSelectedViewType() {
 		"hierarchical",
 	}
 
-	service := services.NewWorkspaceService(suite.environment)
-	workspace, err := service.GetByName(name)
-	require.NoError(suite.T(), err, "Failed to get workspace by name.")
-
-	describeOutput, err := common.ExecuteCommandWithSelectorOnPath(common.CommanderTypes.GO, suite.T(), suite.environment, workspace.Specifications.GetAbsolutePath(), commands...)
+	describeOutput, err := common.ExecuteCommandWithSelector(common.CommanderTypes.GO, suite.T(), suite.environment, commands...)
 	require.NoError(suite.T(), err, "failed to retrieve workspace description")
 
 	require.NotEmpty(suite.T(), describeOutput, "Workspace description is not valid")
@@ -143,11 +130,7 @@ func (suite *DescribeTestSuite) TestDescribeWorkspaceOnlyPath() {
 		"--path",
 	}
 
-	service := services.NewWorkspaceService(suite.environment)
-	workspace, err := service.GetByName(name)
-	require.NoError(suite.T(), err, "Failed to get workspace by name.")
-
-	describeOutput, err := common.ExecuteCommandWithSelectorOnPath(common.CommanderTypes.GO, suite.T(), suite.environment, workspace.Specifications.GetAbsolutePath(), commands...)
+	describeOutput, err := common.ExecuteCommandWithSelector(common.CommanderTypes.GO, suite.T(), suite.environment, commands...)
 	require.NoError(suite.T(), err, "failed to retrieve workspace description")
 
 	require.NotEmpty(suite.T(), describeOutput, "Workspace description is not valid")

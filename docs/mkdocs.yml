@@ -3,7 +3,8 @@ site_url: https://docs.parsdevkit.net/
 site_description: Pars Documentation
 repo_url: https://github.com/parsdevkit/pars
 repo_name: parsdevkit/pars
-edit_uri: edit/main/docs/docs/
+edit_uri: edit/main/docs/contents/
+docs_dir: contents
 nav:
   - Home: index.md
   - Getting started:
@@ -179,65 +180,17 @@ nav:
   # - Contributing:
   #   - contributing/index.md
   - Extras:
-    - Model Samples: 
-      - Application Projects : extras/model-samples/application-projects.md
-    - Glossary: glossary-index.md
-    - Tags: tags.md
-    - Terms: terms.md
-    - Resources: resources.md
-    - references/index.md
-    - Samples:
-      - samples/index.md
-      - Test:
-        - ProductObjectModel: samples/test/projectObjectModel.md
-      - Page:
-        - samples/metas.md
-        - samples/tags.md
-        - samples/page.md
-      - Markdown:
-        - samples/linkings.md
-        - samples/headers.md
-      - General:
-        - samples/admonitions.md
-        - samples/tabs.md
-        - samples/annotations.md
-        - samples/result.md
-      - Fences: 
-        - samples/fences.md
-        - samples/code-blocks.md
-        - samples/diagrams.md
-      - Blocks:
-        - samples/block-admonitions.md
-        - samples/block-definations.md
-        - samples/block-details.md
-        - samples/block-html.md
-        - samples/block-tabs.md
-      - Elements:
-        - samples/buttons.md
-        - samples/forms.md
-        - samples/tables.md
-      - Icons:
-        - samples/icons-colors.md
-        - samples/emojis.md
-        - samples/smart-symbols.md
-        - samples/keyboard-keys.md
-      - samples/referencing.md
-      - samples/shortcodes.md
-      - samples/grids.md
-      - samples/tooltips.md
-      - samples/colors.md
-      - samples/image.md
-      - samples/foot-notes.md
-      - samples/lists.md
-      - samples/emphasis.md
-      - samples/caret-mark-tilde.md
-      - samples/critics.md
-      - samples/progressbar.md
-      - samples/snippets.md
-      - samples/math.md
+    - Glossary: extras/glossary.md
+    - Tags: extras/tags.md
+    - Terms: extras/terms.md
+    - References: extras/references.md
+    - Samples: 
+      - Application Projects : extras/samples/application-project/index.md
 
 theme:
   name: material
+  analytics:
+    gtag: G-TNGBBETP6J
   language: en
   custom_dir: theme
   favicon: assets/favicon.png
@@ -318,7 +271,6 @@ theme:
         icon: material/weather-sunny
         name: Switch to light mode
 plugins:
-  # - tree:
   - mike:
       # These fields are all optional; the defaults are as below...
       alias_type: symlink
@@ -417,7 +369,7 @@ plugins:
   - offline
   - mermaid2
   - tags:
-      tags_file: tags.md
+      tags_file: extras/tags.md
   - search:
       separator: '[\s\u200b\-_,:!=\[\]()"`/]+|\.(?!\d)|&[lg]t;|(?!\b)(?=[A-Z][a-z])'
       lang: 
@@ -428,12 +380,12 @@ plugins:
   # - glightbox
   - privacy:
       enabled: !ENV [CI, false]
-  # - git-revision-date-localized:
-  #     enable_creation_date: true
-  # - git-committers:
-  #     repository: parsdevkit/pars
-  #     branch: main
-  # - git-authors
+  - git-revision-date-localized:
+      enable_creation_date: true
+  - git-committers:
+      repository: parsdevkit/pars
+      branch: main
+  - git-authors
   - ezglossary:
       markdown_links: true
       list_definitions: false
@@ -472,20 +424,10 @@ extra:
       link: mailto:info@parsdevkit.net
     - icon: fontawesome/brands/github 
       link: https://github.com/parsdevkit/pars
-    - icon: fontawesome/brands/slack 
-      link: https://fosstodon.org/
-    - icon: fontawesome/brands/discord 
-      link: https://fosstodon.org/
-    - icon: fontawesome/brands/docker 
-      link: https://fosstodon.org/
     - icon: fontawesome/brands/linkedin 
-      link: https://fosstodon.org/
-    - icon: fontawesome/brands/x-twitter 
-      link: https://fosstodon.org/
-    - icon: fontawesome/brands/facebook 
-      link: https://fosstodon.org/
-    - icon: fontawesome/brands/instagram 
-      link: https://fosstodon.org/
+      link: https://www.linkedin.com/groups/13072322/
+    - icon: fontawesome/brands/youtube
+      link: https://www.youtube.com/@ParsDevKit
   generator: false
   consent:
     title: Cookie consent
@@ -499,7 +441,7 @@ extra:
       find what they're searching for. With your consent, you're helping us to
       make our documentation better.
 copyright: >
-  Copyright &copy; 2017 - 2024 Ahmet Soner –
+  Copyright &copy; 2017 - 2024 Pars –
   <a href="#__consent">Change cookie settings</a>
 markdown_extensions:
   # Python Markdown
