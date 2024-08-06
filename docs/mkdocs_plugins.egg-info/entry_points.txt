@@ -1,2 +1,0 @@
-[mkdocs.plugins]
-tree = extensions.mkdocs_tree_plugin.tree:TreePlugin

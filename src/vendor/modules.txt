@@ -1,0 +1,348 @@
+# github.com/clbanning/mxj/v2 v2.7.0
+## explicit; go 1.15
+github.com/clbanning/mxj/v2
+# github.com/dustin/go-humanize v1.0.1
+## explicit; go 1.16
+github.com/dustin/go-humanize
+# github.com/fsnotify/fsnotify v1.7.0
+## explicit; go 1.17
+github.com/fsnotify/fsnotify
+# github.com/glebarez/go-sqlite v1.21.2
+## explicit; go 1.17
+github.com/glebarez/go-sqlite
+# github.com/glebarez/sqlite v1.10.0
+## explicit; go 1.18
+github.com/glebarez/sqlite
+# github.com/google/uuid v1.4.0
+## explicit
+github.com/google/uuid
+# github.com/hashicorp/hcl v1.0.0
+## explicit
+github.com/hashicorp/hcl
+github.com/hashicorp/hcl/hcl/ast
+github.com/hashicorp/hcl/hcl/parser
+github.com/hashicorp/hcl/hcl/printer
+github.com/hashicorp/hcl/hcl/scanner
+github.com/hashicorp/hcl/hcl/strconv
+github.com/hashicorp/hcl/hcl/token
+github.com/hashicorp/hcl/json/parser
+github.com/hashicorp/hcl/json/scanner
+github.com/hashicorp/hcl/json/token
+# github.com/inconshreveable/mousetrap v1.1.0
+## explicit; go 1.18
+github.com/inconshreveable/mousetrap
+# github.com/jinzhu/inflection v1.0.0
+## explicit
+github.com/jinzhu/inflection
+# github.com/jinzhu/now v1.1.5
+## explicit; go 1.12
+github.com/jinzhu/now
+# github.com/magiconair/properties v1.8.7
+## explicit; go 1.19
+github.com/magiconair/properties
+# github.com/mattn/go-isatty v0.0.17
+## explicit; go 1.15
+github.com/mattn/go-isatty
+# github.com/mitchellh/mapstructure v1.5.0
+## explicit; go 1.14
+github.com/mitchellh/mapstructure
+# github.com/pelletier/go-toml/v2 v2.1.0
+## explicit; go 1.16
+github.com/pelletier/go-toml/v2
+github.com/pelletier/go-toml/v2/internal/characters
+github.com/pelletier/go-toml/v2/internal/danger
+github.com/pelletier/go-toml/v2/internal/tracker
+github.com/pelletier/go-toml/v2/unstable
+# github.com/remyoudompheng/bigfft v0.0.0-20230129092748-24d4a6f8daec
+## explicit; go 1.12
+github.com/remyoudompheng/bigfft
+# github.com/sagikazarmark/locafero v0.4.0
+## explicit; go 1.20
+github.com/sagikazarmark/locafero
+# github.com/sagikazarmark/slog-shim v0.1.0
+## explicit; go 1.20
+github.com/sagikazarmark/slog-shim
+# github.com/sirupsen/logrus v1.9.3
+## explicit; go 1.13
+github.com/sirupsen/logrus
+# github.com/sourcegraph/conc v0.3.0
+## explicit; go 1.19
+github.com/sourcegraph/conc
+github.com/sourcegraph/conc/internal/multierror
+github.com/sourcegraph/conc/iter
+github.com/sourcegraph/conc/panics
+# github.com/spf13/afero v1.11.0
+## explicit; go 1.19
+github.com/spf13/afero
+github.com/spf13/afero/internal/common
+github.com/spf13/afero/mem
+# github.com/spf13/cast v1.6.0
+## explicit; go 1.19
+github.com/spf13/cast
+# github.com/spf13/cobra v1.8.0
+## explicit; go 1.15
+github.com/spf13/cobra
+# github.com/spf13/pflag v1.0.5
+## explicit; go 1.12
+github.com/spf13/pflag
+# github.com/spf13/viper v1.18.2
+## explicit; go 1.18
+github.com/spf13/viper
+github.com/spf13/viper/internal/encoding
+github.com/spf13/viper/internal/encoding/dotenv
+github.com/spf13/viper/internal/encoding/hcl
+github.com/spf13/viper/internal/encoding/ini
+github.com/spf13/viper/internal/encoding/javaproperties
+github.com/spf13/viper/internal/encoding/json
+github.com/spf13/viper/internal/encoding/toml
+github.com/spf13/viper/internal/encoding/yaml
+github.com/spf13/viper/internal/features
+# github.com/subosito/gotenv v1.6.0
+## explicit; go 1.18
+github.com/subosito/gotenv
+# go.uber.org/atomic v1.9.0
+## explicit; go 1.13
+go.uber.org/atomic
+# go.uber.org/multierr v1.9.0
+## explicit; go 1.19
+go.uber.org/multierr
+# golang.org/x/exp v0.0.0-20230905200255-921286631fa9
+## explicit; go 1.20
+golang.org/x/exp/constraints
+golang.org/x/exp/slices
+golang.org/x/exp/slog
+golang.org/x/exp/slog/internal
+golang.org/x/exp/slog/internal/buffer
+# golang.org/x/sys v0.15.0
+## explicit; go 1.18
+golang.org/x/sys/unix
+golang.org/x/sys/windows
+# golang.org/x/text v0.14.0
+## explicit; go 1.18
+golang.org/x/text/encoding
+golang.org/x/text/encoding/internal
+golang.org/x/text/encoding/internal/identifier
+golang.org/x/text/encoding/unicode
+golang.org/x/text/internal/utf8internal
+golang.org/x/text/runes
+golang.org/x/text/transform
+golang.org/x/text/unicode/norm
+# gopkg.in/ini.v1 v1.67.0
+## explicit
+gopkg.in/ini.v1
+# gopkg.in/yaml.v3 v3.0.1
+## explicit
+gopkg.in/yaml.v3
+# gorm.io/gorm v1.25.7
+## explicit; go 1.18
+gorm.io/gorm
+gorm.io/gorm/callbacks
+gorm.io/gorm/clause
+gorm.io/gorm/logger
+gorm.io/gorm/migrator
+gorm.io/gorm/schema
+gorm.io/gorm/utils
+# modernc.org/libc v1.22.5
+## explicit; go 1.18
+modernc.org/libc
+modernc.org/libc/errno
+modernc.org/libc/fcntl
+modernc.org/libc/fts
+modernc.org/libc/grp
+modernc.org/libc/honnef.co/go/netdb
+modernc.org/libc/langinfo
+modernc.org/libc/limits
+modernc.org/libc/netdb
+modernc.org/libc/netinet/in
+modernc.org/libc/poll
+modernc.org/libc/pthread
+modernc.org/libc/pwd
+modernc.org/libc/signal
+modernc.org/libc/stdio
+modernc.org/libc/stdlib
+modernc.org/libc/sys/socket
+modernc.org/libc/sys/stat
+modernc.org/libc/sys/types
+modernc.org/libc/termios
+modernc.org/libc/time
+modernc.org/libc/unistd
+modernc.org/libc/utime
+modernc.org/libc/uuid
+modernc.org/libc/uuid/uuid
+modernc.org/libc/wctype
+# modernc.org/mathutil v1.5.0
+## explicit; go 1.13
+modernc.org/mathutil
+# modernc.org/memory v1.5.0
+## explicit; go 1.18
+modernc.org/memory
+# modernc.org/sqlite v1.23.1
+## explicit; go 1.18
+modernc.org/sqlite/lib
+# parsdevkit.net/cmd v0.0.0-00010101000000-000000000000 => ./cmd
+## explicit; go 1.21.0
+parsdevkit.net/cmd
+parsdevkit.net/cmd/browse
+parsdevkit.net/cmd/clean
+parsdevkit.net/cmd/edit
+parsdevkit.net/cmd/edit/project
+parsdevkit.net/cmd/environment
+parsdevkit.net/cmd/environment/list
+parsdevkit.net/cmd/execute
+parsdevkit.net/cmd/group
+parsdevkit.net/cmd/group/describe
+parsdevkit.net/cmd/group/list
+parsdevkit.net/cmd/group/remove
+parsdevkit.net/cmd/group/submit
+parsdevkit.net/cmd/info
+parsdevkit.net/cmd/init
+parsdevkit.net/cmd/open
+parsdevkit.net/cmd/open/project
+parsdevkit.net/cmd/open/workspace
+parsdevkit.net/cmd/project
+parsdevkit.net/cmd/project/describe
+parsdevkit.net/cmd/project/list
+parsdevkit.net/cmd/project/new
+parsdevkit.net/cmd/project/remove
+parsdevkit.net/cmd/project/submit
+parsdevkit.net/cmd/resource
+parsdevkit.net/cmd/resource/list
+parsdevkit.net/cmd/resource/remove
+parsdevkit.net/cmd/resource/submit
+parsdevkit.net/cmd/template
+parsdevkit.net/cmd/template/list
+parsdevkit.net/cmd/template/remove
+parsdevkit.net/cmd/template/submit
+parsdevkit.net/cmd/test
+parsdevkit.net/cmd/workspace
+parsdevkit.net/cmd/workspace/describe
+parsdevkit.net/cmd/workspace/list
+parsdevkit.net/cmd/workspace/remove
+# parsdevkit.net/common v0.0.0-00010101000000-000000000000 => ./modules/common
+## explicit; go 1.21.0
+parsdevkit.net/common
+# parsdevkit.net/context v0.0.0-00010101000000-000000000000 => ./modules/context
+## explicit; go 1.21.0
+parsdevkit.net/context/models
+# parsdevkit.net/core v0.0.0-00010101000000-000000000000 => ./core
+## explicit; go 1.21.0
+parsdevkit.net/core
+parsdevkit.net/core/cmd
+parsdevkit.net/core/errors
+# parsdevkit.net/core/utils v0.0.0-00010101000000-000000000000 => ./modules/utils
+## explicit; go 1.21.0
+parsdevkit.net/core/utils
+parsdevkit.net/core/utils/_map
+parsdevkit.net/core/utils/array
+parsdevkit.net/core/utils/base64
+parsdevkit.net/core/utils/common
+parsdevkit.net/core/utils/convert
+parsdevkit.net/core/utils/data
+parsdevkit.net/core/utils/json
+parsdevkit.net/core/utils/math
+parsdevkit.net/core/utils/regexp
+parsdevkit.net/core/utils/string
+parsdevkit.net/core/utils/time
+# parsdevkit.net/engines v0.0.0-00010101000000-000000000000 => ./modules/engines
+## explicit; go 1.21.0
+parsdevkit.net/engines
+parsdevkit.net/engines/applicationProject
+parsdevkit.net/engines/codeTemplate
+parsdevkit.net/engines/dataResource
+parsdevkit.net/engines/fileTemplate
+parsdevkit.net/engines/group
+parsdevkit.net/engines/objectResource
+parsdevkit.net/engines/sharedTemplate
+# parsdevkit.net/models v0.0.0-00010101000000-000000000000 => ./modules/models
+## explicit; go 1.21.0
+parsdevkit.net/models
+# parsdevkit.net/operation/services v0.0.0-00010101000000-000000000000 => ./modules/services
+## explicit; go 1.21.0
+parsdevkit.net/operation/services
+# parsdevkit.net/persistence/contexts v0.0.0-00010101000000-000000000000 => ./modules/data/contexts
+## explicit; go 1.21.0
+parsdevkit.net/persistence/contexts
+# parsdevkit.net/persistence/entities v0.0.0-00010101000000-000000000000 => ./modules/data/entities
+## explicit; go 1.21.0
+parsdevkit.net/persistence/entities
+# parsdevkit.net/persistence/repositories v0.0.0-00010101000000-000000000000 => ./modules/data/repositories
+## explicit; go 1.21.0
+parsdevkit.net/persistence/repositories
+# parsdevkit.net/platforms/angular v0.0.0-00010101000000-000000000000 => ./modules/platforms/angular
+## explicit; go 1.21.0
+parsdevkit.net/platforms/angular/managers
+parsdevkit.net/platforms/angular/models
+# parsdevkit.net/platforms/common v0.0.0-00010101000000-000000000000 => ./modules/platforms/common
+## explicit; go 1.21.0
+parsdevkit.net/platforms/common
+# parsdevkit.net/platforms/core v0.0.0-00010101000000-000000000000 => ./modules/platforms/core
+## explicit; go 1.21.0
+parsdevkit.net/platforms/core
+# parsdevkit.net/platforms/dotnet v0.0.0-00010101000000-000000000000 => ./modules/platforms/dotnet
+## explicit; go 1.21.0
+parsdevkit.net/platforms/dotnet/managers
+parsdevkit.net/platforms/dotnet/models
+# parsdevkit.net/platforms/go v0.0.0-00010101000000-000000000000 => ./modules/platforms/go
+## explicit; go 1.21.0
+parsdevkit.net/platforms/go/managers
+parsdevkit.net/platforms/go/models
+# parsdevkit.net/platforms/nodejs v0.0.0-00010101000000-000000000000 => ./modules/platforms/nodejs
+## explicit; go 1.21.0
+parsdevkit.net/platforms/nodejs/managers
+parsdevkit.net/platforms/nodejs/models
+# parsdevkit.net/platforms/pars v0.0.0-00010101000000-000000000000 => ./modules/platforms/pars
+## explicit; go 1.21.0
+parsdevkit.net/platforms/pars/managers
+parsdevkit.net/platforms/pars/models
+# parsdevkit.net/providers v0.0.0-00010101000000-000000000000 => ./modules/providers
+## explicit; go 1.21.0
+parsdevkit.net/providers
+# parsdevkit.net/structs v0.0.0-00010101000000-000000000000 => ./modules/structs
+## explicit; go 1.21.0
+parsdevkit.net/structs
+parsdevkit.net/structs/class
+parsdevkit.net/structs/group
+parsdevkit.net/structs/label
+parsdevkit.net/structs/layer
+parsdevkit.net/structs/option
+parsdevkit.net/structs/project
+parsdevkit.net/structs/project/application-project
+parsdevkit.net/structs/resource
+parsdevkit.net/structs/resource/data-resource
+parsdevkit.net/structs/resource/object-resource
+parsdevkit.net/structs/section
+parsdevkit.net/structs/task
+parsdevkit.net/structs/task/actions
+parsdevkit.net/structs/task/common-task
+parsdevkit.net/structs/template
+parsdevkit.net/structs/template/code-template
+parsdevkit.net/structs/template/file-template
+parsdevkit.net/structs/template/shared-template
+parsdevkit.net/structs/workspace
+# parsdevkit.net/templates v0.0.0-00010101000000-000000000000 => ./modules/templates
+## explicit; go 1.21.0
+parsdevkit.net/templates/engines
+parsdevkit.net/templates/engines/functions
+parsdevkit.net/templates/models/objectResources
+parsdevkit.net/templates/services
+# parsdevkit.net/operation/services => ./modules/services
+# parsdevkit.net/common => ./modules/common
+# parsdevkit.net/persistence/entities => ./modules/data/entities
+# parsdevkit.net/persistence/repositories => ./modules/data/repositories
+# parsdevkit.net/persistence/contexts => ./modules/data/contexts
+# parsdevkit.net/platforms/core => ./modules/platforms/core
+# parsdevkit.net/platforms/common => ./modules/platforms/common
+# parsdevkit.net/platforms/angular => ./modules/platforms/angular
+# parsdevkit.net/platforms/nodejs => ./modules/platforms/nodejs
+# parsdevkit.net/platforms/dotnet => ./modules/platforms/dotnet
+# parsdevkit.net/platforms/go => ./modules/platforms/go
+# parsdevkit.net/platforms/pars => ./modules/platforms/pars
+# parsdevkit.net/structs => ./modules/structs
+# parsdevkit.net/context => ./modules/context
+# parsdevkit.net/core/utils => ./modules/utils
+# parsdevkit.net/providers => ./modules/providers
+# parsdevkit.net/models => ./modules/models
+# parsdevkit.net/engines => ./modules/engines
+# parsdevkit.net/templates => ./modules/templates
+# parsdevkit.net/cmd => ./cmd
+# parsdevkit.net/core => ./core

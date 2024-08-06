@@ -1,7 +1,0 @@
-setup.py
-mkdocs_plugins.egg-info/PKG-INFO
-mkdocs_plugins.egg-info/SOURCES.txt
-mkdocs_plugins.egg-info/dependency_links.txt
-mkdocs_plugins.egg-info/entry_points.txt
-mkdocs_plugins.egg-info/requires.txt
-mkdocs_plugins.egg-info/top_level.txt

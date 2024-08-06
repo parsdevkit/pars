@@ -1,6 +1,10 @@
 /binaries/**
+/data/**
+/dist/**
 /temp/**
 /workspace**/**
+/.venv/**
+/.VSCodeCounter/**
 pars*.db
 
 *.exe

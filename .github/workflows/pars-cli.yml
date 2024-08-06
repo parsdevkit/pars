@@ -111,7 +111,7 @@ jobs:
         with:
           tag_name: ${{ env.tag_name }}
           release_name: Release ${{ env.tag_name }}
-          body_path: docs/docs/en/setup/changelogs/${{ env.tag_name }}.md
+          body_path: docs/contents/en/setup/changelogs/${{ env.tag_name }}.md
           draft: false
           prerelease: false
 

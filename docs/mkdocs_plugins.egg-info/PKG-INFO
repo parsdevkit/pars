@@ -1,5 +1,0 @@
-Metadata-Version: 2.1
-Name: mkdocs-plugins
-Version: 0.1
-Requires-Dist: mkdocs>=1.0.4
-Requires-Dist: Jinja2>=2.10.1
