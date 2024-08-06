@@ -26,7 +26,7 @@ jobs:
       - name: Build Linux x64
         run: |
           mkdir -p release
-          GOOS=linux GOARCH=amd64 go build -o release/pars ./pars.go
+          GOOS=linux GOARCH=amd64 go build -o release/pars ./src/pars.go
 
       - name: Archive Linux Build
         run: tar -czvf release/pars-linux-amd64.tar.gz -C release pars
@@ -53,7 +53,7 @@ jobs:
           mkdir -p release
           set GOOS=windows
           set GOARCH=amd64
-          go build -o release/pars.exe ./pars.go
+          go build -o release/pars.exe ./src/pars.go
 
       - name: Archive Windows Build
         run: Compress-Archive -Path release/* -Destination release/pars-windows-amd64.zip
