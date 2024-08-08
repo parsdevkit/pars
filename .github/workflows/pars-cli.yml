@@ -7,7 +7,7 @@ on:
     - '!*-rc[0-9]+'
 
 jobs:
-  build-linux:
+  build-linux-386:
     runs-on: ubuntu-latest
 
     steps:
@@ -18,65 +18,100 @@ jobs:
         with:
           go-version: '1.21'
 
-      # - name: Build Linux 386
-      #   working-directory: ./src
-      #   run: |
-      #     mkdir -p ../releases/linux/386
-      #     GOOS=linux GOARCH=386 go build -o ../releases/linux/386/pars ./pars.go
+      - name: Build Linux 386
+        working-directory: ./src
+        run: |
+          mkdir -p ../releases/linux/386
+          GOOS=linux GOARCH=386 go build -o ../releases/linux/386/pars ./pars.go
 
-      # - name: Archive Linux Build
-      #   run: tar -czvf releases/linux/386/pars-linux-386.tar.gz -C releases/linux/386/ pars
+      - name: Archive Linux Build
+        run: tar -czvf releases/linux/386/pars-linux-386.tar.gz -C releases/linux/386/ pars
 
-      # - name: Upload Linux Artifact
-      #   uses: actions/upload-artifact@v2
-      #   with:
-      #     name: linux-build
-      #     path: releases/linux/386/pars-linux-386.tar.gz
+      - name: Upload Linux Artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: linux-build-386
+          path: releases/linux/386/pars-linux-386.tar.gz
 
-      # - name: Build Linux amd64
-      #   working-directory: ./src
-      #   run: |
-      #     mkdir -p ../releases/linux/amd64
-      #     GOOS=linux GOARCH=amd64 go build -o ../releases/linux/amd64/pars ./pars.go
+  build-linux-amd64:
+    runs-on: ubuntu-latest
 
-      # - name: Archive Linux Build
-      #   run: tar -czvf releases/linux/amd64/pars-linux-amd64.tar.gz -C releases/linux/amd64/ pars
+    steps:
+      - uses: actions/checkout@v4
 
-      # - name: Upload Linux Artifact
-      #   uses: actions/upload-artifact@v2
-      #   with:
-      #     name: linux-build
-      #     path: releases/linux/amd64/pars-linux-amd64.tar.gz
+      - name: Set up Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: '1.21'
 
-      # - name: Build Linux arm
-      #   working-directory: ./src
-      #   run: |
-      #     mkdir -p ../releases/linux/arm
-      #     GOOS=linux GOARCH=arm go build -o ../releases/linux/arm/pars ./pars.go
+      - name: Build Linux amd64
+        working-directory: ./src
+        run: |
+          mkdir -p ../releases/linux/amd64
+          GOOS=linux GOARCH=amd64 go build -o ../releases/linux/amd64/pars ./pars.go
 
-      # - name: Archive Linux Build
-      #   run: tar -czvf releases/linux/arm/pars-linux-arm.tar.gz -C releases/linux/arm/ pars
+      - name: Archive Linux Build
+        run: tar -czvf releases/linux/amd64/pars-linux-amd64.tar.gz -C releases/linux/amd64/ pars
 
-      # - name: Upload Linux Artifact
-      #   uses: actions/upload-artifact@v2
-      #   with:
-      #     name: linux-build
-      #     path: releases/linux/arm/pars-linux-arm.tar.gz
+      - name: Upload Linux Artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: linux-build-amd64
+          path: releases/linux/amd64/pars-linux-amd64.tar.gz
 
-      # - name: Build Linux arm64
-      #   working-directory: ./src
-      #   run: |
-      #     mkdir -p ../releases/linux/arm64
-      #     GOOS=linux GOARCH=arm64 go build -o ../releases/linux/arm64/pars ./pars.go
+  build-linux-arm:
+    runs-on: ubuntu-latest
 
-      # - name: Archive Linux Build
-      #   run: tar -czvf releases/linux/arm64/pars-linux-arm64.tar.gz -C releases/linux/arm64/ pars
+    steps:
+      - uses: actions/checkout@v4
 
-      # - name: Upload Linux Artifact
-      #   uses: actions/upload-artifact@v2
-      #   with:
-      #     name: linux-build
-      #     path: releases/linux/arm64/pars-linux-arm64.tar.gz
+      - name: Set up Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: '1.21'
+          
+      - name: Build Linux arm
+        working-directory: ./src
+        run: |
+          mkdir -p ../releases/linux/arm
+          GOOS=linux GOARCH=arm go build -o ../releases/linux/arm/pars ./pars.go
+
+      - name: Archive Linux Build
+        run: tar -czvf releases/linux/arm/pars-linux-arm.tar.gz -C releases/linux/arm/ pars
+
+      - name: Upload Linux Artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: linux-build-arm
+          path: releases/linux/arm/pars-linux-arm.tar.gz
+
+
+
+  build-linux-arm64:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: '1.21'
+
+      - name: Build Linux arm64
+        working-directory: ./src
+        run: |
+          mkdir -p ../releases/linux/arm64
+          GOOS=linux GOARCH=arm64 go build -o ../releases/linux/arm64/pars ./pars.go
+
+      - name: Archive Linux Build
+        run: tar -czvf releases/linux/arm64/pars-linux-arm64.tar.gz -C releases/linux/arm64/ pars
+
+      - name: Upload Linux Artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: linux-build-arm64
+          path: releases/linux/arm64/pars-linux-arm64.tar.gz
 
 
 
@@ -115,20 +150,20 @@ jobs:
       #     name: linux-build
       #     path: releases/darwin/amd64/pars-darwin-amd64.tar.gz
 
-      - name: Build Darwin arm
-        working-directory: ./src
-        run: |
-          mkdir -p ../releases/darwin/arm
-          GOOS=darwin GOARCH=arm go build -o ../releases/darwin/arm/pars ./pars.go
+      # # - name: Build Darwin arm
+      # #   working-directory: ./src
+      # #   run: |
+      # #     mkdir -p ../releases/darwin/arm
+      # #     GOOS=darwin GOARCH=arm go build -o ../releases/darwin/arm/pars ./pars.go
 
-      - name: Archive Darwin Build
-        run: tar -czvf releases/darwin/arm/pars-darwin-arm.tar.gz -C releases/darwin/arm/ pars
+      # # - name: Archive Darwin Build
+      # #   run: tar -czvf releases/darwin/arm/pars-darwin-arm.tar.gz -C releases/darwin/arm/ pars
 
-      - name: Upload Darwin Artifact
-        uses: actions/upload-artifact@v2
-        with:
-          name: linux-build
-          path: releases/darwin/arm/pars-darwin-arm.tar.gz
+      # # - name: Upload Darwin Artifact
+      # #   uses: actions/upload-artifact@v2
+      # #   with:
+      # #     name: linux-build
+      # #     path: releases/darwin/arm/pars-darwin-arm.tar.gz
 
       # - name: Build Darwin arm64
       #   working-directory: ./src
