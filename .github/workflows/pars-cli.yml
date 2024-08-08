@@ -85,20 +85,20 @@ jobs:
 
 
 
-      - name: Build Darwin 386
-        working-directory: ./src
-        run: |
-          mkdir -p ../releases/darwin/386
-          GOOS=darwin GOARCH=386 go build -o ../releases/darwin/386/pars ./pars.go
+      # - name: Build Darwin 386
+      #   working-directory: ./src
+      #   run: |
+      #     mkdir -p ../releases/darwin/386
+      #     GOOS=darwin GOARCH=386 go build -o ../releases/darwin/386/pars ./pars.go
 
-      - name: Archive Darwin Build
-        run: tar -czvf releases/darwin/386/pars-darwin-386.tar.gz -C releases/darwin/386/ pars
+      # - name: Archive Darwin Build
+      #   run: tar -czvf releases/darwin/386/pars-darwin-386.tar.gz -C releases/darwin/386/ pars
 
-      - name: Upload Darwin Artifact
-        uses: actions/upload-artifact@v2
-        with:
-          name: darwin-build
-          path: releases/darwin/386/pars-darwin-386.tar.gz
+      # - name: Upload Darwin Artifact
+      #   uses: actions/upload-artifact@v2
+      #   with:
+      #     name: darwin-build
+      #     path: releases/darwin/386/pars-darwin-386.tar.gz
 
       - name: Build Darwin amd64
         working-directory: ./src
@@ -115,20 +115,20 @@ jobs:
           name: darwin-build
           path: releases/darwin/amd64/pars-darwin-amd64.tar.gz
 
-      - name: Build Darwin arm
-        working-directory: ./src
-        run: |
-          mkdir -p ../releases/darwin/arm
-          GOOS=darwin GOARCH=arm go build -o ../releases/darwin/arm/pars ./pars.go
+      # - name: Build Darwin arm
+      #   working-directory: ./src
+      #   run: |
+      #     mkdir -p ../releases/darwin/arm
+      #     GOOS=darwin GOARCH=arm go build -o ../releases/darwin/arm/pars ./pars.go
 
-      - name: Archive Darwin Build
-        run: tar -czvf releases/darwin/arm/pars-darwin-arm.tar.gz -C releases/darwin/arm/ pars
+      # - name: Archive Darwin Build
+      #   run: tar -czvf releases/darwin/arm/pars-darwin-arm.tar.gz -C releases/darwin/arm/ pars
 
-      - name: Upload Darwin Artifact
-        uses: actions/upload-artifact@v2
-        with:
-          name: darwin-build
-          path: releases/darwin/arm/pars-darwin-arm.tar.gz
+      # - name: Upload Darwin Artifact
+      #   uses: actions/upload-artifact@v2
+      #   with:
+      #     name: darwin-build
+      #     path: releases/darwin/arm/pars-darwin-arm.tar.gz
 
       - name: Build Darwin arm64
         working-directory: ./src
@@ -323,15 +323,15 @@ jobs:
 
           
 
-      - name: Upload Darwin Release Asset 386
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./releases/darwin/386/pars-darwin-amd64.tar.gz
-          asset_name: pars-darwin-386.tar.gz
-          asset_content_type: application/gzip
+      # - name: Upload Darwin Release Asset 386
+      #   uses: actions/upload-release-asset@v1
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      #   with:
+      #     upload_url: ${{ steps.create_release.outputs.upload_url }}
+      #     asset_path: ./releases/darwin/386/pars-darwin-amd64.tar.gz
+      #     asset_name: pars-darwin-386.tar.gz
+      #     asset_content_type: application/gzip
 
       - name: Upload Darwin Release Asset amd64
         uses: actions/upload-release-asset@v1
@@ -343,15 +343,15 @@ jobs:
           asset_name: pars-darwin-amd64.tar.gz
           asset_content_type: application/gzip
 
-      - name: Upload Darwin Release Asset arm
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./releases/darwin/arm/pars-darwin-arm.tar.gz
-          asset_name: pars-darwin-arm.tar.gz
-          asset_content_type: application/gzip
+      # - name: Upload Darwin Release Asset arm
+      #   uses: actions/upload-release-asset@v1
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      #   with:
+      #     upload_url: ${{ steps.create_release.outputs.upload_url }}
+      #     asset_path: ./releases/darwin/arm/pars-darwin-arm.tar.gz
+      #     asset_name: pars-darwin-arm.tar.gz
+      #     asset_content_type: application/gzip
 
       - name: Upload Darwin Release Asset arm64
         uses: actions/upload-release-asset@v1
