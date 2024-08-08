@@ -33,216 +33,209 @@ jobs:
           name: linux-build
           path: releases/linux/386/pars-linux-386.tar.gz
 
-      - name: Build Linux amd64
-        working-directory: ./src
-        run: |
-          mkdir -p ../releases/linux/amd64
-          GOOS=linux GOARCH=amd64 go build -o ../releases/linux/amd64/pars ./pars.go
-
-      - name: Archive Linux Build
-        run: tar -czvf releases/linux/amd64/pars-linux-amd64.tar.gz -C releases/linux/amd64/ pars
-
-      - name: Upload Linux Artifact
-        uses: actions/upload-artifact@v2
-        with:
-          name: linux-build
-          path: releases/linux/amd64/pars-linux-amd64.tar.gz
-
-      - name: Build Linux arm
-        working-directory: ./src
-        run: |
-          mkdir -p ../releases/linux/arm
-          GOOS=linux GOARCH=arm go build -o ../releases/linux/arm/pars ./pars.go
-
-      - name: Archive Linux Build
-        run: tar -czvf releases/linux/arm/pars-linux-arm.tar.gz -C releases/linux/arm/ pars
-
-      - name: Upload Linux Artifact
-        uses: actions/upload-artifact@v2
-        with:
-          name: linux-build
-          path: releases/linux/arm/pars-linux-arm.tar.gz
-
-      - name: Build Linux arm64
-        working-directory: ./src
-        run: |
-          mkdir -p ../releases/linux/arm64
-          GOOS=linux GOARCH=arm64 go build -o ../releases/linux/arm64/pars ./pars.go
-
-      - name: Archive Linux Build
-        run: tar -czvf releases/linux/arm64/pars-linux-arm64.tar.gz -C releases/linux/arm64/ pars
-
-      - name: Upload Linux Artifact
-        uses: actions/upload-artifact@v2
-        with:
-          name: linux-build
-          path: releases/linux/arm64/pars-linux-arm64.tar.gz
-
-
-
-
-
-
-
-
-      # - name: Build Darwin 386
+      # - name: Build Linux amd64
       #   working-directory: ./src
       #   run: |
-      #     mkdir -p ../releases/darwin/386
-      #     GOOS=darwin GOARCH=386 go build -o ../releases/darwin/386/pars ./pars.go
+      #     mkdir -p ../releases/linux/amd64
+      #     GOOS=linux GOARCH=amd64 go build -o ../releases/linux/amd64/pars ./pars.go
+
+      # - name: Archive Linux Build
+      #   run: tar -czvf releases/linux/amd64/pars-linux-amd64.tar.gz -C releases/linux/amd64/ pars
+
+      # - name: Upload Linux Artifact
+      #   uses: actions/upload-artifact@v2
+      #   with:
+      #     name: linux-build
+      #     path: releases/linux/amd64/pars-linux-amd64.tar.gz
+
+      # - name: Build Linux arm
+      #   working-directory: ./src
+      #   run: |
+      #     mkdir -p ../releases/linux/arm
+      #     GOOS=linux GOARCH=arm go build -o ../releases/linux/arm/pars ./pars.go
+
+      # - name: Archive Linux Build
+      #   run: tar -czvf releases/linux/arm/pars-linux-arm.tar.gz -C releases/linux/arm/ pars
+
+      # - name: Upload Linux Artifact
+      #   uses: actions/upload-artifact@v2
+      #   with:
+      #     name: linux-build
+      #     path: releases/linux/arm/pars-linux-arm.tar.gz
+
+      # - name: Build Linux arm64
+      #   working-directory: ./src
+      #   run: |
+      #     mkdir -p ../releases/linux/arm64
+      #     GOOS=linux GOARCH=arm64 go build -o ../releases/linux/arm64/pars ./pars.go
+
+      # - name: Archive Linux Build
+      #   run: tar -czvf releases/linux/arm64/pars-linux-arm64.tar.gz -C releases/linux/arm64/ pars
+
+      # - name: Upload Linux Artifact
+      #   uses: actions/upload-artifact@v2
+      #   with:
+      #     name: linux-build
+      #     path: releases/linux/arm64/pars-linux-arm64.tar.gz
+
+
+
+
+
+
+
+
+      # # - name: Build Darwin 386
+      # #   working-directory: ./src
+      # #   run: |
+      # #     mkdir -p ../releases/darwin/386
+      # #     GOOS=darwin GOARCH=386 go build -o ../releases/darwin/386/pars ./pars.go
+
+      # # - name: Archive Darwin Build
+      # #   run: tar -czvf releases/darwin/386/pars-darwin-386.tar.gz -C releases/darwin/386/ pars
+
+      # # - name: Upload Darwin Artifact
+      # #   uses: actions/upload-artifact@v2
+      # #   with:
+      # #     name: darwin-build
+      # #     path: releases/darwin/386/pars-darwin-386.tar.gz
+
+      # - name: Build Darwin amd64
+      #   working-directory: ./src
+      #   run: |
+      #     mkdir -p ../releases/darwin/amd64
+      #     GOOS=darwin GOARCH=amd64 go build -o ../releases/darwin/amd64/pars ./pars.go
 
       # - name: Archive Darwin Build
-      #   run: tar -czvf releases/darwin/386/pars-darwin-386.tar.gz -C releases/darwin/386/ pars
+      #   run: tar -czvf releases/darwin/amd64/pars-darwin-amd64.tar.gz -C releases/darwin/amd64/ pars
 
       # - name: Upload Darwin Artifact
       #   uses: actions/upload-artifact@v2
       #   with:
       #     name: darwin-build
-      #     path: releases/darwin/386/pars-darwin-386.tar.gz
+      #     path: releases/darwin/amd64/pars-darwin-amd64.tar.gz
 
-      - name: Build Darwin amd64
-        working-directory: ./src
-        run: |
-          mkdir -p ../releases/darwin/amd64
-          GOOS=darwin GOARCH=amd64 go build -o ../releases/darwin/amd64/pars ./pars.go
+      # # - name: Build Darwin arm
+      # #   working-directory: ./src
+      # #   run: |
+      # #     mkdir -p ../releases/darwin/arm
+      # #     GOOS=darwin GOARCH=arm go build -o ../releases/darwin/arm/pars ./pars.go
 
-      - name: Archive Darwin Build
-        run: tar -czvf releases/darwin/amd64/pars-darwin-amd64.tar.gz -C releases/darwin/amd64/ pars
+      # # - name: Archive Darwin Build
+      # #   run: tar -czvf releases/darwin/arm/pars-darwin-arm.tar.gz -C releases/darwin/arm/ pars
 
-      - name: Upload Darwin Artifact
-        uses: actions/upload-artifact@v2
-        with:
-          name: darwin-build
-          path: releases/darwin/amd64/pars-darwin-amd64.tar.gz
+      # # - name: Upload Darwin Artifact
+      # #   uses: actions/upload-artifact@v2
+      # #   with:
+      # #     name: darwin-build
+      # #     path: releases/darwin/arm/pars-darwin-arm.tar.gz
 
-      # - name: Build Darwin arm
+      # - name: Build Darwin arm64
       #   working-directory: ./src
       #   run: |
-      #     mkdir -p ../releases/darwin/arm
-      #     GOOS=darwin GOARCH=arm go build -o ../releases/darwin/arm/pars ./pars.go
+      #     mkdir -p ../releases/darwin/arm64
+      #     GOOS=darwin GOARCH=arm64 go build -o ../releases/darwin/arm64/pars ./pars.go
 
       # - name: Archive Darwin Build
-      #   run: tar -czvf releases/darwin/arm/pars-darwin-arm.tar.gz -C releases/darwin/arm/ pars
+      #   run: tar -czvf releases/darwin/arm64/pars-darwin-arm64.tar.gz -C releases/darwin/arm64/ pars
 
       # - name: Upload Darwin Artifact
       #   uses: actions/upload-artifact@v2
       #   with:
       #     name: darwin-build
-      #     path: releases/darwin/arm/pars-darwin-arm.tar.gz
-
-      - name: Build Darwin arm64
-        working-directory: ./src
-        run: |
-          mkdir -p ../releases/darwin/arm64
-          GOOS=darwin GOARCH=arm64 go build -o ../releases/darwin/arm64/pars ./pars.go
-
-      - name: Archive Darwin Build
-        run: tar -czvf releases/darwin/arm64/pars-darwin-arm64.tar.gz -C releases/darwin/arm64/ pars
-
-      - name: Upload Darwin Artifact
-        uses: actions/upload-artifact@v2
-        with:
-          name: darwin-build
-          path: releases/darwin/arm64/pars-darwin-arm64.tar.gz
+      #     path: releases/darwin/arm64/pars-darwin-arm64.tar.gz
 
 
 
 
 
 
-      # - name: Build Solaris amd64
-      #   working-directory: ./src
-      #   run: |
-      #     mkdir -p ../releases/solaris/amd64
-      #     GOOS=solaris GOARCH=amd64 go build -o ../releases/solaris/amd64/pars ./pars.go
+      # # - name: Build Solaris amd64
+      # #   working-directory: ./src
+      # #   run: |
+      # #     mkdir -p ../releases/solaris/amd64
+      # #     GOOS=solaris GOARCH=amd64 go build -o ../releases/solaris/amd64/pars ./pars.go
 
-      # - name: Archive Solaris Build
-      #   run: tar -czvf releases/solaris/amd64/pars-solaris-amd64.tar.gz -C releases/solaris/amd64/ pars
+      # # - name: Archive Solaris Build
+      # #   run: tar -czvf releases/solaris/amd64/pars-solaris-amd64.tar.gz -C releases/solaris/amd64/ pars
 
-      # - name: Upload Solaris Artifact
-      #   uses: actions/upload-artifact@v2
-      #   with:
-      #     name: solaris-build
-      #     path: releases/solaris/amd64/pars-solaris-amd64.tar.gz
+      # # - name: Upload Solaris Artifact
+      # #   uses: actions/upload-artifact@v2
+      # #   with:
+      # #     name: solaris-build
+      # #     path: releases/solaris/amd64/pars-solaris-amd64.tar.gz
 
+  # build-windows:
+  #   runs-on: windows-latest
 
+  #   steps:
+  #     - uses: actions/checkout@v4
 
+  #     - name: Set up Go
+  #       uses: actions/setup-go@v4
+  #       with:
+  #         go-version: '1.21'
 
+  #     - name: Build Windows 386
+  #       working-directory: ./src
+  #       run: |
+  #         mkdir -p ../releases/windows/386
+  #         set GOOS=windows
+  #         set GOARCH=386
+  #         go build -o ../releases/windows/386/pars.exe ./pars.go
 
-
-
-
-
-  build-windows:
-    runs-on: windows-latest
-
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Set up Go
-        uses: actions/setup-go@v4
-        with:
-          go-version: '1.21'
-
-      - name: Build Windows 386
-        working-directory: ./src
-        run: |
-          mkdir -p ../releases/windows/386
-          set GOOS=windows
-          set GOARCH=386
-          go build -o ../releases/windows/386/pars.exe ./pars.go
-
-      - name: Archive Windows Build
-        run: Compress-Archive -Path releases/windows/386/* -Destination releases/windows/386/pars-windows-386.zip
+  #     - name: Archive Windows Build
+  #       run: Compress-Archive -Path releases/windows/386/* -Destination releases/windows/386/pars-windows-386.zip
 
 
-      - name: Upload Windows Artifact
-        uses: actions/upload-artifact@v2
-        with:
-          name: windows-build
-          path: releases/windows/386/pars-windows-386.zip
+  #     - name: Upload Windows Artifact
+  #       uses: actions/upload-artifact@v2
+  #       with:
+  #         name: windows-build
+  #         path: releases/windows/386/pars-windows-386.zip
 
 
-      - name: Upload Windows Artifact (exe)
-        uses: actions/upload-artifact@v2
-        with:
-          name: windows-build
-          path: releases/windows/386/pars.exe
+  #     - name: Upload Windows Artifact (exe)
+  #       uses: actions/upload-artifact@v2
+  #       with:
+  #         name: windows-build
+  #         path: releases/windows/386/pars.exe
 
-      - name: Build Windows amd64
-        working-directory: ./src
-        run: |
-          mkdir -p ../releases/windows/amd64
-          set GOOS=windows
-          set GOARCH=amd64
-          go build -o ../releases/windows/amd64/pars.exe ./pars.go
+  #     - name: Build Windows amd64
+  #       working-directory: ./src
+  #       run: |
+  #         mkdir -p ../releases/windows/amd64
+  #         set GOOS=windows
+  #         set GOARCH=amd64
+  #         go build -o ../releases/windows/amd64/pars.exe ./pars.go
 
-      - name: Archive Windows Build
-        run: Compress-Archive -Path releases/windows/amd64/* -Destination releases/windows/amd64/pars-windows-amd64.zip
-
-
-      - name: Upload Windows Artifact
-        uses: actions/upload-artifact@v2
-        with:
-          name: windows-build
-          path: releases/windows/amd64/pars-windows-amd64.zip
+  #     - name: Archive Windows Build
+  #       run: Compress-Archive -Path releases/windows/amd64/* -Destination releases/windows/amd64/pars-windows-amd64.zip
 
 
-      - name: Upload Windows Artifact 386 (exe)
-        uses: actions/upload-artifact@v2
-        with:
-          name: windows-build
-          path: releases/windows/386/pars.exe
+  #     - name: Upload Windows Artifact
+  #       uses: actions/upload-artifact@v2
+  #       with:
+  #         name: windows-build
+  #         path: releases/windows/amd64/pars-windows-amd64.zip
 
 
-      - name: Upload Windows Artifact amd64 (exe)
-        uses: actions/upload-artifact@v2
-        with:
-          name: windows-build
-          path: releases/windows/amd64/pars.exe
+  #     - name: Upload Windows Artifact 386 (exe)
+  #       uses: actions/upload-artifact@v2
+  #       with:
+  #         name: windows-build
+  #         path: releases/windows/386/pars.exe
+
+
+  #     - name: Upload Windows Artifact amd64 (exe)
+  #       uses: actions/upload-artifact@v2
+  #       with:
+  #         name: windows-build
+  #         path: releases/windows/amd64/pars.exe
 
   create_release:
-    needs: [build-linux, build-windows]
+    needs: [build-linux]
+    # needs: [build-linux, build-windows]
     runs-on: ubuntu-latest
 
     steps:
@@ -261,6 +254,11 @@ jobs:
         with:
           name: linux-build
           path: release
+          
+      - name: Get Tag Name
+        id: ls
+        run: |
+          ls release
 
       - name: Download Windows Artifact
         uses: actions/download-artifact@v2
