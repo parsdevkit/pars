@@ -286,7 +286,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./releases/linux/386/pars-linux-amd64.tar.gz
+          asset_path: ./releases/linux/386/pars-linux-386.tar.gz
           asset_name: pars-linux-386.tar.gz
           asset_content_type: application/gzip
 
@@ -329,7 +329,7 @@ jobs:
       #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       #   with:
       #     upload_url: ${{ steps.create_release.outputs.upload_url }}
-      #     asset_path: ./releases/darwin/386/pars-darwin-amd64.tar.gz
+      #     asset_path: ./releases/darwin/386/pars-darwin-386.tar.gz
       #     asset_name: pars-darwin-386.tar.gz
       #     asset_content_type: application/gzip
 
