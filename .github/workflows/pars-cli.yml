@@ -97,7 +97,7 @@ jobs:
       # - name: Upload Darwin Artifact
       #   uses: actions/upload-artifact@v2
       #   with:
-      #     name: darwin-build
+      #     name: linux-build
       #     path: releases/darwin/386/pars-darwin-386.tar.gz
 
       - name: Build Darwin amd64
@@ -112,7 +112,7 @@ jobs:
       - name: Upload Darwin Artifact
         uses: actions/upload-artifact@v2
         with:
-          name: darwin-build
+          name: linux-build
           path: releases/darwin/amd64/pars-darwin-amd64.tar.gz
 
       # - name: Build Darwin arm
@@ -127,7 +127,7 @@ jobs:
       # - name: Upload Darwin Artifact
       #   uses: actions/upload-artifact@v2
       #   with:
-      #     name: darwin-build
+      #     name: linux-build
       #     path: releases/darwin/arm/pars-darwin-arm.tar.gz
 
       - name: Build Darwin arm64
@@ -142,7 +142,7 @@ jobs:
       - name: Upload Darwin Artifact
         uses: actions/upload-artifact@v2
         with:
-          name: darwin-build
+          name: linux-build
           path: releases/darwin/arm64/pars-darwin-arm64.tar.gz
 
 
