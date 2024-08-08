@@ -115,20 +115,20 @@ jobs:
       #     name: linux-build
       #     path: releases/darwin/amd64/pars-darwin-amd64.tar.gz
 
-      # # - name: Build Darwin arm
-      # #   working-directory: ./src
-      # #   run: |
-      # #     mkdir -p ../releases/darwin/arm
-      # #     GOOS=darwin GOARCH=arm go build -o ../releases/darwin/arm/pars ./pars.go
+      - name: Build Darwin arm
+        working-directory: ./src
+        run: |
+          mkdir -p ../releases/darwin/arm
+          GOOS=darwin GOARCH=arm go build -o ../releases/darwin/arm/pars ./pars.go
 
-      # # - name: Archive Darwin Build
-      # #   run: tar -czvf releases/darwin/arm/pars-darwin-arm.tar.gz -C releases/darwin/arm/ pars
+      - name: Archive Darwin Build
+        run: tar -czvf releases/darwin/arm/pars-darwin-arm.tar.gz -C releases/darwin/arm/ pars
 
-      # # - name: Upload Darwin Artifact
-      # #   uses: actions/upload-artifact@v2
-      # #   with:
-      # #     name: linux-build
-      # #     path: releases/darwin/arm/pars-darwin-arm.tar.gz
+      - name: Upload Darwin Artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: linux-build
+          path: releases/darwin/arm/pars-darwin-arm.tar.gz
 
       # - name: Build Darwin arm64
       #   working-directory: ./src
