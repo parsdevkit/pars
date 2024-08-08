@@ -127,16 +127,13 @@ nav:
       - guides/references/value-types.md
   - Setup:
     - setup/index.md
-    - Installation: 
-      - Installing: setup/installation/installation.md
-    -   Uninstalling: setup/installation/uninstall.md
-    - Downloads:
-      - setup/downloads/windows.md
-      - setup/downloads/linux.md
-      - setup/downloads/macos.md
-      - setup/downloads/achieve.md
+    - Installation: setup/installation/installation.md
+    - Downloads: setup/downloads/latest.md
     - Changelogs:
-      - setup/changelogs/v1.0.0.md
+      - setup/changelogs/index.md
+      - v1.0.2: setup/changelogs/v1.0.2.md
+      - v1.0.1: setup/changelogs/v1.0.1.md
+      - v1.0.0: setup/changelogs/v1.0.0.md
     - Configuration: setup/configuration/configuration.md
     - Upgrade: 
       - Upgrade: setup/upgrade/upgrade.md
@@ -190,7 +187,23 @@ nav:
 theme:
   name: material
   analytics:
-    gtag: G-TNGBBETP6J
+    provider: google
+    property: G-TNGBBETP6J
+    feedback:
+      title: Was this page helpful?
+      ratings:
+        - icon: material/emoticon-happy-outline
+          name: This page was helpful
+          data: 1
+          note: >-
+            Thanks for your feedback!
+        - icon: material/emoticon-sad-outline
+          name: This page could be improved
+          data: 0
+          note: >- 
+            Thanks for your feedback! Help us improve this page by
+            using our <a href="https://github.com/parsdevkit/pars/issues/new/?title=[Feedback]+{title}+-+{url}" target="_blank" rel="noopener">feedback form</a>.
+
   language: en
   custom_dir: theme
   favicon: assets/favicon.png
@@ -380,12 +393,12 @@ plugins:
   # - glightbox
   - privacy:
       enabled: !ENV [CI, false]
-  - git-revision-date-localized:
-      enable_creation_date: true
-  - git-committers:
-      repository: parsdevkit/pars
-      branch: main
-  - git-authors
+  # - git-revision-date-localized:
+  #     enable_creation_date: true
+  # - git-committers:
+  #     repository: parsdevkit/pars
+  #     branch: main
+  # - git-authors
   - ezglossary:
       markdown_links: true
       list_definitions: false
@@ -428,6 +441,8 @@ extra:
       link: https://www.linkedin.com/groups/13072322/
     - icon: fontawesome/brands/youtube
       link: https://www.youtube.com/@ParsDevKit
+    - icon: fontawesome/brands/medium
+      link: https://medium.com/@parsdevkit
   generator: false
   consent:
     title: Cookie consent
