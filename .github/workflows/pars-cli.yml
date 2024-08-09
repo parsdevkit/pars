@@ -68,7 +68,7 @@ jobs:
           dpkg-deb --build releases/package
 
       - name: Archive .deb Package
-        run: tar -czvf releases/linux/386/package.deb.tar.gz -C releases/package/DEBIAN/ .
+        run: tar -czvf releases/linux/386/pars-linux-386.deb.tar.gz -C releases/package/DEBIAN/ .
 
       - name: Upload .deb Artifact
         uses: actions/upload-artifact@v2
