@@ -84,7 +84,7 @@ jobs:
           echo '%install' >> ~/rpmbuild/SPECS/pars.spec
           echo 'mkdir -p %{buildroot}/usr/local/bin' >> ~/rpmbuild/SPECS/pars.spec
           echo 'ls' >> ~/rpmbuild/SPECS/pars.spec
-          echo 'cp -a bin %{buildroot}/usr/local/bin/' >> ~/rpmbuild/SPECS/pars.spec
+          echo 'cp -a bin/pars %{buildroot}/usr/local/bin/' >> ~/rpmbuild/SPECS/pars.spec
           echo '%files' >> ~/rpmbuild/SPECS/pars.spec
           echo '/usr/local/bin/pars' >> ~/rpmbuild/SPECS/pars.spec
           echo '%changelog' >> ~/rpmbuild/SPECS/pars.spec
