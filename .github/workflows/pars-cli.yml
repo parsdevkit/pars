@@ -50,7 +50,17 @@ jobs:
 
           # Copy binary and control files
           cp releases/linux/386/pars release/package/usr/local/bin/
-          cp debian/control release/package/DEBIAN/
+
+          
+          # Create a simple control file if not already present
+          echo "Package: Pars" > release/package/DEBIAN/control
+          echo "Version: ${{ env.tag_name }}" >> release/package/DEBIAN/control
+          echo "Section: base" >> release/package/DEBIAN/control
+          echo "Priority: optional" >> release/package/DEBIAN/control
+          echo "Architecture: amd64" >> release/package/DEBIAN/control
+          echo "Depends: libc6 (>= 2.7)" >> release/package/DEBIAN/control
+          echo "Maintainer: Pars Dev Kit <info@parsdevkit.net>" >> release/package/DEBIAN/control
+          echo "Description: Pars" >> release/package/DEBIAN/control
 
           # Build the .deb package
           dpkg-deb --build release/package
