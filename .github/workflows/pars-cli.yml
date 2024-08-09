@@ -73,8 +73,8 @@ jobs:
       - name: Upload .deb Artifact
         uses: actions/upload-artifact@v2
         with:
-          name: deb-package
-          path: releases/linux/386/package.deb.tar.gz
+          name: linux-build-386-deb
+          path: releases/linux/386/pars-linux-386.deb.tar.gz
 
 
 
@@ -337,13 +337,21 @@ jobs:
           asset_name: pars-ubuntu-386.tar.gz
           asset_content_type: application/gzip
 
+          
+      - name: Download Linux Artifact 386
+        uses: actions/download-artifact@v2
+        with:
+          name: linux-build-386-deb
+          path: releases
+
+          
       - name: Upload Ubuntu Release Asset 386 Package
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./releases/package.deb.tar.gz
+          asset_path: ./releases/pars-linux-386.deb.tar.gz
           asset_name: pars-ubuntu-386.deb.tar.gz
           asset_content_type: application/gzip
 
