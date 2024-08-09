@@ -240,7 +240,7 @@ jobs:
 
 
   create_release:
-    needs: [build-linux, build-windows]
+    needs: [build-linux-386, build-linux-amd64]
     runs-on: ubuntu-latest
 
     steps:
