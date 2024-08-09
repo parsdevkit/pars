@@ -39,15 +39,6 @@ jobs:
       - name: Archive Binary Build
         run: tar -czvf releases/pars-linux-386-bin.tar.gz -C releases/ bin
 
-      - name: Upload Linux Binary Artifact
-        uses: actions/upload-artifact@v2
-        with:
-          name: linux-386-bin-build
-          path: releases/pars-linux-386-bin.tar.gz
-
-
-      # ******************************************
-
 
       - name: Build .deb Package
         run: |
@@ -70,12 +61,15 @@ jobs:
         run: tar -czvf releases/pars-linux-386.deb.tar.gz -C releases/ pars-linux-386.deb
 
 
-          
-      - name: Upload .deb Artifact
+
+
+      - name: Upload Linux 386 Artifact
         uses: actions/upload-artifact@v2
         with:
-          name: linux-386-deb-package
-          path: releases/pars-linux-386.deb.tar.gz
+          name: linux-386-build
+          path: |
+            releases/pars-linux-386-bin.tar.gz
+            releases/pars-linux-386.deb.tar.gz
 
 
 
@@ -137,12 +131,7 @@ jobs:
       - name: Archive Binary Build
         run: tar -czvf releases/pars-linux-amd64-bin.tar.gz -C releases/ bin
 
-      - name: Upload Linux Binary Artifact
-        uses: actions/upload-artifact@v2
-        with:
-          name: linux-amd64-bin-build
-          path: releases/pars-linux-amd64-bin.tar.gz
-
+        
 
       # ******************************************
 
@@ -169,11 +158,15 @@ jobs:
 
 
           
-      - name: Upload .deb Artifact
+
+
+      - name: Upload Linux amd64 Artifact
         uses: actions/upload-artifact@v2
         with:
-          name: linux-amd64-deb-package
-          path: releases/pars-linux-amd64.deb.tar.gz
+          name: linux-amd64-build
+          path: |
+            releases/pars-linux-amd64-bin.tar.gz
+            releases/pars-linux-amd64.deb.tar.gz
 
 
   build-linux-arm:
@@ -208,11 +201,7 @@ jobs:
       - name: Archive Binary Build
         run: tar -czvf releases/pars-linux-arm-bin.tar.gz -C releases/ bin
 
-      - name: Upload Linux Binary Artifact
-        uses: actions/upload-artifact@v2
-        with:
-          name: linux-arm-bin-build
-          path: releases/pars-linux-arm-bin.tar.gz
+        
 
 
       # ******************************************
@@ -239,13 +228,13 @@ jobs:
         run: tar -czvf releases/pars-linux-arm.deb.tar.gz -C releases/ pars-linux-arm.deb
 
 
-          
-      - name: Upload .deb Artifact
+      - name: Upload Linux arm Artifact
         uses: actions/upload-artifact@v2
         with:
-          name: linux-arm-deb-package
-          path: releases/pars-linux-arm.deb.tar.gz
-
+          name: linux-arm-build
+          path: |
+            releases/pars-linux-arm-bin.tar.gz
+            releases/pars-linux-arm.deb.tar.gz
 
 
   build-linux-arm64:
@@ -280,12 +269,7 @@ jobs:
       - name: Archive Binary Build
         run: tar -czvf releases/pars-linux-arm64-bin.tar.gz -C releases/ bin
 
-      - name: Upload Linux Binary Artifact
-        uses: actions/upload-artifact@v2
-        with:
-          name: linux-arm64-bin-build
-          path: releases/pars-linux-arm64-bin.tar.gz
-
+        
 
       # ******************************************
 
@@ -311,12 +295,13 @@ jobs:
         run: tar -czvf releases/pars-linux-arm64.deb.tar.gz -C releases/ pars-linux-arm64.deb
 
 
-          
-      - name: Upload .deb Artifact
+      - name: Upload Linux arm64 Artifact
         uses: actions/upload-artifact@v2
         with:
-          name: linux-arm64-deb-package
-          path: releases/pars-linux-arm64.deb.tar.gz
+          name: linux-arm64-build
+          path: |
+            releases/pars-linux-arm64-bin.tar.gz
+            releases/pars-linux-arm64.deb.tar.gz
 
 
 
@@ -487,22 +472,15 @@ jobs:
       #  386
 
 
-      - name: Download Linux 386 Binary Artifact
+      - name: Download Linux 386 Artifact
         uses: actions/download-artifact@v2
         with:
-          name: linux-386-bin-build
-          path: releases
-
-          
-      - name: Download Linux 386 .deb Artifact
-        uses: actions/download-artifact@v2
-        with:
-          name: linux-386-deb-package
+          name: linux-386-build
           path: releases
 
 
 
-          
+
 
       - name: Upload Linux 386 Binary Asset
         uses: actions/upload-release-asset@v1
@@ -532,17 +510,11 @@ jobs:
 
       #  amd64
 
-      - name: Download Linux amd64 Binary Artifact
-        uses: actions/download-artifact@v2
-        with:
-          name: linux-amd64-bin-build
-          path: releases
 
-          
-      - name: Download Linux amd64 .deb Artifact
+      - name: Download Linux amd64 Artifact
         uses: actions/download-artifact@v2
         with:
-          name: linux-amd64-deb-package
+          name: linux-amd64-build
           path: releases
 
 
@@ -579,17 +551,11 @@ jobs:
       #  arm
 
 
-      - name: Download Linux arm Binary Artifact
-        uses: actions/download-artifact@v2
-        with:
-          name: linux-arm-bin-build
-          path: releases
 
-          
-      - name: Download Linux arm .deb Artifact
+      - name: Download Linux arm Artifact
         uses: actions/download-artifact@v2
         with:
-          name: linux-arm-deb-package
+          name: linux-arm-build
           path: releases
 
 
@@ -623,17 +589,11 @@ jobs:
 
       #  arm64
 
-      - name: Download Linux arm64 Binary Artifact
-        uses: actions/download-artifact@v2
-        with:
-          name: linux-arm64-bin-build
-          path: releases
 
-          
-      - name: Download Linux arm64 .deb Artifact
+      - name: Download Linux arm64 Artifact
         uses: actions/download-artifact@v2
         with:
-          name: linux-arm64-deb-package
+          name: linux-arm64-build
           path: releases
 
 
