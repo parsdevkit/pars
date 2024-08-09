@@ -177,70 +177,78 @@ jobs:
 
 
 
-  # build-windows-386:
-  #   runs-on: windows-latest
+  build-windows-386:
+    runs-on: windows-latest
 
-  #   steps:
-  #     - uses: actions/checkout@v4
+    steps:
+      - uses: actions/checkout@v4
 
-  #     - name: Set up Go
-  #       uses: actions/setup-go@v4
-  #       with:
-  #         go-version: '1.21'
+      - name: Set up Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: '1.21'
 
-  #     - name: Build Windows 386
-  #       working-directory: ./src
-  #       run: |
-  #         mkdir -p ../releases/windows/386
-  #         set GOOS=windows
-  #         set GOARCH=386
-  #         go build -o ../releases/windows/386/pars.exe ./pars.go
+      - name: Build Windows 386
+        working-directory: ./src
+        run: |
+          mkdir -p ../releases/windows/386
+          set GOOS=windows
+          set GOARCH=386
+          go build -o ../releases/windows/386/pars.exe ./pars.go
 
-  #     - name: Archive Windows Build
-  #       run: Compress-Archive -Path releases/windows/386/* -Destination releases/windows/386/pars-windows-386.zip
-
-
-  #     - name: Upload Windows Artifact
-  #       uses: actions/upload-artifact@v2
-  #       with:
-  #         name: windows-build-386
-  #         path: releases/windows/386/pars-windows-386.zip
+      - name: Archive Windows Build
+        run: Compress-Archive -Path releases/windows/386/* -Destination releases/windows/386/pars-windows-386.zip
 
 
+      - name: Upload Windows Artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: windows-build-386
+          path: releases/windows/386/pars-windows-386.zip
 
 
-  # build-windows-amd64:
-  #   runs-on: windows-latest
-
-  #   steps:
-  #     - uses: actions/checkout@v4
-
-  #     - name: Set up Go
-  #       uses: actions/setup-go@v4
-  #       with:
-  #         go-version: '1.21'
-
-  #     - name: Build Windows amd64
-  #       working-directory: ./src
-  #       run: |
-  #         mkdir -p ../releases/windows/amd64
-  #         set GOOS=windows
-  #         set GOARCH=amd64
-  #         go build -o ../releases/windows/amd64/pars.exe ./pars.go
-
-  #     - name: Archive Windows Build
-  #       run: Compress-Archive -Path releases/windows/amd64/* -Destination releases/windows/amd64/pars-windows-amd64.zip
 
 
-  #     - name: Upload Windows Artifact
-  #       uses: actions/upload-artifact@v2
-  #       with:
-  #         name: windows-build-amd64
-  #         path: releases/windows/amd64/pars-windows-amd64.zip
+  build-windows-amd64:
+    runs-on: windows-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: '1.21'
+
+      - name: Build Windows amd64
+        working-directory: ./src
+        run: |
+          mkdir -p ../releases/windows/amd64
+          set GOOS=windows
+          set GOARCH=amd64
+          go build -o ../releases/windows/amd64/pars.exe ./pars.go
+
+      - name: Archive Windows Build
+        run: Compress-Archive -Path releases/windows/amd64/* -Destination releases/windows/amd64/pars-windows-amd64.zip
+
+
+      - name: Upload Windows Artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: windows-build-amd64
+          path: releases/windows/amd64/pars-windows-amd64.zip
 
 
   create_release:
-    needs: [build-linux-386, build-linux-amd64]
+    needs: 
+      - build-linux-386
+      - build-linux-amd64
+      - build-linux-arm
+      - build-linux-arm64
+      - build-windows-386
+      - build-windows-amd64
+      - build-darwin-amd64
+      - build-darwin-arm64
     runs-on: ubuntu-latest
 
     steps:
@@ -265,7 +273,6 @@ jobs:
           body: "test"
           draft: false
           prerelease: false
-
 
 
           
