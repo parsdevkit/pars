@@ -30,52 +30,53 @@ jobs:
           echo "version=$VERSION" >> $GITHUB_ENV
 
 
-      - name: Build Binary 386
+      - name: Build Binary
         working-directory: ./src
         run: |
-          mkdir -p ../releases/linux/386
-          GOOS=linux GOARCH=386 go build -o ../releases/linux/386/pars ./pars.go
+          mkdir -p ../releases
+          GOOS=linux GOARCH=386 go build -o ../releases/bin ./pars.go
 
-      - name: Archive Binary Build 386
-        run: tar -czvf releases/linux/386/pars-linux-386.tar.gz -C releases/linux/386/ pars
+      - name: Archive Binary Build
+        run: tar -czvf releases/pars-linux-386-bin.tar.gz -C releases/bin .
 
 
-      - name: Upload Linux Binary Artifact 386
+      - name: Upload Linux Binary Artifact
         uses: actions/upload-artifact@v2
         with:
-          name: linux-binary-build-386
-          path: releases/linux/386/pars-linux-386.tar.gz
+          name: linux-386-bin-build
+          path: releases/pars-linux-386-bin.tar.gz
 
 
       # ******************************************
 
 
-      - name: Build .deb Package 386
+      - name: Build .deb Package
         run: |
-          mkdir -p releases/package/DEBIAN
-          mkdir -p releases/package/usr/local/bin
-          cp releases/linux/386/pars releases/package/usr/local/bin/
-          echo "Package: Pars" > releases/package/DEBIAN/control
-          echo "Version: ${{ env.version }}" >> releases/package/DEBIAN/control
-          echo "Section: base" >> releases/package/DEBIAN/control
-          echo "Priority: optional" >> releases/package/DEBIAN/control
-          echo "Architecture: amd64" >> releases/package/DEBIAN/control
-          echo "Depends: libc6 (>= 2.7)" >> releases/package/DEBIAN/control
-          echo "Maintainer: Pars Dev Kit <info@parsdevkit.net>" >> releases/package/DEBIAN/control
-          echo "Description: Pars" >> releases/package/DEBIAN/control
-          dpkg-deb --build releases/package releases/package/pars-linux-386.deb
+          mkdir -p releases/deb/DEBIAN
+          mkdir -p releases/deb/usr/local/bin
+          cp releases/pars releases/deb/usr/local/bin/
+          echo "Package: Pars" > releases/deb/DEBIAN/control
+          echo "Version: ${{ env.version }}" >> releases/deb/DEBIAN/control
+          echo "Section: base" >> releases/deb/DEBIAN/control
+          echo "Priority: optional" >> releases/deb/DEBIAN/control
+          echo "Architecture: amd64" >> releases/deb/DEBIAN/control
+          echo "Depends: libc6 (>= 2.7)" >> releases/deb/DEBIAN/control
+          echo "Maintainer: Pars Dev Kit <info@parsdevkit.net>" >> releases/deb/DEBIAN/control
+          echo "Description: Pars" >> releases/deb/DEBIAN/control
+          
+          dpkg-deb --build releases/deb releases/pars-linux-386.deb
 
 
-      - name: Archive .deb Package 386
-        run: tar -czvf releases/linux/386/pars-linux-386.deb.tar.gz -C releases/package/ pars-linux-386.deb
+      - name: Archive .deb Package
+        run: tar -czvf releases/pars-linux-386.deb.tar.gz -C releases/deb/ pars-linux-386.deb
 
 
           
-      - name: Upload .deb Artifact 386
+      - name: Upload .deb Artifact
         uses: actions/upload-artifact@v2
         with:
-          name: linux-deb-package-386
-          path: releases/linux/386/pars-linux-386.deb.tar.gz
+          name: linux-386-deb-package
+          path: releases/pars-linux-386.deb.tar.gz
 
 
 
@@ -347,32 +348,32 @@ jobs:
           prerelease: false
 
 
-          
-      - name: Download Linux Artifact 386
+
+      - name: Download Linux 386 Binary Artifact
         uses: actions/download-artifact@v2
         with:
-          name: linux-binary-build-386
+          name: linux-386-bin-build
           path: releases
 
-      - name: Upload Ubuntu Release Asset 386
+      - name: Upload Ubuntu 386 Binary Asset
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./releases/pars-linux-386.tar.gz
+          asset_path: ./releases/pars-linux-386-bin.tar.gz
           asset_name: pars-ubuntu-386.tar.gz
           asset_content_type: application/gzip
 
           
-      - name: Download Linux Artifact 386 binary
+      - name: Download Linux 386 Deb Artifact
         uses: actions/download-artifact@v2
         with:
-          name: linux-deb-package-386
+          name: linux-386-deb-package
           path: releases
 
           
-      - name: Upload Ubuntu Release Asset 386 .deb
+      - name: Upload Ubuntu 386 Deb Asset
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -384,30 +385,13 @@ jobs:
 
           
 
-          
-      - name: Download Linux Artifact 386 binary
-        uses: actions/download-artifact@v2
-        with:
-          name: linux-build-i386-snap
-          path: releases
-          
-      - name: Upload Ubuntu Release Asset 386 .snap
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./releases/linux/386/pars-linux-i386.snap.tar.gz
-          asset_name: pars-ubuntu-i386.snap.tar.gz
-          asset_content_type: application/gzip
-
       # - name: Upload Centos Release Asset 386
       #   uses: actions/upload-release-asset@v1
       #   env:
       #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       #   with:
       #     upload_url: ${{ steps.create_release.outputs.upload_url }}
-      #     asset_path: ./releases/pars-linux-386.tar.gz
+      #     asset_path: ./releases/pars-linux-386-bin.tar.gz
       #     asset_name: pars-centos-386.tar.gz
       #     asset_content_type: application/gzip
 
@@ -418,7 +402,7 @@ jobs:
       #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       #   with:
       #     upload_url: ${{ steps.create_release.outputs.upload_url }}
-      #     asset_path: ./releases/pars-linux-386.tar.gz
+      #     asset_path: ./releases/pars-linux-386-bin.tar.gz
       #     asset_name: pars-debian-386.tar.gz
       #     asset_content_type: application/gzip
 
