@@ -62,34 +62,34 @@ jobs:
 
       - name: Build .rpm Package
         run: |
-          mkdir -p releases/rpm/{BUILD,RPMS,SOURCES,SPECS,SRPMS}
-          mkdir -p releases/rpm/BUILD/pars
-          cp releases/bin releases/rpm/BUILD/pars/
-          cp releases/pars-linux-386-bin.tar.gz releases/rpm/SOURCES/
+          mkdir -p ~/rpmbuild/{BUILD,RPMS,SOURCES,SPECS,SRPMS}
+          mkdir -p ~/rpmbuild/BUILD/pars
+          cp releases/bin ~/rpmbuild/BUILD/pars/
+          cp releases/pars-linux-386-bin.tar.gz ~/rpmbuild/SOURCES/
 
           # Create a SPEC file
-          echo 'Name: pars' > releases/rpm/SPECS/pars.spec
-          echo 'Version: ${{ env.version }}' >> releases/rpm/SPECS/pars.spec
-          echo 'Release: 1%{?dist}' >> releases/rpm/SPECS/pars.spec
-          echo 'Summary: Pars' >> releases/rpm/SPECS/pars.spec
-          echo 'License: MIT' >> releases/rpm/SPECS/pars.spec
-          echo 'Source0: pars-linux-386-bin.tar.gz' >> releases/rpm/SPECS/pars.spec
-          echo '%description' >> releases/rpm/SPECS/pars.spec
-          echo 'Pars.' >> releases/rpm/SPECS/pars.spec
-          echo '%prep' >> releases/rpm/SPECS/pars.spec
-          echo '%setup -q' >> releases/rpm/SPECS/pars.spec
-          echo '%build' >> releases/rpm/SPECS/pars.spec
-          echo '%install' >> releases/rpm/SPECS/pars.spec
-          echo 'mkdir -p %{buildroot}/usr/local/bin' >> releases/rpm/SPECS/pars.spec
-          echo 'cp -a pars %{buildroot}/usr/local/bin/' >> releases/rpm/SPECS/pars.spec
-          echo '%files' >> releases/rpm/SPECS/pars.spec
-          echo '/usr/local/bin/pars' >> releases/rpm/SPECS/pars.spec
-          echo '%changelog' >> releases/rpm/SPECS/pars.spec
-          echo '* Pars Dev Kit <info@parsdevkit.net>' >> releases/rpm/SPECS/pars.spec
-          echo '- Initial RPM package.' >> releases/rpm/SPECS/pars.spec
+          echo 'Name: pars' > ~/rpmbuild/SPECS/pars.spec
+          echo 'Version: ${{ env.version }}' >> ~/rpmbuild/SPECS/pars.spec
+          echo 'Release: 1%{?dist}' >> ~/rpmbuild/SPECS/pars.spec
+          echo 'Summary: Pars' >> ~/rpmbuild/SPECS/pars.spec
+          echo 'License: MIT' >> ~/rpmbuild/SPECS/pars.spec
+          echo 'Source0: pars-linux-386-bin.tar.gz' >> ~/rpmbuild/SPECS/pars.spec
+          echo '%description' >> ~/rpmbuild/SPECS/pars.spec
+          echo 'Pars.' >> ~/rpmbuild/SPECS/pars.spec
+          echo '%prep' >> ~/rpmbuild/SPECS/pars.spec
+          echo '%setup -q' >> ~/rpmbuild/SPECS/pars.spec
+          echo '%build' >> ~/rpmbuild/SPECS/pars.spec
+          echo '%install' >> ~/rpmbuild/SPECS/pars.spec
+          echo 'mkdir -p %{buildroot}/usr/local/bin' >> ~/rpmbuild/SPECS/pars.spec
+          echo 'cp -a pars %{buildroot}/usr/local/bin/' >> ~/rpmbuild/SPECS/pars.spec
+          echo '%files' >> ~/rpmbuild/SPECS/pars.spec
+          echo '/usr/local/bin/pars' >> ~/rpmbuild/SPECS/pars.spec
+          echo '%changelog' >> ~/rpmbuild/SPECS/pars.spec
+          echo '* Pars Dev Kit <info@parsdevkit.net>' >> ~/rpmbuild/SPECS/pars.spec
+          echo '- Initial RPM package.' >> ~/rpmbuild/SPECS/pars.spec
 
           # Build the RPM
-          rpmbuild -bb releases/rpm/SPECS/pars.spec
+          rpmbuild -bb ~/rpmbuild/SPECS/pars.spec
 
 
       - name: Archive .rpm Package
