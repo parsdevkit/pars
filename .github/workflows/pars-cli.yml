@@ -45,6 +45,10 @@ jobs:
 
       - name: Build .deb Package
         run: |
+          # Remove 'v' from the version number
+          deb_version=${{ env.tag_name#v }}
+
+
           mkdir -p release/package/DEBIAN
           mkdir -p release/package/usr/local/bin
 
@@ -54,7 +58,7 @@ jobs:
           
           # Create a simple control file if not already present
           echo "Package: Pars" > release/package/DEBIAN/control
-          echo "Version: ${{ env.tag_name }}" >> release/package/DEBIAN/control
+          echo "Version: ${{ deb_version }}" >> release/package/DEBIAN/control
           echo "Section: base" >> release/package/DEBIAN/control
           echo "Priority: optional" >> release/package/DEBIAN/control
           echo "Architecture: amd64" >> release/package/DEBIAN/control
