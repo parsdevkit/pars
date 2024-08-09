@@ -49,7 +49,7 @@ jobs:
           echo "Version: ${{ env.version }}" >> releases/deb/DEBIAN/control
           echo "Section: base" >> releases/deb/DEBIAN/control
           echo "Priority: optional" >> releases/deb/DEBIAN/control
-          echo "Architecture: amd64" >> releases/deb/DEBIAN/control
+          echo "Architecture: i386" >> releases/deb/DEBIAN/control
           echo "Depends: libc6 (>= 2.7)" >> releases/deb/DEBIAN/control
           echo "Maintainer: Pars Dev Kit <info@parsdevkit.net>" >> releases/deb/DEBIAN/control
           echo "Description: Pars" >> releases/deb/DEBIAN/control
@@ -216,7 +216,7 @@ jobs:
           echo "Version: ${{ env.version }}" >> releases/deb/DEBIAN/control
           echo "Section: base" >> releases/deb/DEBIAN/control
           echo "Priority: optional" >> releases/deb/DEBIAN/control
-          echo "Architecture: amd64" >> releases/deb/DEBIAN/control
+          echo "Architecture: armhf" >> releases/deb/DEBIAN/control
           echo "Depends: libc6 (>= 2.7)" >> releases/deb/DEBIAN/control
           echo "Maintainer: Pars Dev Kit <info@parsdevkit.net>" >> releases/deb/DEBIAN/control
           echo "Description: Pars" >> releases/deb/DEBIAN/control
@@ -283,7 +283,7 @@ jobs:
           echo "Version: ${{ env.version }}" >> releases/deb/DEBIAN/control
           echo "Section: base" >> releases/deb/DEBIAN/control
           echo "Priority: optional" >> releases/deb/DEBIAN/control
-          echo "Architecture: amd64" >> releases/deb/DEBIAN/control
+          echo "Architecture: arm64" >> releases/deb/DEBIAN/control
           echo "Depends: libc6 (>= 2.7)" >> releases/deb/DEBIAN/control
           echo "Maintainer: Pars Dev Kit <info@parsdevkit.net>" >> releases/deb/DEBIAN/control
           echo "Description: Pars" >> releases/deb/DEBIAN/control
