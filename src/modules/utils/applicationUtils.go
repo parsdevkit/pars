@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"runtime"
 	"strings"
 
 	"github.com/sirupsen/logrus"
@@ -14,6 +15,82 @@ var (
 	environment string
 	logLevel    core.LogLevel
 )
+
+func getDefaultPlatformApplicationDir() string {
+	switch runtime.GOOS {
+	case "windows":
+		if runtime.GOARCH == "amd64" {
+			return "C:\\Program Files\\pars"
+		} else if runtime.GOARCH == "386" {
+			return "C:\\Program Files (x86)\\pars"
+		}
+		return "C:\\Program Files\\pars"
+	case "darwin":
+		return "/usr/local/bin"
+	case "linux":
+		return "/usr/local/bin"
+	case "freebsd":
+		return "/usr/local/bin"
+	case "openbsd":
+		return "/usr/local/bin"
+	case "netbsd":
+		return "/usr/local/bin"
+	default:
+		return "/usr/local/bin"
+	}
+}
+
+func getDefaultPlatformDataDir() string {
+	switch runtime.GOOS {
+	case "windows":
+		if runtime.GOARCH == "amd64" {
+			return "C:\\Program Files\\pars\\data"
+		} else if runtime.GOARCH == "386" {
+			return "C:\\Program Files (x86)\\pars\\data"
+		}
+		return "C:\\Program Files\\pars\\data"
+	case "darwin":
+		return "/usr/local/var/pars/data"
+	case "linux":
+		return "/var/lib/pars/data"
+	case "freebsd":
+		return "/var/db/pars/data"
+	case "openbsd":
+		return "/var/db/pars/data"
+	case "netbsd":
+		return "/var/db/pars/data"
+	default:
+		return "/tmp/pars/data"
+	}
+}
+
+func getDefaultPlatformConfigDir() string {
+	switch runtime.GOOS {
+	case "windows":
+		if runtime.GOARCH == "amd64" {
+			return "C:\\Program Files\\pars\\config"
+		} else if runtime.GOARCH == "386" {
+			return "C:\\Program Files (x86)\\pars\\config"
+		}
+		return "C:\\Program Files\\pars\\config"
+	case "darwin":
+		return "/usr/local/etc/pars"
+	case "linux":
+		return "/etc/pars"
+	case "freebsd":
+		return "/usr/local/etc/pars"
+	case "openbsd":
+		return "/etc/pars"
+	case "netbsd":
+		return "/etc/pars"
+	default:
+		return "/tmp/pars/config"
+	}
+}
+
+func getDefaultPlatformTempDir() string {
+	return os.TempDir()
+}
 
 func SetEnvironment(env string) {
 	environment = env
@@ -31,31 +108,73 @@ func GetLogLevel() core.LogLevel {
 
 func GetExecutionLocation() string {
 
-	path := GetCodeBaseLocation()
+	path := os.Getenv("PARS_PROJECT")
 
 	if IsEmpty(path) {
-		exePath, err := os.Executable()
-		if err != nil {
-			panic(err)
-		}
-
-		path = filepath.Dir(exePath)
+		path = getDefaultPlatformApplicationDir()
 	}
 
 	return path
 }
+func GetPluginsLocation() string {
+	return filepath.Join(GetExecutionLocation(), "plugins")
+}
+
+func GetBinariesLocation() string {
+	return filepath.Join(GetExecutionLocation(), "binaries")
+}
+func GetDataLocation() string {
+	path := os.Getenv("PARS_PROJECT")
+
+	if IsEmpty(path) {
+		path = filepath.Join(GetExecutionLocation(), "data")
+	} else {
+		path = getDefaultPlatformDataDir()
+	}
+
+	_, err := os.Stat(path)
+	if os.IsNotExist(err) {
+		err := os.MkdirAll(path, 0755)
+		if err != nil {
+			return ""
+		}
+	}
+
+	return path
+}
+func GetBinaryLocation(name, version string) string {
+	return filepath.Join(GetBinariesLocation(), name, version)
+}
+
+func GetPluginLocation(pluginName string) string {
+	return filepath.Join(GetPluginsLocation(), pluginName)
+}
+
+func GetDBLocation(environment string) string {
+	dbName := "pars.db"
+
+	if !IsEmpty(environment) {
+		dbName = fmt.Sprintf("pars-%v.db", environment)
+	}
+
+	path := filepath.Join(GetDataLocation(), dbName)
+	return path
+}
+
+func GetManagerTemplatesLocation() string {
+	return filepath.Join(GetExecutionLocation(), "templates")
+}
 
 func GetCodeBaseLocation() string {
-
 	return os.Getenv("PARS_PROJECT_ROOT")
 }
 
 func GetSourceLocation() string {
 	return filepath.Join(GetCodeBaseLocation(), "src")
 }
-func GetPluginsLocation() string {
 
-	return filepath.Join(GetCodeBaseLocation(), "plugins")
+func GetTempsLocation() string {
+	return filepath.Join(GetCodeBaseLocation(), "temp")
 }
 func GetTestsLocation() string {
 	return filepath.Join(GetCodeBaseLocation(), "tests")
@@ -84,8 +203,8 @@ func GenerateTestArea() string {
 		logrus.Fatalf("Test Drivers are not same")
 	}
 	return ""
-
 }
+
 func GetTestFileFromCurrentLocation(file string) string {
 	return GetTestFileLocation(filepath.Join(GenerateTestArea(), file))
 }
@@ -124,51 +243,4 @@ func GetBenchmarkTestsLocation() string {
 }
 func GetBenchmarkTestFileLocation(file string) string {
 	return filepath.Join(GetBenchmarkTestsLocation(), file)
-}
-
-func GetBinariesLocation() string {
-
-	return filepath.Join(GetCodeBaseLocation(), "binaries")
-}
-
-func GetTempsLocation() string {
-
-	return filepath.Join(GetCodeBaseLocation(), "temp")
-}
-func GetDataLocation() string {
-	path := filepath.Join(GetCodeBaseLocation(), "data")
-
-	_, err := os.Stat(path)
-	if os.IsNotExist(err) {
-		err := os.MkdirAll(path, 0755)
-		if err != nil {
-			return ""
-		}
-	}
-
-	return path
-}
-func GetBinaryLocation(name, version string) string {
-
-	return filepath.Join(GetBinariesLocation(), name, version)
-}
-
-func GetPluginLocation(pluginName string) string {
-
-	return filepath.Join(GetPluginsLocation(), pluginName)
-}
-
-func GetDBLocation(environment string) string {
-	dbName := "pars.db"
-
-	if !IsEmpty(environment) {
-		dbName = fmt.Sprintf("pars-%v.db", environment)
-	}
-
-	path := filepath.Join(GetDataLocation(), dbName)
-	return path
-}
-
-func GetManagerTemplatesLocation() string {
-	return filepath.Join(GetExecutionLocation(), "templates")
 }
