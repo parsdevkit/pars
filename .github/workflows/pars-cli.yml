@@ -73,7 +73,7 @@ jobs:
           echo 'Release: 1%{?dist}' >> releases/rpm/SPECS/pars.spec
           echo 'Summary: Pars' >> releases/rpm/SPECS/pars.spec
           echo 'License: MIT' >> releases/rpm/SPECS/pars.spec
-          echo 'Source0: %{name}-%{version}.tar.gz' >> releases/rpm/SPECS/pars.spec
+          echo 'Source0: releases/pars-linux-386-bin.tar.gz' >> releases/rpm/SPECS/pars.spec
           echo '%description' >> releases/rpm/SPECS/pars.spec
           echo 'Pars.' >> releases/rpm/SPECS/pars.spec
           echo '%prep' >> releases/rpm/SPECS/pars.spec
