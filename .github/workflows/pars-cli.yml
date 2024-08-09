@@ -65,8 +65,7 @@ jobs:
           mkdir -p ~/rpmbuild/{BUILD,RPMS,SOURCES,SPECS,SRPMS}
           mkdir -p ~/rpmbuild/BUILD/pars
           cp releases/bin ~/rpmbuild/BUILD/pars/
-          cp releases/pars-linux-386-bin.tar.gz ~/rpmbuild/SOURCES/
-
+          
           # Create a SPEC file
           echo 'Name: pars' > ~/rpmbuild/SPECS/pars.spec
           echo 'Version: ${{ env.version }}' >> ~/rpmbuild/SPECS/pars.spec
@@ -85,8 +84,7 @@ jobs:
           echo '%files' >> ~/rpmbuild/SPECS/pars.spec
           echo '/usr/local/bin/pars' >> ~/rpmbuild/SPECS/pars.spec
           echo '%changelog' >> ~/rpmbuild/SPECS/pars.spec
-          echo '* Fri Aug 09 2024 Pars Dev Kit <info@parsdevkit.net> - ${{ env.tag_name }}' >> ~/rpmbuild/SPECS/myapp.spec
-          echo '* Pars Dev Kit <info@parsdevkit.net>' >> ~/rpmbuild/SPECS/pars.spec
+          echo '* Fri Aug 09 2024 Pars Dev Kit <info@parsdevkit.net> - ${{ env.tag_name }}' >> ~/rpmbuild/SPECS/pars.spec
           echo '- Initial RPM package.' >> ~/rpmbuild/SPECS/pars.spec
 
           # Build the RPM
