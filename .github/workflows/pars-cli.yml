@@ -93,7 +93,8 @@ jobs:
           # Build the RPM
           rpmbuild -bb ~/rpmbuild/SPECS/pars.spec
 
-          ls ~/rpmbuild/RPMS/x86_64/
+          # Rename the RPM file
+          mv ~/rpmbuild/RPMS/x86_64/pars-*.x86_64.rpm ~/rpmbuild/RPMS/x86_64/pars-${{ env.version }}.x86_64.rpm
 
       - name: Archive .rpm Package
         run: tar -czvf releases/pars-linux-386.rpm.tar.gz -C ~/rpmbuild/RPMS/x86_64/ pars-${{ env.version }}.x86_64.rpm
