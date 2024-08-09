@@ -26,37 +26,37 @@ jobs:
           TAG_NAME=$(echo "${{ github.ref }}" | sed 's/refs\/tags\///')
           echo "tag_name=$TAG_NAME" >> $GITHUB_ENV
 
-          DEB_VERSION=$(echo "${{ github.ref }}" | sed 's/refs\/tags\/v//')
-          echo "deb_version=$DEB_VERSION" >> $GITHUB_ENV
+          VERSION=$(echo "${{ github.ref }}" | sed 's/refs\/tags\/v//')
+          echo "version=$DEB_VERSIONVERSION" >> $GITHUB_ENV
 
 
-      - name: Build Linux 386
+      - name: Build Binary 386
         working-directory: ./src
         run: |
           mkdir -p ../releases/linux/386
           GOOS=linux GOARCH=386 go build -o ../releases/linux/386/pars ./pars.go
 
-      - name: Archive Linux Build
+      - name: Archive Binary Build 386
         run: tar -czvf releases/linux/386/pars-linux-386.tar.gz -C releases/linux/386/ pars
 
 
-      - name: Upload Linux Artifact
+      - name: Upload Linux Binary Artifact 386
         uses: actions/upload-artifact@v2
         with:
-          name: linux-build-386
+          name: linux-binary-build-386
           path: releases/linux/386/pars-linux-386.tar.gz
 
 
       # ******************************************
 
 
-      - name: Build .deb Package
+      - name: Build .deb Package 386
         run: |
           mkdir -p releases/package/DEBIAN
           mkdir -p releases/package/usr/local/bin
           cp releases/linux/386/pars releases/package/usr/local/bin/
           echo "Package: Pars" > releases/package/DEBIAN/control
-          echo "Version: ${{ env.deb_version }}" >> releases/package/DEBIAN/control
+          echo "Version: ${{ env.version }}" >> releases/package/DEBIAN/control
           echo "Section: base" >> releases/package/DEBIAN/control
           echo "Priority: optional" >> releases/package/DEBIAN/control
           echo "Architecture: amd64" >> releases/package/DEBIAN/control
@@ -66,15 +66,15 @@ jobs:
           dpkg-deb --build releases/package releases/package/pars-linux-386.deb
 
 
-      - name: Archive .deb Package
+      - name: Archive .deb Package 386
         run: tar -czvf releases/linux/386/pars-linux-386.deb.tar.gz -C releases/package/ pars-linux-386.deb
 
 
           
-      - name: Upload .deb Artifact
+      - name: Upload .deb Artifact 386
         uses: actions/upload-artifact@v2
         with:
-          name: linux-build-386-deb
+          name: linux-deb-package-386
           path: releases/linux/386/pars-linux-386.deb.tar.gz
 
 
@@ -84,25 +84,25 @@ jobs:
 
 
 
-      - name: Set up Snapcraft
-        run: |
-          sudo apt update
-          sudo apt install snapcraft -y
+      # - name: Set up Snapcraft
+      #   run: |
+      #     sudo apt update
+      #     sudo apt install snapcraft -y
 
-      - name: Build Snap Package for i386
-        run: |
-          mkdir -p releases/snap/i386
-          snapcraft --target-arch=i386 --destructive-mode --output releases/snap/i386/pars_i386.snap
+      # - name: Build Snap Package for i386
+      #   run: |
+      #     mkdir -p releases/snap/i386
+      #     snapcraft --target-arch=i386 --destructive-mode --output releases/snap/i386/pars_i386.snap
 
-      - name: Archive i386 Snap Package
-        run: |
-          tar -czvf releases/linux/386/pars-linux-i386.snap.tar.gz -C releases/snap/i386 pars_i386.snap
+      # - name: Archive i386 Snap Package
+      #   run: |
+      #     tar -czvf releases/linux/386/pars-linux-i386.snap.tar.gz -C releases/snap/i386 pars_i386.snap
 
-      - name: Upload i386 Snap Package
-        uses: actions/upload-artifact@v2
-        with:
-          name: linux-build-i386-snap
-          path: releases/linux/386/pars-linux-i386.snap.tar.gz
+      # - name: Upload i386 Snap Package
+      #   uses: actions/upload-artifact@v2
+      #   with:
+      #     name: linux-build-i386-snap
+      #     path: releases/linux/386/pars-linux-i386.snap.tar.gz
 
 
   # build-linux-amd64:
@@ -351,7 +351,7 @@ jobs:
       - name: Download Linux Artifact 386
         uses: actions/download-artifact@v2
         with:
-          name: linux-build-386
+          name: linux-binary-build-386
           path: releases
 
       - name: Upload Ubuntu Release Asset 386
@@ -368,7 +368,7 @@ jobs:
       - name: Download Linux Artifact 386 binary
         uses: actions/download-artifact@v2
         with:
-          name: linux-build-386-deb
+          name: linux-deb-package-386
           path: releases
 
           
