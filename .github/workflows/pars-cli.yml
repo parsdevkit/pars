@@ -86,7 +86,7 @@ jobs:
           echo 'cp -a bin %{buildroot}/usr/local/bin/' >> ~/rpmbuild/SPECS/pars.spec
           echo 'ls %{buildroot}/usr/local/bin/' >> ~/rpmbuild/SPECS/pars.spec
           echo '%files' >> ~/rpmbuild/SPECS/pars.spec
-          echo '/usr/local/bin/pars' >> ~/rpmbuild/SPECS/pars.spec
+          echo '/usr/local/bin/bin' >> ~/rpmbuild/SPECS/pars.spec
           echo '%changelog' >> ~/rpmbuild/SPECS/pars.spec
           echo '* Fri Aug 09 2024 Pars Dev Kit <info@parsdevkit.net> - ${{ env.tag_name }}' >> ~/rpmbuild/SPECS/pars.spec
           echo '- Initial RPM package.' >> ~/rpmbuild/SPECS/pars.spec
