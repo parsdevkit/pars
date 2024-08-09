@@ -69,7 +69,7 @@ jobs:
 
           # Create a SPEC file
           echo 'Name: pars' > releases/rpm/SPECS/pars.spec
-          echo 'Version: ${{ env.deb_version }}' >> releases/rpm/SPECS/pars.spec
+          echo 'Version: ${{ env.version }}' >> releases/rpm/SPECS/pars.spec
           echo 'Release: 1%{?dist}' >> releases/rpm/SPECS/pars.spec
           echo 'Summary: Pars' >> releases/rpm/SPECS/pars.spec
           echo 'License: MIT' >> releases/rpm/SPECS/pars.spec
