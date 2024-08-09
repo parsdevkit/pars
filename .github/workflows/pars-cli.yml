@@ -43,13 +43,11 @@ jobs:
         run: tar -czvf releases/linux/386/pars-linux-386.tar.gz -C releases/linux/386/ pars
 
 
-
-      - name: ls dir
-        id: get_tag_dname
-        run: |
-          ls releases/linux/386/
-          echo "---------"
-          ls releases/linux/386/pars
+      - name: Upload Linux Artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: linux-build-386
+          path: releases/linux/386/pars-linux-386.tar.gz
       # ******************************************
 
 
@@ -68,15 +66,15 @@ jobs:
           echo "Description: Pars" >> releases/package/DEBIAN/control
           dpkg-deb --build releases/package releases/package/deb
 
+      - name: ls dir
+        id: get_tag_dname
+        run: |
+          ls releases/package/deb
+
       - name: Archive .deb Package
         run: tar -czvf releases/linux/386/pars-linux-386.deb.tar.gz -C releases/package/deb/ .
 
 
-      - name: Upload Linux Artifact
-        uses: actions/upload-artifact@v2
-        with:
-          name: linux-build-386
-          path: releases/linux/386/pars-linux-386.tar.gz
           
       - name: Upload .deb Artifact
         uses: actions/upload-artifact@v2
