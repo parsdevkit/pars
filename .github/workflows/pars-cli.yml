@@ -79,10 +79,11 @@ jobs:
           echo '%description' >> ~/rpmbuild/SPECS/pars.spec
           echo 'Pars.' >> ~/rpmbuild/SPECS/pars.spec
           echo '%prep' >> ~/rpmbuild/SPECS/pars.spec
-          echo '%setup -q -n bin' >> ~/rpmbuild/SPECS/pars.spec
+          echo '%setup -q -n pars' >> ~/rpmbuild/SPECS/pars.spec
           echo '%build' >> ~/rpmbuild/SPECS/pars.spec
           echo '%install' >> ~/rpmbuild/SPECS/pars.spec
           echo 'mkdir -p %{buildroot}/usr/local/bin' >> ~/rpmbuild/SPECS/pars.spec
+          echo 'if [ -e pars ]; then echo "Pars exists"; else echo "Pars does not exist"; fi' >> ~/rpmbuild/SPECS/pars.spec
           echo 'cp -a pars %{buildroot}/usr/local/bin/' >> ~/rpmbuild/SPECS/pars.spec
           echo '%files' >> ~/rpmbuild/SPECS/pars.spec
           echo '/usr/local/bin/pars' >> ~/rpmbuild/SPECS/pars.spec
