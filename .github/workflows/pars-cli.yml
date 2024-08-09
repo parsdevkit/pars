@@ -42,12 +42,6 @@ jobs:
       - name: Archive Linux Build
         run: tar -czvf releases/linux/386/pars-linux-386.tar.gz -C releases/linux/386/ pars
 
-      - name: Upload Linux Artifact
-        uses: actions/upload-artifact@v2
-        with:
-          name: linux-build-386
-          path: releases/linux/386/pars-linux-386.tar.gz
-
 
 
       - name: ls dir
@@ -77,6 +71,13 @@ jobs:
       - name: Archive .deb Package
         run: tar -czvf releases/linux/386/pars-linux-386.deb.tar.gz -C releases/package/DEBIAN/ .
 
+
+      - name: Upload Linux Artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: linux-build-386
+          path: releases/linux/386/pars-linux-386.tar.gz
+          
       - name: Upload .deb Artifact
         uses: actions/upload-artifact@v2
         with:
