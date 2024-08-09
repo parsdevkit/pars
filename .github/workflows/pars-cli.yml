@@ -288,7 +288,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./releases/pars-ubuntu-386.tar.gz
+          asset_path: ./releases/pars-linux-386.tar.gz
           asset_name: pars-ubuntu-386.tar.gz
           asset_content_type: application/gzip
 
@@ -298,7 +298,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./releases/pars-centos-386.tar.gz
+          asset_path: ./releases/pars-linux-386.tar.gz
           asset_name: pars-centos-386.tar.gz
           asset_content_type: application/gzip
 
@@ -309,7 +309,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./releases/pars-debian-386.tar.gz
+          asset_path: ./releases/pars-linux-386.tar.gz
           asset_name: pars-debian-386.tar.gz
           asset_content_type: application/gzip
 
@@ -327,7 +327,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./releases/pars-ubuntu-amd64.tar.gz
+          asset_path: ./releases/pars-linux-amd64.tar.gz
           asset_name: pars-ubuntu-amd64.tar.gz
           asset_content_type: application/gzip
 
@@ -338,7 +338,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./releases/pars-centos-amd64.tar.gz
+          asset_path: ./releases/pars-linux-amd64.tar.gz
           asset_name: pars-centos-amd64.tar.gz
           asset_content_type: application/gzip
           
@@ -350,7 +350,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./releases/pars-debian-amd64.tar.gz
+          asset_path: ./releases/pars-linux-amd64.tar.gz
           asset_name: pars-debian-amd64.tar.gz
           asset_content_type: application/gzip
 
@@ -361,7 +361,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./releases/pars-fedora-amd64.tar.gz
+          asset_path: ./releases/pars-linux-amd64.tar.gz
           asset_name: pars-fedora-amd64.tar.gz
           asset_content_type: application/gzip
 
@@ -373,7 +373,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./releases/pars-opensuse-amd64.tar.gz
+          asset_path: ./releases/pars-linux-amd64.tar.gz
           asset_name: pars-opensuse-amd64.tar.gz
           asset_content_type: application/gzip
 
@@ -392,7 +392,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./releases/pars-ubuntu-arm.tar.gz
+          asset_path: ./releases/pars-linux-arm.tar.gz
           asset_name: pars-ubuntu-arm.tar.gz
           asset_content_type: application/gzip
 
@@ -402,7 +402,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./releases/pars-centos-arm.tar.gz
+          asset_path: ./releases/pars-linux-arm.tar.gz
           asset_name: pars-centos-arm.tar.gz
           asset_content_type: application/gzip
 
@@ -413,7 +413,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./releases/pars-debian-arm.tar.gz
+          asset_path: ./releases/pars-linux-arm.tar.gz
           asset_name: pars-debian-arm.tar.gz
           asset_content_type: application/gzip
           
@@ -432,7 +432,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./releases/pars-ubuntu-arm64.tar.gz
+          asset_path: ./releases/pars-linux-arm64.tar.gz
           asset_name: pars-ubuntu-arm64.tar.gz
           asset_content_type: application/gzip
 
@@ -442,7 +442,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./releases/pars-centos-arm64.tar.gz
+          asset_path: ./releases/pars-linux-arm64.tar.gz
           asset_name: pars-centos-arm64.tar.gz
           asset_content_type: application/gzip
 
@@ -452,8 +452,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./releases/pars-debiab-arm64.tar.gz
-          asset_name: pars-debiab-arm64.tar.gz
+          asset_path: ./releases/pars-linux-arm64.tar.gz
+          asset_name: pars-debian-arm64.tar.gz
           asset_content_type: application/gzip
 
 
@@ -464,7 +464,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./releases/pars-fedora-arm64.tar.gz
+          asset_path: ./releases/pars-linux-arm64.tar.gz
           asset_name: pars-fedora-arm64.tar.gz
           asset_content_type: application/gzip
 
@@ -474,7 +474,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./releases/pars-opensuse-arm64.tar.gz
+          asset_path: ./releases/pars-linux-arm64.tar.gz
           asset_name: pars-opensuse-arm64.tar.gz
           asset_content_type: application/gzip
 
@@ -486,7 +486,7 @@ jobs:
       - name: Download Darwin Artifact amd64
         uses: actions/download-artifact@v2
         with:
-          name: linux-build-amd64
+          name: darwin-build-amd64
           path: releases       
 
 
@@ -496,7 +496,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./releases/pars-macos-amd64.tar.gz
+          asset_path: ./releases/pars-darwin-amd64.tar.gz
           asset_name: pars-macos-amd64.tar.gz
           asset_content_type: application/gzip
 
@@ -504,7 +504,7 @@ jobs:
       - name: Download Darwin Artifact arm64
         uses: actions/download-artifact@v2
         with:
-          name: linux-build-arm64
+          name: darwin-build-arm64
           path: releases       
 
       - name: Upload MacOS Release Asset arm64
@@ -513,7 +513,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./releases/pars-macos-arm64.tar.gz
+          asset_path: ./releases/pars-darwin-arm64.tar.gz
           asset_name: pars-macos-arm64.tar.gz
           asset_content_type: application/gzip
 
