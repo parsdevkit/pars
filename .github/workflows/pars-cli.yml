@@ -67,7 +67,7 @@ jobs:
 
 
       - name: Archive .deb Package
-        run: tar -czvf releases/pars-linux-386.deb.tar.gz -C releases/deb/ pars-linux-386.deb
+        run: tar -czvf releases/pars-linux-386.deb.tar.gz -C releases/ pars-linux-386.deb
 
 
           
