@@ -18,7 +18,7 @@ func NewEnvironmentService() *EnvironmentService {
 func (s *EnvironmentService) List() ([]string, error) {
 	var result = make([]string, 0)
 
-	directory := utils.GetExecutionLocation()
+	directory := utils.GetDataLocation()
 
 	desen := "^pars-?(.*?).db$"
 

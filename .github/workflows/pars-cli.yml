@@ -30,9 +30,6 @@ jobs:
           echo "deb_version=$DEB_VERSION" >> $GITHUB_ENV
 
 
-
-
-
       - name: Build Linux 386
         working-directory: ./src
         run: |
@@ -48,6 +45,8 @@ jobs:
         with:
           name: linux-build-386
           path: releases/linux/386/pars-linux-386.tar.gz
+
+
       # ******************************************
 
 
@@ -78,6 +77,32 @@ jobs:
           name: linux-build-386-deb
           path: releases/linux/386/pars-linux-386.deb.tar.gz
 
+
+
+
+      # ******************************************
+
+
+
+      - name: Set up Snapcraft
+        run: |
+          sudo apt update
+          sudo apt install snapcraft -y
+
+      - name: Build Snap Package for i386
+        run: |
+          mkdir -p releases/snap/i386
+          snapcraft --target-arch=i386 --destructive-mode --output releases/snap/i386/pars_i386.snap
+
+      - name: Archive i386 Snap Package
+        run: |
+          tar -czvf releases/linux/386/pars-linux-i386.snap.tar.gz -C releases/snap/i386 pars_i386.snap
+
+      - name: Upload i386 Snap Package
+        uses: actions/upload-artifact@v2
+        with:
+          name: linux-build-i386-snap
+          path: releases/linux/386/pars-linux-i386.snap.tar.gz
 
 
   # build-linux-amd64:
@@ -340,14 +365,14 @@ jobs:
           asset_content_type: application/gzip
 
           
-      - name: Download Linux Artifact 386
+      - name: Download Linux Artifact 386 binary
         uses: actions/download-artifact@v2
         with:
           name: linux-build-386-deb
           path: releases
 
           
-      - name: Upload Ubuntu Release Asset 386 Package
+      - name: Upload Ubuntu Release Asset 386 .deb
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -355,6 +380,25 @@ jobs:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: ./releases/pars-linux-386.deb.tar.gz
           asset_name: pars-ubuntu-386.deb.tar.gz
+          asset_content_type: application/gzip
+
+          
+
+          
+      - name: Download Linux Artifact 386 binary
+        uses: actions/download-artifact@v2
+        with:
+          name: linux-build-i386-snap
+          path: releases
+          
+      - name: Upload Ubuntu Release Asset 386 .snap
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./releases/linux/386/pars-linux-i386.snap.tar.gz
+          asset_name: pars-ubuntu-i386.snap.tar.gz
           asset_content_type: application/gzip
 
       # - name: Upload Centos Release Asset 386
