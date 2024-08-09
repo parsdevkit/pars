@@ -84,7 +84,6 @@ jobs:
           echo '%install' >> ~/rpmbuild/SPECS/pars.spec
           echo 'mkdir -p %{buildroot}/usr/local/bin' >> ~/rpmbuild/SPECS/pars.spec
           echo 'cp -a bin %{buildroot}/usr/local/bin/' >> ~/rpmbuild/SPECS/pars.spec
-          echo 'ls %{buildroot}/usr/local/bin/' >> ~/rpmbuild/SPECS/pars.spec
           echo '%files' >> ~/rpmbuild/SPECS/pars.spec
           echo '/usr/local/bin/bin' >> ~/rpmbuild/SPECS/pars.spec
           echo '%changelog' >> ~/rpmbuild/SPECS/pars.spec
@@ -94,6 +93,7 @@ jobs:
           # Build the RPM
           rpmbuild -bb ~/rpmbuild/SPECS/pars.spec
 
+          echo 'ls ~/rpmbuild/RPMS/x86_64/' >> ~/rpmbuild/SPECS/pars.spec
 
       - name: Archive .rpm Package
         run: tar -czvf releases/pars-linux-386.rpm.tar.gz -C ~/rpmbuild/RPMS/x86_64/ pars-${{ env.version }}.x86_64.rpm
