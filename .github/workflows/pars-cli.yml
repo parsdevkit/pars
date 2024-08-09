@@ -53,7 +53,7 @@ jobs:
         run: |
           mkdir -p releases/deb/DEBIAN
           mkdir -p releases/deb/usr/local/bin
-          cp releases/pars releases/deb/usr/local/bin/
+          cp releases/bin releases/deb/usr/local/bin/
           echo "Package: Pars" > releases/deb/DEBIAN/control
           echo "Version: ${{ env.version }}" >> releases/deb/DEBIAN/control
           echo "Section: base" >> releases/deb/DEBIAN/control
