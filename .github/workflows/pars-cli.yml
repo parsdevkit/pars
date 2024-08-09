@@ -65,6 +65,7 @@ jobs:
           mkdir -p ~/rpmbuild/{BUILD,RPMS,SOURCES,SPECS,SRPMS}
           mkdir -p ~/rpmbuild/BUILD/pars
           cp releases/bin ~/rpmbuild/BUILD/pars/
+          cp releases/pars-linux-386-bin.tar.gz ~/rpmbuild/SOURCES/
           
           # Create a SPEC file
           echo 'Name: pars' > ~/rpmbuild/SPECS/pars.spec
