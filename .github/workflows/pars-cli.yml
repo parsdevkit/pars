@@ -61,6 +61,42 @@ jobs:
         run: tar -czvf releases/pars-linux-386.deb.tar.gz -C releases/ pars-linux-386.deb
 
 
+      - name: Build .rpm Package
+        run: |
+          mkdir -p releases/rpm/{BUILD,RPMS,SOURCES,SPECS,SRPMS}
+          mkdir -p releases/rpm/BUILD/pars
+          cp pars releases/rpm/BUILD/pars/
+          cp -r config/* releases/rpm/BUILD/pars/
+  
+          # Create a SPEC file
+          echo 'Name: pars' > releases/rpm/SPECS/pars.spec
+          echo 'Version: ${{ env.version }}' >> releases/rpm/SPECS/pars.spec
+          echo 'Release: 1%{?dist}' >> releases/rpm/SPECS/pars.spec
+          echo 'Summary: Pars' >> releases/rpm/SPECS/pars.spec
+          echo 'License: MIT' >> releases/rpm/SPECS/pars.spec
+          echo 'Source0: %{name}-%{version}.tar.gz' >> releases/rpm/SPECS/pars.spec
+          echo '%description' >> releases/rpm/SPECS/pars.spec
+          echo 'Pars.' >> releases/rpm/SPECS/pars.spec
+          echo '%prep' >> releases/rpm/SPECS/pars.spec
+          echo '%setup -q' >> releases/rpm/SPECS/pars.spec
+          echo '%build' >> releases/rpm/SPECS/pars.spec
+          echo '%install' >> releases/rpm/SPECS/pars.spec
+          echo 'mkdir -p %{buildroot}/usr/local/bin' >> releases/rpm/SPECS/pars.spec
+          echo 'cp -a pars %{buildroot}/usr/local/bin/' >> releases/rpm/SPECS/pars.spec
+          echo '%files' >> releases/rpm/SPECS/pars.spec
+          echo '/usr/local/bin/pars' >> releases/rpm/SPECS/pars.spec
+          echo '%changelog' >> releases/rpm/SPECS/pars.spec
+          echo '* Pars Dev Kit <info@parsdevkit.net>' >> releases/rpm/SPECS/pars.spec
+          echo '- Initial RPM package.' >> releases/rpm/SPECS/pars.spec
+  
+          # Build the RPM
+          rpmbuild -bb releases/rpm/SPECS/pars.spec
+
+
+      - name: Archive .rpm Package
+        run: tar -czvf releases/pars-linux-386.rpm.tar.gz -C releases/RPMS/x86_64/ pars-${{ env.version }}.x86_64.rpm
+  
+  
 
 
       - name: Upload Linux 386 Artifact
@@ -70,6 +106,7 @@ jobs:
           path: |
             releases/pars-linux-386-bin.tar.gz
             releases/pars-linux-386.deb.tar.gz
+            releases/pars-linux-386.rpm.tar.gz
 
 
 
@@ -99,209 +136,209 @@ jobs:
       #     path: releases/linux/386/pars-linux-i386.snap.tar.gz
 
 
-  build-linux-amd64:
-    runs-on: ubuntu-latest
+  # build-linux-amd64:
+  #   runs-on: ubuntu-latest
 
-    steps:
-      - uses: actions/checkout@v4
+  #   steps:
+  #     - uses: actions/checkout@v4
 
-      - name: Set up Go
-        uses: actions/setup-go@v4
-        with:
-          go-version: '1.21'
+  #     - name: Set up Go
+  #       uses: actions/setup-go@v4
+  #       with:
+  #         go-version: '1.21'
 
-      - name: Get Tag Name
-        id: get_tag_name
-        run: |
-          echo "Tag name is: ${{ github.ref }}"
+  #     - name: Get Tag Name
+  #       id: get_tag_name
+  #       run: |
+  #         echo "Tag name is: ${{ github.ref }}"
 
-          TAG_NAME=$(echo "${{ github.ref }}" | sed 's/refs\/tags\///')
-          echo "tag_name=$TAG_NAME" >> $GITHUB_ENV
+  #         TAG_NAME=$(echo "${{ github.ref }}" | sed 's/refs\/tags\///')
+  #         echo "tag_name=$TAG_NAME" >> $GITHUB_ENV
 
-          VERSION=$(echo "${{ github.ref }}" | sed 's/refs\/tags\/v//')
-          echo "version=$VERSION" >> $GITHUB_ENV
-
-
-      - name: Build Binary
-        working-directory: ./src
-        run: |
-          mkdir -p ../releases
-          GOOS=linux GOARCH=amd64 go build -o ../releases/bin ./pars.go
-
-      - name: Archive Binary Build
-        run: tar -czvf releases/pars-linux-amd64-bin.tar.gz -C releases/ bin
-
-        
-
-      # ******************************************
+  #         VERSION=$(echo "${{ github.ref }}" | sed 's/refs\/tags\/v//')
+  #         echo "version=$VERSION" >> $GITHUB_ENV
 
 
-      - name: Build .deb Package
-        run: |
-          mkdir -p releases/deb/DEBIAN
-          mkdir -p releases/deb/usr/local/bin
-          cp releases/bin releases/deb/usr/local/bin/
-          echo "Package: Pars" > releases/deb/DEBIAN/control
-          echo "Version: ${{ env.version }}" >> releases/deb/DEBIAN/control
-          echo "Section: base" >> releases/deb/DEBIAN/control
-          echo "Priority: optional" >> releases/deb/DEBIAN/control
-          echo "Architecture: amd64" >> releases/deb/DEBIAN/control
-          echo "Depends: libc6 (>= 2.7)" >> releases/deb/DEBIAN/control
-          echo "Maintainer: Pars Dev Kit <info@parsdevkit.net>" >> releases/deb/DEBIAN/control
-          echo "Description: Pars" >> releases/deb/DEBIAN/control
-          
-          dpkg-deb --build releases/deb releases/pars-linux-amd64.deb
+  #     - name: Build Binary
+  #       working-directory: ./src
+  #       run: |
+  #         mkdir -p ../releases
+  #         GOOS=linux GOARCH=amd64 go build -o ../releases/bin ./pars.go
 
-
-      - name: Archive .deb Package
-        run: tar -czvf releases/pars-linux-amd64.deb.tar.gz -C releases/ pars-linux-amd64.deb
-
-
-          
-
-
-      - name: Upload Linux amd64 Artifact
-        uses: actions/upload-artifact@v2
-        with:
-          name: linux-amd64-build
-          path: |
-            releases/pars-linux-amd64-bin.tar.gz
-            releases/pars-linux-amd64.deb.tar.gz
-
-
-  build-linux-arm:
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Set up Go
-        uses: actions/setup-go@v4
-        with:
-          go-version: '1.21'
-
-      - name: Get Tag Name
-        id: get_tag_name
-        run: |
-          echo "Tag name is: ${{ github.ref }}"
-
-          TAG_NAME=$(echo "${{ github.ref }}" | sed 's/refs\/tags\///')
-          echo "tag_name=$TAG_NAME" >> $GITHUB_ENV
-
-          VERSION=$(echo "${{ github.ref }}" | sed 's/refs\/tags\/v//')
-          echo "version=$VERSION" >> $GITHUB_ENV
-
-
-      - name: Build Binary
-        working-directory: ./src
-        run: |
-          mkdir -p ../releases
-          GOOS=linux GOARCH=arm go build -o ../releases/bin ./pars.go
-
-      - name: Archive Binary Build
-        run: tar -czvf releases/pars-linux-arm-bin.tar.gz -C releases/ bin
+  #     - name: Archive Binary Build
+  #       run: tar -czvf releases/pars-linux-amd64-bin.tar.gz -C releases/ bin
 
         
 
+  #     # ******************************************
 
-      # ******************************************
 
-
-      - name: Build .deb Package
-        run: |
-          mkdir -p releases/deb/DEBIAN
-          mkdir -p releases/deb/usr/local/bin
-          cp releases/bin releases/deb/usr/local/bin/
-          echo "Package: Pars" > releases/deb/DEBIAN/control
-          echo "Version: ${{ env.version }}" >> releases/deb/DEBIAN/control
-          echo "Section: base" >> releases/deb/DEBIAN/control
-          echo "Priority: optional" >> releases/deb/DEBIAN/control
-          echo "Architecture: armhf" >> releases/deb/DEBIAN/control
-          echo "Depends: libc6 (>= 2.7)" >> releases/deb/DEBIAN/control
-          echo "Maintainer: Pars Dev Kit <info@parsdevkit.net>" >> releases/deb/DEBIAN/control
-          echo "Description: Pars" >> releases/deb/DEBIAN/control
+  #     - name: Build .deb Package
+  #       run: |
+  #         mkdir -p releases/deb/DEBIAN
+  #         mkdir -p releases/deb/usr/local/bin
+  #         cp releases/bin releases/deb/usr/local/bin/
+  #         echo "Package: Pars" > releases/deb/DEBIAN/control
+  #         echo "Version: ${{ env.version }}" >> releases/deb/DEBIAN/control
+  #         echo "Section: base" >> releases/deb/DEBIAN/control
+  #         echo "Priority: optional" >> releases/deb/DEBIAN/control
+  #         echo "Architecture: amd64" >> releases/deb/DEBIAN/control
+  #         echo "Depends: libc6 (>= 2.7)" >> releases/deb/DEBIAN/control
+  #         echo "Maintainer: Pars Dev Kit <info@parsdevkit.net>" >> releases/deb/DEBIAN/control
+  #         echo "Description: Pars" >> releases/deb/DEBIAN/control
           
-          dpkg-deb --build releases/deb releases/pars-linux-arm.deb
+  #         dpkg-deb --build releases/deb releases/pars-linux-amd64.deb
 
 
-      - name: Archive .deb Package
-        run: tar -czvf releases/pars-linux-arm.deb.tar.gz -C releases/ pars-linux-arm.deb
+  #     - name: Archive .deb Package
+  #       run: tar -czvf releases/pars-linux-amd64.deb.tar.gz -C releases/ pars-linux-amd64.deb
 
 
-      - name: Upload Linux arm Artifact
-        uses: actions/upload-artifact@v2
-        with:
-          name: linux-arm-build
-          path: |
-            releases/pars-linux-arm-bin.tar.gz
-            releases/pars-linux-arm.deb.tar.gz
+          
 
 
-  build-linux-arm64:
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Set up Go
-        uses: actions/setup-go@v4
-        with:
-          go-version: '1.21'
-
-      - name: Get Tag Name
-        id: get_tag_name
-        run: |
-          echo "Tag name is: ${{ github.ref }}"
-
-          TAG_NAME=$(echo "${{ github.ref }}" | sed 's/refs\/tags\///')
-          echo "tag_name=$TAG_NAME" >> $GITHUB_ENV
-
-          VERSION=$(echo "${{ github.ref }}" | sed 's/refs\/tags\/v//')
-          echo "version=$VERSION" >> $GITHUB_ENV
+  #     - name: Upload Linux amd64 Artifact
+  #       uses: actions/upload-artifact@v2
+  #       with:
+  #         name: linux-amd64-build
+  #         path: |
+  #           releases/pars-linux-amd64-bin.tar.gz
+  #           releases/pars-linux-amd64.deb.tar.gz
 
 
-      - name: Build Binary
-        working-directory: ./src
-        run: |
-          mkdir -p ../releases
-          GOOS=linux GOARCH=arm64 go build -o ../releases/bin ./pars.go
+  # build-linux-arm:
+  #   runs-on: ubuntu-latest
 
-      - name: Archive Binary Build
-        run: tar -czvf releases/pars-linux-arm64-bin.tar.gz -C releases/ bin
+  #   steps:
+  #     - uses: actions/checkout@v4
+
+  #     - name: Set up Go
+  #       uses: actions/setup-go@v4
+  #       with:
+  #         go-version: '1.21'
+
+  #     - name: Get Tag Name
+  #       id: get_tag_name
+  #       run: |
+  #         echo "Tag name is: ${{ github.ref }}"
+
+  #         TAG_NAME=$(echo "${{ github.ref }}" | sed 's/refs\/tags\///')
+  #         echo "tag_name=$TAG_NAME" >> $GITHUB_ENV
+
+  #         VERSION=$(echo "${{ github.ref }}" | sed 's/refs\/tags\/v//')
+  #         echo "version=$VERSION" >> $GITHUB_ENV
+
+
+  #     - name: Build Binary
+  #       working-directory: ./src
+  #       run: |
+  #         mkdir -p ../releases
+  #         GOOS=linux GOARCH=arm go build -o ../releases/bin ./pars.go
+
+  #     - name: Archive Binary Build
+  #       run: tar -czvf releases/pars-linux-arm-bin.tar.gz -C releases/ bin
 
         
 
-      # ******************************************
+
+  #     # ******************************************
 
 
-      - name: Build .deb Package
-        run: |
-          mkdir -p releases/deb/DEBIAN
-          mkdir -p releases/deb/usr/local/bin
-          cp releases/bin releases/deb/usr/local/bin/
-          echo "Package: Pars" > releases/deb/DEBIAN/control
-          echo "Version: ${{ env.version }}" >> releases/deb/DEBIAN/control
-          echo "Section: base" >> releases/deb/DEBIAN/control
-          echo "Priority: optional" >> releases/deb/DEBIAN/control
-          echo "Architecture: arm64" >> releases/deb/DEBIAN/control
-          echo "Depends: libc6 (>= 2.7)" >> releases/deb/DEBIAN/control
-          echo "Maintainer: Pars Dev Kit <info@parsdevkit.net>" >> releases/deb/DEBIAN/control
-          echo "Description: Pars" >> releases/deb/DEBIAN/control
+  #     - name: Build .deb Package
+  #       run: |
+  #         mkdir -p releases/deb/DEBIAN
+  #         mkdir -p releases/deb/usr/local/bin
+  #         cp releases/bin releases/deb/usr/local/bin/
+  #         echo "Package: Pars" > releases/deb/DEBIAN/control
+  #         echo "Version: ${{ env.version }}" >> releases/deb/DEBIAN/control
+  #         echo "Section: base" >> releases/deb/DEBIAN/control
+  #         echo "Priority: optional" >> releases/deb/DEBIAN/control
+  #         echo "Architecture: armhf" >> releases/deb/DEBIAN/control
+  #         echo "Depends: libc6 (>= 2.7)" >> releases/deb/DEBIAN/control
+  #         echo "Maintainer: Pars Dev Kit <info@parsdevkit.net>" >> releases/deb/DEBIAN/control
+  #         echo "Description: Pars" >> releases/deb/DEBIAN/control
           
-          dpkg-deb --build releases/deb releases/pars-linux-arm64.deb
+  #         dpkg-deb --build releases/deb releases/pars-linux-arm.deb
 
 
-      - name: Archive .deb Package
-        run: tar -czvf releases/pars-linux-arm64.deb.tar.gz -C releases/ pars-linux-arm64.deb
+  #     - name: Archive .deb Package
+  #       run: tar -czvf releases/pars-linux-arm.deb.tar.gz -C releases/ pars-linux-arm.deb
 
 
-      - name: Upload Linux arm64 Artifact
-        uses: actions/upload-artifact@v2
-        with:
-          name: linux-arm64-build
-          path: |
-            releases/pars-linux-arm64-bin.tar.gz
-            releases/pars-linux-arm64.deb.tar.gz
+  #     - name: Upload Linux arm Artifact
+  #       uses: actions/upload-artifact@v2
+  #       with:
+  #         name: linux-arm-build
+  #         path: |
+  #           releases/pars-linux-arm-bin.tar.gz
+  #           releases/pars-linux-arm.deb.tar.gz
+
+
+  # build-linux-arm64:
+  #   runs-on: ubuntu-latest
+
+  #   steps:
+  #     - uses: actions/checkout@v4
+
+  #     - name: Set up Go
+  #       uses: actions/setup-go@v4
+  #       with:
+  #         go-version: '1.21'
+
+  #     - name: Get Tag Name
+  #       id: get_tag_name
+  #       run: |
+  #         echo "Tag name is: ${{ github.ref }}"
+
+  #         TAG_NAME=$(echo "${{ github.ref }}" | sed 's/refs\/tags\///')
+  #         echo "tag_name=$TAG_NAME" >> $GITHUB_ENV
+
+  #         VERSION=$(echo "${{ github.ref }}" | sed 's/refs\/tags\/v//')
+  #         echo "version=$VERSION" >> $GITHUB_ENV
+
+
+  #     - name: Build Binary
+  #       working-directory: ./src
+  #       run: |
+  #         mkdir -p ../releases
+  #         GOOS=linux GOARCH=arm64 go build -o ../releases/bin ./pars.go
+
+  #     - name: Archive Binary Build
+  #       run: tar -czvf releases/pars-linux-arm64-bin.tar.gz -C releases/ bin
+
+        
+
+  #     # ******************************************
+
+
+  #     - name: Build .deb Package
+  #       run: |
+  #         mkdir -p releases/deb/DEBIAN
+  #         mkdir -p releases/deb/usr/local/bin
+  #         cp releases/bin releases/deb/usr/local/bin/
+  #         echo "Package: Pars" > releases/deb/DEBIAN/control
+  #         echo "Version: ${{ env.version }}" >> releases/deb/DEBIAN/control
+  #         echo "Section: base" >> releases/deb/DEBIAN/control
+  #         echo "Priority: optional" >> releases/deb/DEBIAN/control
+  #         echo "Architecture: arm64" >> releases/deb/DEBIAN/control
+  #         echo "Depends: libc6 (>= 2.7)" >> releases/deb/DEBIAN/control
+  #         echo "Maintainer: Pars Dev Kit <info@parsdevkit.net>" >> releases/deb/DEBIAN/control
+  #         echo "Description: Pars" >> releases/deb/DEBIAN/control
+          
+  #         dpkg-deb --build releases/deb releases/pars-linux-arm64.deb
+
+
+  #     - name: Archive .deb Package
+  #       run: tar -czvf releases/pars-linux-arm64.deb.tar.gz -C releases/ pars-linux-arm64.deb
+
+
+  #     - name: Upload Linux arm64 Artifact
+  #       uses: actions/upload-artifact@v2
+  #       with:
+  #         name: linux-arm64-build
+  #         path: |
+  #           releases/pars-linux-arm64-bin.tar.gz
+  #           releases/pars-linux-arm64.deb.tar.gz
 
 
 
@@ -503,44 +540,55 @@ jobs:
           asset_name: pars-linux-386.deb.tar.gz
           asset_content_type: application/gzip
 
-
-
-
-
-
-      #  amd64
-
-
-      - name: Download Linux amd64 Artifact
-        uses: actions/download-artifact@v2
-        with:
-          name: linux-amd64-build
-          path: releases
-
-
-
-
-
-      - name: Upload Linux amd64 Binary Asset
+          
+      - name: Upload Linux 386 .rpm Asset
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./releases/pars-linux-amd64-bin.tar.gz
-          asset_name: pars-linux-amd64.tar.gz
+          asset_path: ./releases/pars-linux-386.rpm.tar.gz
+          asset_name: pars-linux-386.rpm.tar.gz
           asset_content_type: application/gzip
+
+
+
+
+
+
+      # #  amd64
+
+
+      # - name: Download Linux amd64 Artifact
+      #   uses: actions/download-artifact@v2
+      #   with:
+      #     name: linux-amd64-build
+      #     path: releases
+
+
+
+
+
+      # - name: Upload Linux amd64 Binary Asset
+      #   uses: actions/upload-release-asset@v1
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      #   with:
+      #     upload_url: ${{ steps.create_release.outputs.upload_url }}
+      #     asset_path: ./releases/pars-linux-amd64-bin.tar.gz
+      #     asset_name: pars-linux-amd64.tar.gz
+      #     asset_content_type: application/gzip
 
           
-      - name: Upload Linux amd64 .deb Asset
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./releases/pars-linux-amd64.deb.tar.gz
-          asset_name: pars-linux-amd64.deb.tar.gz
-          asset_content_type: application/gzip
+      # - name: Upload Linux amd64 .deb Asset
+      #   uses: actions/upload-release-asset@v1
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      #   with:
+      #     upload_url: ${{ steps.create_release.outputs.upload_url }}
+      #     asset_path: ./releases/pars-linux-amd64.deb.tar.gz
+      #     asset_name: pars-linux-amd64.deb.tar.gz
+      #     asset_content_type: application/gzip
 
 
 
@@ -548,78 +596,78 @@ jobs:
 
 
 
-      #  arm
+      # #  arm
 
 
 
-      - name: Download Linux arm Artifact
-        uses: actions/download-artifact@v2
-        with:
-          name: linux-arm-build
-          path: releases
+      # - name: Download Linux arm Artifact
+      #   uses: actions/download-artifact@v2
+      #   with:
+      #     name: linux-arm-build
+      #     path: releases
 
 
 
           
 
-      - name: Upload Linux arm Binary Asset
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./releases/pars-linux-arm-bin.tar.gz
-          asset_name: pars-linux-arm.tar.gz
-          asset_content_type: application/gzip
+      # - name: Upload Linux arm Binary Asset
+      #   uses: actions/upload-release-asset@v1
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      #   with:
+      #     upload_url: ${{ steps.create_release.outputs.upload_url }}
+      #     asset_path: ./releases/pars-linux-arm-bin.tar.gz
+      #     asset_name: pars-linux-arm.tar.gz
+      #     asset_content_type: application/gzip
 
           
-      - name: Upload Linux arm .deb Asset
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./releases/pars-linux-arm.deb.tar.gz
-          asset_name: pars-linux-arm.deb.tar.gz
-          asset_content_type: application/gzip
+      # - name: Upload Linux arm .deb Asset
+      #   uses: actions/upload-release-asset@v1
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      #   with:
+      #     upload_url: ${{ steps.create_release.outputs.upload_url }}
+      #     asset_path: ./releases/pars-linux-arm.deb.tar.gz
+      #     asset_name: pars-linux-arm.deb.tar.gz
+      #     asset_content_type: application/gzip
 
 
 
 
 
-      #  arm64
+      # #  arm64
 
 
-      - name: Download Linux arm64 Artifact
-        uses: actions/download-artifact@v2
-        with:
-          name: linux-arm64-build
-          path: releases
+      # - name: Download Linux arm64 Artifact
+      #   uses: actions/download-artifact@v2
+      #   with:
+      #     name: linux-arm64-build
+      #     path: releases
 
 
 
 
 
-      - name: Upload Linux arm64 Binary Asset
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./releases/pars-linux-arm64-bin.tar.gz
-          asset_name: pars-linux-arm64.tar.gz
-          asset_content_type: application/gzip
+      # - name: Upload Linux arm64 Binary Asset
+      #   uses: actions/upload-release-asset@v1
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      #   with:
+      #     upload_url: ${{ steps.create_release.outputs.upload_url }}
+      #     asset_path: ./releases/pars-linux-arm64-bin.tar.gz
+      #     asset_name: pars-linux-arm64.tar.gz
+      #     asset_content_type: application/gzip
 
           
-      - name: Upload Linux arm64 .deb Asset
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./releases/pars-linux-arm64.deb.tar.gz
-          asset_name: pars-linux-arm64.deb.tar.gz
-          asset_content_type: application/gzip
+      # - name: Upload Linux arm64 .deb Asset
+      #   uses: actions/upload-release-asset@v1
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      #   with:
+      #     upload_url: ${{ steps.create_release.outputs.upload_url }}
+      #     asset_path: ./releases/pars-linux-arm64.deb.tar.gz
+      #     asset_name: pars-linux-arm64.deb.tar.gz
+      #     asset_content_type: application/gzip
 
 
 
