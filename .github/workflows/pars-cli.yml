@@ -282,68 +282,203 @@ jobs:
           name: linux-build-386
           path: releases
 
-      - name: Upload Linux Release Asset 386
+      - name: Upload Ubuntu Release Asset 386
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./releases/pars-linux-386.tar.gz
-          asset_name: pars-linux-386.tar.gz
+          asset_path: ./releases/pars-ubuntu-386.tar.gz
+          asset_name: pars-ubuntu-386.tar.gz
+          asset_content_type: application/gzip
+
+      - name: Upload Centos Release Asset 386
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./releases/pars-centos-386.tar.gz
+          asset_name: pars-centos-386.tar.gz
           asset_content_type: application/gzip
 
 
-          
+      - name: Upload Debian Release Asset 386
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./releases/pars-debian-386.tar.gz
+          asset_name: pars-debian-386.tar.gz
+          asset_content_type: application/gzip
+
+
+
       - name: Download Linux Artifact amd64
         uses: actions/download-artifact@v2
         with:
           name: linux-build-amd64
-          path: releases          
+          path: releases
 
-      - name: Upload Linux Release Asset amd64
+      - name: Upload Ubuntu Release Asset amd64
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./releases/pars-linux-amd64.tar.gz
-          asset_name: pars-linux-amd64.tar.gz
+          asset_path: ./releases/pars-ubuntu-amd64.tar.gz
+          asset_name: pars-ubuntu-amd64.tar.gz
           asset_content_type: application/gzip
 
+
+      - name: Upload Centos Release Asset amd64
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./releases/pars-centos-amd64.tar.gz
+          asset_name: pars-centos-amd64.tar.gz
+          asset_content_type: application/gzip
           
+
+
+      - name: Upload Debian Release Asset amd64
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./releases/pars-debian-amd64.tar.gz
+          asset_name: pars-debian-amd64.tar.gz
+          asset_content_type: application/gzip
+
+
+      - name: Upload Fedora Release Asset amd64
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./releases/pars-fedora-amd64.tar.gz
+          asset_name: pars-fedora-amd64.tar.gz
+          asset_content_type: application/gzip
+
+
+
+      - name: Upload OpenSUSE Release Asset amd64
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./releases/pars-opensuse-amd64.tar.gz
+          asset_name: pars-opensuse-amd64.tar.gz
+          asset_content_type: application/gzip
+
+
+
+
       - name: Download Linux Artifact arm
         uses: actions/download-artifact@v2
         with:
           name: linux-build-arm
           path: releases
 
-      - name: Upload Linux Release Asset arm
+      - name: Upload Ubuntu Release Asset arm
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./releases/pars-linux-arm.tar.gz
-          asset_name: pars-linux-arm.tar.gz
+          asset_path: ./releases/pars-ubuntu-arm.tar.gz
+          asset_name: pars-ubuntu-arm.tar.gz
+          asset_content_type: application/gzip
+
+      - name: Upload Centos Release Asset arm
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./releases/pars-centos-arm.tar.gz
+          asset_name: pars-centos-arm.tar.gz
           asset_content_type: application/gzip
 
 
+      - name: Upload Debian Release Asset arm
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./releases/pars-debian-arm.tar.gz
+          asset_name: pars-debian-arm.tar.gz
+          asset_content_type: application/gzip
           
+          
+
+
       - name: Download Linux Artifact arm64
         uses: actions/download-artifact@v2
         with:
           name: linux-build-arm64
-          path: releases                 
+          path: releases
 
-      - name: Upload Linux Release Asset arm64
+      - name: Upload Ubuntu Release Asset arm64
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./releases/pars-linux-arm64.tar.gz
-          asset_name: pars-linux-arm64.tar.gz
+          asset_path: ./releases/pars-ubuntu-arm64.tar.gz
+          asset_name: pars-ubuntu-arm64.tar.gz
           asset_content_type: application/gzip
+
+      - name: Upload Centos Release Asset arm64
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./releases/pars-centos-arm64.tar.gz
+          asset_name: pars-centos-arm64.tar.gz
+          asset_content_type: application/gzip
+
+      - name: Upload Debian Release Asset arm64
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./releases/pars-debiab-arm64.tar.gz
+          asset_name: pars-debiab-arm64.tar.gz
+          asset_content_type: application/gzip
+
+
+
+      - name: Upload Fedora Release Asset arm64
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./releases/pars-fedora-arm64.tar.gz
+          asset_name: pars-fedora-arm64.tar.gz
+          asset_content_type: application/gzip
+
+      - name: Upload OpenSUSE Release Asset arm64
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./releases/pars-opensuse-arm64.tar.gz
+          asset_name: pars-opensuse-arm64.tar.gz
+          asset_content_type: application/gzip
+
+
 
 
 
@@ -355,14 +490,14 @@ jobs:
           path: releases       
 
 
-      - name: Upload Darwin Release Asset amd64
+      - name: Upload MacOS Release Asset amd64
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./releases/pars-darwin-amd64.tar.gz
-          asset_name: pars-darwin-amd64.tar.gz
+          asset_path: ./releases/pars-macos-amd64.tar.gz
+          asset_name: pars-macos-amd64.tar.gz
           asset_content_type: application/gzip
 
 
@@ -372,14 +507,14 @@ jobs:
           name: linux-build-arm64
           path: releases       
 
-      - name: Upload Darwin Release Asset arm64
+      - name: Upload MacOS Release Asset arm64
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./releases/pars-darwin-arm64.tar.gz
-          asset_name: pars-darwin-arm64.tar.gz
+          asset_path: ./releases/pars-macos-arm64.tar.gz
+          asset_name: pars-macos-arm64.tar.gz
           asset_content_type: application/gzip
 
 
