@@ -96,7 +96,7 @@ jobs:
 
 
       - name: Archive .rpm Package
-        run: tar -czvf releases/pars-linux-386.rpm.tar.gz -C releases/RPMS/x86_64/ pars-${{ env.version }}.x86_64.rpm
+        run: tar -czvf releases/pars-linux-386.rpm.tar.gz -C ~/rpmbuild/RPMS/x86_64/ pars-${{ env.version }}.x86_64.rpm
   
   
 
