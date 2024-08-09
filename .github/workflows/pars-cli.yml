@@ -53,35 +53,35 @@ jobs:
 
       - name: Build .deb Package
         run: |
-          mkdir -p release/package/DEBIAN
-          mkdir -p release/package/usr/local/bin
+          mkdir -p releases/package/DEBIAN
+          mkdir -p releases/package/usr/local/bin
 
           # Copy binary and control files
-          cp releases/linux/386/pars release/package/usr/local/bin/
+          cp releases/linux/386/pars releases/package/usr/local/bin/
 
           
           # Create a simple control file if not already present
-          echo "Package: Pars" > release/package/DEBIAN/control
-          echo "Version: ${{ env.deb_version }}" >> release/package/DEBIAN/control
-          echo "Section: base" >> release/package/DEBIAN/control
-          echo "Priority: optional" >> release/package/DEBIAN/control
-          echo "Architecture: amd64" >> release/package/DEBIAN/control
-          echo "Depends: libc6 (>= 2.7)" >> release/package/DEBIAN/control
-          echo "Maintainer: Pars Dev Kit <info@parsdevkit.net>" >> release/package/DEBIAN/control
-          echo "Description: Pars" >> release/package/DEBIAN/control
+          echo "Package: Pars" > releases/package/DEBIAN/control
+          echo "Version: ${{ env.deb_version }}" >> releases/package/DEBIAN/control
+          echo "Section: base" >> releases/package/DEBIAN/control
+          echo "Priority: optional" >> releases/package/DEBIAN/control
+          echo "Architecture: amd64" >> releases/package/DEBIAN/control
+          echo "Depends: libc6 (>= 2.7)" >> releases/package/DEBIAN/control
+          echo "Maintainer: Pars Dev Kit <info@parsdevkit.net>" >> releases/package/DEBIAN/control
+          echo "Description: Pars" >> releases/package/DEBIAN/control
 
           # Build the .deb package
-          dpkg-deb --build release/package
+          dpkg-deb --build releases/package
 
       - name: Archive .deb Package
-        run: tar -czvf releases/linux/386/release/package.deb.tar.gz -C releases/linux/386/ pars.deb
+        run: tar -czvf releases/linux/386/releases/package.deb.tar.gz -C releases/linux/386/ pars.deb
 
 
       - name: Upload .deb Artifact
         uses: actions/upload-artifact@v2
         with:
           name: deb-package
-          path: releases/linux/386/release/package.deb.tar.gz
+          path: releases/linux/386/releases/package.deb.tar.gz
 
 
 
