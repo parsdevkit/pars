@@ -67,7 +67,7 @@ jobs:
           cp releases/bin ~/rpmbuild/BUILD/pars/
             
           cd ~/rpmbuild/SOURCES
-          tar -czf pars-${{ env.version }}.tar.gz -C ../BUILD pars
+          tar -czf pars-linux-386-bin.tar.gz -C ../BUILD pars
           
           # Create a SPEC file
           echo 'Name: pars' > ~/rpmbuild/SPECS/pars.spec
