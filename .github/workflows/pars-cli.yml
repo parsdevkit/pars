@@ -60,17 +60,16 @@ jobs:
       - name: Archive .deb Package
         run: tar -czvf releases/pars-linux-386.deb.tar.gz -C releases/ pars-linux-386.deb
 
-
-      - name: Build .rpm Package
+        - name: Build .rpm Package
         run: |
           mkdir -p releases/rpm/{BUILD,RPMS,SOURCES,SPECS,SRPMS}
           mkdir -p releases/rpm/BUILD/pars
           cp releases/bin releases/rpm/BUILD/pars/
           cp releases/pars-linux-386-bin.tar.gz releases/rpm/SOURCES/
-  
+
           # Create a SPEC file
           echo 'Name: pars' > releases/rpm/SPECS/pars.spec
-          echo 'Version: ${{ env.version }}' >> releases/rpm/SPECS/pars.spec
+          echo 'Version: ${{ env.deb_version }}' >> releases/rpm/SPECS/pars.spec
           echo 'Release: 1%{?dist}' >> releases/rpm/SPECS/pars.spec
           echo 'Summary: Pars' >> releases/rpm/SPECS/pars.spec
           echo 'License: MIT' >> releases/rpm/SPECS/pars.spec
@@ -88,7 +87,7 @@ jobs:
           echo '%changelog' >> releases/rpm/SPECS/pars.spec
           echo '* Pars Dev Kit <info@parsdevkit.net>' >> releases/rpm/SPECS/pars.spec
           echo '- Initial RPM package.' >> releases/rpm/SPECS/pars.spec
-  
+
           # Build the RPM
           rpmbuild -bb releases/rpm/SPECS/pars.spec
 
