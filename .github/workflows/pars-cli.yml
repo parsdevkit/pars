@@ -49,6 +49,13 @@ jobs:
           path: releases/linux/386/pars-linux-386.tar.gz
 
 
+
+      - name: ls dir
+        id: get_tag_dname
+        run: |
+          ls releases/linux/386/
+          echo "---------"
+          ls releases/linux/386/pars
       # ******************************************
 
 
