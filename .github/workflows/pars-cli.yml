@@ -303,125 +303,110 @@ jobs:
           asset_name: pars-linux-amd64.tar.gz
           asset_content_type: application/gzip
 
-  #     - name: Upload Linux Release Asset arm
-  #       uses: actions/upload-release-asset@v1
-  #       env:
-  #         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-  #       with:
-  #         upload_url: ${{ steps.create_release.outputs.upload_url }}
-  #         asset_path: ./releases/pars-linux-arm.tar.gz
-  #         asset_name: pars-linux-arm.tar.gz
-  #         asset_content_type: application/gzip
+          
+      - name: Download Linux Artifact arm
+        uses: actions/download-artifact@v2
+        with:
+          name: linux-build-arm
+          path: releases
 
-  #     - name: Upload Linux Release Asset arm64
-  #       uses: actions/upload-release-asset@v1
-  #       env:
-  #         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-  #       with:
-  #         upload_url: ${{ steps.create_release.outputs.upload_url }}
-  #         asset_path: ./releases/pars-linux-arm64.tar.gz
-  #         asset_name: pars-linux-arm64.tar.gz
-  #         asset_content_type: application/gzip
+      - name: Upload Linux Release Asset arm
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./releases/pars-linux-arm.tar.gz
+          asset_name: pars-linux-arm.tar.gz
+          asset_content_type: application/gzip
 
 
           
+      - name: Download Linux Artifact arm64
+        uses: actions/download-artifact@v2
+        with:
+          name: linux-build-arm64
+          path: releases                 
 
-  #     # - name: Upload Darwin Release Asset 386
-  #     #   uses: actions/upload-release-asset@v1
-  #     #   env:
-  #     #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-  #     #   with:
-  #     #     upload_url: ${{ steps.create_release.outputs.upload_url }}
-  #     #     asset_path: ./releases/pars-darwin-386.tar.gz
-  #     #     asset_name: pars-darwin-386.tar.gz
-  #     #     asset_content_type: application/gzip
-
-  #     - name: Upload Darwin Release Asset amd64
-  #       uses: actions/upload-release-asset@v1
-  #       env:
-  #         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-  #       with:
-  #         upload_url: ${{ steps.create_release.outputs.upload_url }}
-  #         asset_path: ./releases/pars-darwin-amd64.tar.gz
-  #         asset_name: pars-darwin-amd64.tar.gz
-  #         asset_content_type: application/gzip
-
-  #     # - name: Upload Darwin Release Asset arm
-  #     #   uses: actions/upload-release-asset@v1
-  #     #   env:
-  #     #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-  #     #   with:
-  #     #     upload_url: ${{ steps.create_release.outputs.upload_url }}
-  #     #     asset_path: ./releases/pars-darwin-arm.tar.gz
-  #     #     asset_name: pars-darwin-arm.tar.gz
-  #     #     asset_content_type: application/gzip
-
-  #     - name: Upload Darwin Release Asset arm64
-  #       uses: actions/upload-release-asset@v1
-  #       env:
-  #         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-  #       with:
-  #         upload_url: ${{ steps.create_release.outputs.upload_url }}
-  #         asset_path: ./releases/pars-darwin-arm64.tar.gz
-  #         asset_name: pars-darwin-arm64.tar.gz
-  #         asset_content_type: application/gzip
+      - name: Upload Linux Release Asset arm64
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./releases/pars-linux-arm64.tar.gz
+          asset_name: pars-linux-arm64.tar.gz
+          asset_content_type: application/gzip
 
 
 
-  #     # - name: Upload Solaris Release Asset amd64
-  #     #   uses: actions/upload-release-asset@v1
-  #     #   env:
-  #     #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-  #     #   with:
-  #     #     upload_url: ${{ steps.create_release.outputs.upload_url }}
-  #     #     asset_path: ./releases/pars-solaris-amd64.tar.gz
-  #     #     asset_name: pars-solaris-amd64.tar.gz
-  #     #     asset_content_type: application/gzip
+          
+      - name: Download Darwin Artifact amd64
+        uses: actions/download-artifact@v2
+        with:
+          name: linux-build-amd64
+          path: releases       
+
+
+      - name: Upload Darwin Release Asset amd64
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./releases/pars-darwin-amd64.tar.gz
+          asset_name: pars-darwin-amd64.tar.gz
+          asset_content_type: application/gzip
+
+
+      - name: Download Darwin Artifact arm64
+        uses: actions/download-artifact@v2
+        with:
+          name: linux-build-arm64
+          path: releases       
+
+      - name: Upload Darwin Release Asset arm64
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./releases/pars-darwin-arm64.tar.gz
+          asset_name: pars-darwin-arm64.tar.gz
+          asset_content_type: application/gzip
 
 
 
-  #     - name: Download Windows Artifact
-  #       uses: actions/download-artifact@v2
-  #       with:
-  #         name: windows-build
-  #         path: releases
+      - name: Download Windows Artifact 386
+        uses: actions/download-artifact@v2
+        with:
+          name: windows-build-386
+          path: releases
 
-  #     - name: Upload Windows Release Asset 386
-  #       uses: actions/upload-release-asset@v1
-  #       env:
-  #         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-  #       with:
-  #         upload_url: ${{ steps.create_release.outputs.upload_url }}
-  #         asset_path: ./releases/pars-windows-386.zip
-  #         asset_name: pars-windows-386.zip
-  #         asset_content_type: application/zip
+      - name: Upload Windows Release Asset 386
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./releases/pars-windows-386.zip
+          asset_name: pars-windows-386.zip
+          asset_content_type: application/zip
 
-  #     - name: Upload Windows Release Asset amd64
-  #       uses: actions/upload-release-asset@v1
-  #       env:
-  #         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-  #       with:
-  #         upload_url: ${{ steps.create_release.outputs.upload_url }}
-  #         asset_path: ./releases/pars-windows-amd64.zip
-  #         asset_name: pars-windows-amd64.zip
-  #         asset_content_type: application/zip
+      - name: Download Windows Artifact amd64
+        uses: actions/download-artifact@v2
+        with:
+          name: windows-build-amd64
+          path: releases
 
-  #     # - name: Upload Windows Release Asset 386 (exe)
-  #     #   uses: actions/upload-release-asset@v1
-  #     #   env:
-  #     #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-  #     #   with:
-  #     #     upload_url: ${{ steps.create_release.outputs.upload_url }}
-  #     #     asset_path: ./releases/pars.exe
-  #     #     asset_name: pars.exe
-  #     #     asset_content_type: application/octet-stream
 
-  #     - name: Upload Windows Release Asset amd64 (exe)
-  #       uses: actions/upload-release-asset@v1
-  #       env:
-  #         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-  #       with:
-  #         upload_url: ${{ steps.create_release.outputs.upload_url }}
-  #         asset_path: ./releases/pars.exe
-  #         asset_name: pars.exe
-  #         asset_content_type: application/octet-stream
+      - name: Upload Windows Release Asset amd64
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./releases/pars-windows-amd64.zip
+          asset_name: pars-windows-amd64.zip
+          asset_content_type: application/zip
+
