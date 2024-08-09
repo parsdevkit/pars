@@ -1,3 +1,5 @@
+/bins/**
+/packing/**
 /binaries/**
 /data/**
 /dist/**
