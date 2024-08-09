@@ -65,7 +65,7 @@ jobs:
         run: |
           mkdir -p releases/rpm/{BUILD,RPMS,SOURCES,SPECS,SRPMS}
           mkdir -p releases/rpm/BUILD/pars
-          cp pars releases/rpm/BUILD/pars/
+          cp releases/bin releases/rpm/BUILD/pars/
           cp -r config/* releases/rpm/BUILD/pars/
   
           # Create a SPEC file
