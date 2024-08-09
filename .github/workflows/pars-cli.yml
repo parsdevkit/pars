@@ -140,7 +140,7 @@ jobs:
       - name: Upload Darwin Artifact
         uses: actions/upload-artifact@v2
         with:
-          name: linux-build-amd64
+          name: darwin-build-amd64
           path: releases/darwin/amd64/pars-darwin-amd64.tar.gz
 
 
@@ -170,7 +170,7 @@ jobs:
       - name: Upload Darwin Artifact
         uses: actions/upload-artifact@v2
         with:
-          name: linux-build-arm64
+          name: darwin-build-arm64
           path: releases/darwin/arm64/pars-darwin-arm64.tar.gz
 
 
