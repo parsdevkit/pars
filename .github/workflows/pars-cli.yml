@@ -177,127 +177,131 @@ jobs:
 
 
 
-  build-windows-386:
-    runs-on: windows-latest
-
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Set up Go
-        uses: actions/setup-go@v4
-        with:
-          go-version: '1.21'
-
-      - name: Build Windows 386
-        working-directory: ./src
-        run: |
-          mkdir -p ../releases/windows/386
-          set GOOS=windows
-          set GOARCH=386
-          go build -o ../releases/windows/386/pars.exe ./pars.go
-
-      - name: Archive Windows Build
-        run: Compress-Archive -Path releases/windows/386/* -Destination releases/windows/386/pars-windows-386.zip
-
-
-      - name: Upload Windows Artifact
-        uses: actions/upload-artifact@v2
-        with:
-          name: windows-build-386
-          path: releases/windows/386/pars-windows-386.zip
-
-
-
-
-  build-windows-amd64:
-    runs-on: windows-latest
-
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Set up Go
-        uses: actions/setup-go@v4
-        with:
-          go-version: '1.21'
-
-      - name: Build Windows amd64
-        working-directory: ./src
-        run: |
-          mkdir -p ../releases/windows/amd64
-          set GOOS=windows
-          set GOARCH=amd64
-          go build -o ../releases/windows/amd64/pars.exe ./pars.go
-
-      - name: Archive Windows Build
-        run: Compress-Archive -Path releases/windows/amd64/* -Destination releases/windows/amd64/pars-windows-amd64.zip
-
-
-      - name: Upload Windows Artifact
-        uses: actions/upload-artifact@v2
-        with:
-          name: windows-build-amd64
-          path: releases/windows/amd64/pars-windows-amd64.zip
-
-
-  # create_release:
-  #   needs: [build-linux, build-windows]
-  #   runs-on: ubuntu-latest
+  # build-windows-386:
+  #   runs-on: windows-latest
 
   #   steps:
-  #     - name: Checkout code
-  #       uses: actions/checkout@v4
+  #     - uses: actions/checkout@v4
 
-  #     - name: Get Tag Name
-  #       id: get_tag_name
+  #     - name: Set up Go
+  #       uses: actions/setup-go@v4
+  #       with:
+  #         go-version: '1.21'
+
+  #     - name: Build Windows 386
+  #       working-directory: ./src
   #       run: |
-  #         echo "Tag name is: ${{ github.ref }}"
-  #         TAG_NAME=$(echo "${{ github.ref }}" | sed 's/refs\/tags\///')
-  #         echo "tag_name=$TAG_NAME" >> $GITHUB_ENV
+  #         mkdir -p ../releases/windows/386
+  #         set GOOS=windows
+  #         set GOARCH=386
+  #         go build -o ../releases/windows/386/pars.exe ./pars.go
 
-  #     - name: Download Linux Artifact
-  #       uses: actions/download-artifact@v2
-  #       with:
-  #         name: linux-build
-  #         path: releases
-
-  #     - name: Download Windows Artifact
-  #       uses: actions/download-artifact@v2
-  #       with:
-  #         name: windows-build
-  #         path: releases
-
-  #     - name: Create GitHub Release
-  #       id: create_release
-  #       uses: actions/create-release@v1
-  #       env:
-  #         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-  #       with:
-  #         tag_name: ${{ env.tag_name }}
-  #         release_name: Release ${{ env.tag_name }}
-  #         body: "test"
-  #         draft: false
-  #         prerelease: false
+  #     - name: Archive Windows Build
+  #       run: Compress-Archive -Path releases/windows/386/* -Destination releases/windows/386/pars-windows-386.zip
 
 
-  #     - name: Upload Linux Release Asset 386
-  #       uses: actions/upload-release-asset@v1
-  #       env:
-  #         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  #     - name: Upload Windows Artifact
+  #       uses: actions/upload-artifact@v2
   #       with:
-  #         upload_url: ${{ steps.create_release.outputs.upload_url }}
-  #         asset_path: ./releases/pars-linux-386.tar.gz
-  #         asset_name: pars-linux-386.tar.gz
-  #         asset_content_type: application/gzip
-  
-  #     - name: Upload Linux Release Asset amd64
-  #       uses: actions/upload-release-asset@v1
-  #       env:
-  #         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  #         name: windows-build-386
+  #         path: releases/windows/386/pars-windows-386.zip
+
+
+
+
+  # build-windows-amd64:
+  #   runs-on: windows-latest
+
+  #   steps:
+  #     - uses: actions/checkout@v4
+
+  #     - name: Set up Go
+  #       uses: actions/setup-go@v4
   #       with:
-  #         upload_url: ${{ steps.create_release.outputs.upload_url }}
-  #         asset_path: ./releases/pars-linux-amd64.tar.gz
-  #         asset_name: pars-linux-amd64.tar.gz
-  #         asset_content_type: application/gzip
+  #         go-version: '1.21'
+
+  #     - name: Build Windows amd64
+  #       working-directory: ./src
+  #       run: |
+  #         mkdir -p ../releases/windows/amd64
+  #         set GOOS=windows
+  #         set GOARCH=amd64
+  #         go build -o ../releases/windows/amd64/pars.exe ./pars.go
+
+  #     - name: Archive Windows Build
+  #       run: Compress-Archive -Path releases/windows/amd64/* -Destination releases/windows/amd64/pars-windows-amd64.zip
+
+
+  #     - name: Upload Windows Artifact
+  #       uses: actions/upload-artifact@v2
+  #       with:
+  #         name: windows-build-amd64
+  #         path: releases/windows/amd64/pars-windows-amd64.zip
+
+
+  create_release:
+    needs: [build-linux, build-windows]
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Get Tag Name
+        id: get_tag_name
+        run: |
+          echo "Tag name is: ${{ github.ref }}"
+          TAG_NAME=$(echo "${{ github.ref }}" | sed 's/refs\/tags\///')
+          echo "tag_name=$TAG_NAME" >> $GITHUB_ENV
+
+      - name: Create GitHub Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ env.tag_name }}
+          release_name: Release ${{ env.tag_name }}
+          body: "test"
+          draft: false
+          prerelease: false
+
+
+
+          
+      - name: Download Linux Artifact 386
+        uses: actions/download-artifact@v2
+        with:
+          name: linux-build-386
+          path: releases
+
+      - name: Upload Linux Release Asset 386
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./releases/pars-linux-386.tar.gz
+          asset_name: pars-linux-386.tar.gz
+          asset_content_type: application/gzip
+
+
+          
+      - name: Download Linux Artifact amd64
+        uses: actions/download-artifact@v2
+        with:
+          name: linux-build-amd64
+          path: releases          
+
+      - name: Upload Linux Release Asset amd64
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./releases/pars-linux-amd64.tar.gz
+          asset_name: pars-linux-amd64.tar.gz
+          asset_content_type: application/gzip
 
   #     - name: Upload Linux Release Asset arm
   #       uses: actions/upload-release-asset@v1
@@ -375,6 +379,12 @@ jobs:
   #     #     asset_content_type: application/gzip
 
 
+
+  #     - name: Download Windows Artifact
+  #       uses: actions/download-artifact@v2
+  #       with:
+  #         name: windows-build
+  #         path: releases
 
   #     - name: Upload Windows Release Asset 386
   #       uses: actions/upload-release-asset@v1
