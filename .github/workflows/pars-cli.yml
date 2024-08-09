@@ -51,16 +51,12 @@ jobs:
 
       # ******************************************
 
+
       - name: Build .deb Package
         run: |
           mkdir -p releases/package/DEBIAN
           mkdir -p releases/package/usr/local/bin
-
-          # Copy binary and control files
           cp releases/linux/386/pars releases/package/usr/local/bin/
-
-          
-          # Create a simple control file if not already present
           echo "Package: Pars" > releases/package/DEBIAN/control
           echo "Version: ${{ env.deb_version }}" >> releases/package/DEBIAN/control
           echo "Section: base" >> releases/package/DEBIAN/control
@@ -69,13 +65,10 @@ jobs:
           echo "Depends: libc6 (>= 2.7)" >> releases/package/DEBIAN/control
           echo "Maintainer: Pars Dev Kit <info@parsdevkit.net>" >> releases/package/DEBIAN/control
           echo "Description: Pars" >> releases/package/DEBIAN/control
-
-          # Build the .deb package
           dpkg-deb --build releases/package
 
       - name: Archive .deb Package
-        run: tar -czvf releases/linux/386/releases/package.deb.tar.gz -C releases/linux/386/ pars.deb
-
+        run: tar -czvf releases/linux/386/releases/package.deb.tar.gz -C releases/package/DEBIAN/ .
 
       - name: Upload .deb Artifact
         uses: actions/upload-artifact@v2
