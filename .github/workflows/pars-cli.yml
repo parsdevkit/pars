@@ -37,8 +37,7 @@ jobs:
           GOOS=linux GOARCH=386 go build -o ../releases/bin ./pars.go
 
       - name: Archive Binary Build
-        run: tar -czvf releases/pars-linux-386-bin.tar.gz -C releases/bin .
-
+        run: tar -czvf releases/pars-linux-386-bin.tar.gz -C releases/ bin
 
       - name: Upload Linux Binary Artifact
         uses: actions/upload-artifact@v2
@@ -366,14 +365,14 @@ jobs:
           asset_content_type: application/gzip
 
           
-      - name: Download Linux 386 Deb Artifact
+      - name: Download Linux 386 .deb Artifact
         uses: actions/download-artifact@v2
         with:
           name: linux-386-deb-package
           path: releases
 
           
-      - name: Upload Ubuntu 386 Deb Asset
+      - name: Upload Ubuntu 386 .deb Asset
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
