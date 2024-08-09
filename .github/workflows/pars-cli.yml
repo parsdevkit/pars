@@ -27,7 +27,7 @@ jobs:
           echo "tag_name=$TAG_NAME" >> $GITHUB_ENV
 
           VERSION=$(echo "${{ github.ref }}" | sed 's/refs\/tags\/v//')
-          echo "version=$DEB_VERSIONVERSION" >> $GITHUB_ENV
+          echo "version=$VERSION" >> $GITHUB_ENV
 
 
       - name: Build Binary 386
