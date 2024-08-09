@@ -66,10 +66,10 @@ jobs:
           echo "Depends: libc6 (>= 2.7)" >> releases/package/DEBIAN/control
           echo "Maintainer: Pars Dev Kit <info@parsdevkit.net>" >> releases/package/DEBIAN/control
           echo "Description: Pars" >> releases/package/DEBIAN/control
-          dpkg-deb --build releases/package
+          dpkg-deb --build releases/package releases/package/deb
 
       - name: Archive .deb Package
-        run: tar -czvf releases/linux/386/pars-linux-386.deb.tar.gz -C releases/package/ .
+        run: tar -czvf releases/linux/386/pars-linux-386.deb.tar.gz -C releases/package/deb/ .
 
 
       - name: Upload Linux Artifact
@@ -77,7 +77,7 @@ jobs:
         with:
           name: linux-build-386
           path: releases/linux/386/pars-linux-386.tar.gz
-
+          
       - name: Upload .deb Artifact
         uses: actions/upload-artifact@v2
         with:
