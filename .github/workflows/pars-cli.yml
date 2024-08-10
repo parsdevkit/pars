@@ -114,6 +114,7 @@ jobs:
           sudo apt-get install -y snapd
           sudo apt install snapcraft -y
           sudo apt-get install -y lxc
+          sudo apt-get install lxc-templates
 
           # Create snap directories
           mkdir -p snap
