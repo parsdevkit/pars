@@ -33,7 +33,6 @@ jobs:
         with:
           name: linux-386-build
           path: |
-            ./src
             releases/bin
             releases/pars-linux-386.bin.tar.gz
 
