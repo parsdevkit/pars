@@ -28,7 +28,7 @@ jobs:
         run: | 
           tar -czvf artifacts/pars-linux-386.bin.tar.gz -C artifacts/ bin
 
-      - name: Upload Linux 386 Artifact
+      - name: Upload Artifact
         uses: actions/upload-artifact@v2
         with:
           name: linux-386-artifacts
@@ -40,7 +40,7 @@ jobs:
 
 
 
-  package-linux-389-deb:
+  package-linux-386-deb:
     needs: 
       - build-linux-386
     runs-on: ubuntu-latest
@@ -65,7 +65,7 @@ jobs:
           path: downloads
 
 
-      - name: Build .deb Package
+      - name: Build Package
         run: |
           mkdir -p artifacts
           mkdir -p temp/deb/DEBIAN
@@ -83,22 +83,104 @@ jobs:
           dpkg-deb --build temp/deb temp/pars-linux-386.deb
 
 
-      - name: Archive .deb Package
+      - name: Archive Package
         run: tar -czvf artifacts/pars-linux-386.deb.tar.gz -C temp/ pars-linux-386.deb
 
 
 
-      - name: Upload Linux 386 Artifact
+      - name: Upload Artifact
         uses: actions/upload-artifact@v2
         with:
           name: linux-386-artifacts
           path: |
             artifacts/pars-linux-386.deb.tar.gz
 
+  package-linux-386-rpm:
+    needs: 
+      - build-linux-386
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Get Tag Name
+        id: get_tag_name
+        run: |
+          echo "Tag name is: ${{ github.ref }}"
+          TAG_NAME=$(echo "${{ github.ref }}" | sed 's/refs\/tags\///')
+          echo "tag_name=$TAG_NAME" >> $GITHUB_ENV
+
+          VERSION=$(echo "${{ github.ref }}" | sed 's/refs\/tags\/v//')
+          echo "version=$VERSION" >> $GITHUB_ENV
+
+
+
+      - name: Download Artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: linux-386-artifacts
+          path: downloads
+
+
+      - name: Build Package
+        run: |
+          mkdir -p artifacts
+          sudo apt-get update
+          sudo apt-get install -y rpm
+          sudo apt-get install -y rpm gcc libc6-dev gcc-multilib
+
+          mkdir -p ~/rpmbuild/{BUILD,RPMS,SOURCES,SPECS,SRPMS}
+          mkdir -p ~/rpmbuild/BUILD/pars
+          cp downloads/bin ~/rpmbuild/BUILD/pars/
+            
+          cd ~/rpmbuild/SOURCES
+          tar -czf pars-linux-386.bin.tar.gz -C ../BUILD pars
+          
+          # Create a SPEC file
+          echo 'Name: pars' > ~/rpmbuild/SPECS/pars.spec
+          echo 'Version: ${{ env.version }}' >> ~/rpmbuild/SPECS/pars.spec
+          echo 'Release: 1%{?dist}' >> ~/rpmbuild/SPECS/pars.spec
+          echo 'Summary: Pars' >> ~/rpmbuild/SPECS/pars.spec
+          echo 'License: MIT' >> ~/rpmbuild/SPECS/pars.spec
+          echo 'Source0: pars-linux-386.bin.tar.gz' >> ~/rpmbuild/SPECS/pars.spec
+          echo 'BuildArch: i386' >> ~/rpmbuild/SPECS/pars.spec
+          echo '%description' >> ~/rpmbuild/SPECS/pars.spec
+          echo 'Pars.' >> ~/rpmbuild/SPECS/pars.spec
+          echo '%prep' >> ~/rpmbuild/SPECS/pars.spec
+          echo '%setup -q -n pars' >> ~/rpmbuild/SPECS/pars.spec
+          echo '%build' >> ~/rpmbuild/SPECS/pars.spec
+          echo '%install' >> ~/rpmbuild/SPECS/pars.spec
+          echo 'mkdir -p %{buildroot}/usr/local/bin' >> ~/rpmbuild/SPECS/pars.spec
+          echo 'cp -a bin %{buildroot}/usr/local/bin/' >> ~/rpmbuild/SPECS/pars.spec
+          echo '%files' >> ~/rpmbuild/SPECS/pars.spec
+          echo '/usr/local/bin/bin' >> ~/rpmbuild/SPECS/pars.spec
+          echo '%changelog' >> ~/rpmbuild/SPECS/pars.spec
+          echo '* Fri Aug 09 2024 Pars Dev Kit <info@parsdevkit.net> - ${{ env.tag_name }}' >> ~/rpmbuild/SPECS/pars.spec
+          echo '- Initial RPM package.' >> ~/rpmbuild/SPECS/pars.spec
+
+          # Build the RPM
+          setarch i386 rpmbuild --target i386 -bb ~/rpmbuild/SPECS/pars.spec
+
+          # Rename the RPM file
+          mv ~/rpmbuild/RPMS/i386/pars-*.i386.rpm ~/rpmbuild/RPMS/i386/pars-${{ env.version }}.i386.rpm
+
+      - name: Archive Package
+        run: tar -czvf artifacts/pars-linux-386.rpm.tar.gz -C ~/rpmbuild/RPMS/i386/ pars-${{ env.version }}.i386.rpm
+
+
+
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: linux-386-artifacts
+          path: |
+            artifacts/pars-linux-386.rpm.tar.gz
+
 
   create_release:
     needs: 
-      - package-linux-389-deb
+      - build-linux-386
+      - package-linux-386-deb
+      - package-linux-386-rpm
     runs-on: ubuntu-latest
 
     steps:
@@ -140,7 +222,7 @@ jobs:
 
 
 
-      - name: Upload Linux 386 Binary Asset
+      - name: Upload Linux 386 Binary
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -151,15 +233,26 @@ jobs:
           asset_content_type: application/gzip
 
           
-      - name: Upload Linux 386 .deb Asset
+          - name: Upload Linux 386 DEB Package
+          uses: actions/upload-release-asset@v1
+          env:
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          with:
+            upload_url: ${{ steps.create_release.outputs.upload_url }}
+            asset_path: ./downloads/pars-linux-386.deb.tar.gz
+            asset_name: pars-linux-386.deb.tar.gz
+            asset_content_type: application/gzip
+  
+  
+      - name: Upload Linux 386 RPM Package
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./downloads/pars-linux-386.deb.tar.gz
-          asset_name: pars-linux-386.deb.tar.gz
+          asset_path: ./downloads/pars-linux-386.rpm.tar.gz
+          asset_name: pars-linux-386.rpm.tar.gz
           asset_content_type: application/gzip
 
 
-
+  
