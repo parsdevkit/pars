@@ -66,15 +66,17 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y rpm gcc libc6-dev gcc-multilib
   
-        
-      - name: Build .rpm Package
+
+      - name: Prepare build environment
         run: |
           mkdir -p ~/rpmbuild/{BUILD,RPMS,SOURCES,SPECS,SRPMS}
           mkdir -p ~/rpmbuild/BUILD/pars
           cp releases/bin ~/rpmbuild/BUILD/pars/
-            
           cd ~/rpmbuild/SOURCES
           tar -czf pars-linux-386.bin.tar.gz -C ../BUILD pars
+
+      - name: Create SPEC file
+        run: |
           
           # Create a SPEC file
           echo 'Name: pars' > ~/rpmbuild/SPECS/pars.spec
@@ -102,6 +104,13 @@ jobs:
           rpmbuild -bb ~/rpmbuild/SPECS/pars.spec
 
           # Rename the RPM file
+          mv ~/rpmbuild/RPMS/i386/pars-*.i386.rpm ~/rpmbuild/RPMS/i386/pars-${{ env.version }}.i386.rpm
+
+      - name: Build the RPM package
+        run: rpmbuild -bb ~/rpmbuild/SPECS/pars.spec
+
+      - name: Rename and archive the RPM package
+        run: |
           mv ~/rpmbuild/RPMS/i386/pars-*.i386.rpm ~/rpmbuild/RPMS/i386/pars-${{ env.version }}.i386.rpm
 
       - name: Archive .rpm i386
