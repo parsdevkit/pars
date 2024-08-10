@@ -114,6 +114,10 @@ jobs:
           sudo apt-get install -y snapd
           sudo snap install snapcraft --classic
           sudo snap install multipass
+
+      - name: Ara test
+        run: |
+
           ss -tln | grep 50051
 
       - name: Create .snap config file
