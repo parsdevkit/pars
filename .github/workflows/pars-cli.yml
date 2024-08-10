@@ -135,14 +135,16 @@ jobs:
           # Build the snap
           snapcraft --target-arch=i386 --destructive-mode --enable-experimental-target-arch
 
+
           echo '### current'
           ls 
 
-          mkdir -p releases/snap/i386
-          mv *.snap releases/snap/i386/pars_i386.snap
+          # mkdir -p releases/snap/i386
+          # mv *.snap releases/snap/i386/pars_i386.snap
 
       - name: Archive .snap i386
         run: |
+          ls releases/snap
           tar -czvf releases/pars-linux-386.snap.tar.gz -C releases/snap/i386 pars_i386.snap
 
 
