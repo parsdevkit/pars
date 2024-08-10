@@ -202,7 +202,7 @@ jobs:
       - name: Read Changelog File
         id: changelog
         run: |
-          changelog_file="downloads/contents/en/pars/changelogs/${{ env.tag_name }}.md"
+          changelog_file="downloads/contents/en/pars/changelogs/v1.0.164.md"
           if [ -f "$changelog_file" ]; then
             content=$(cat "$changelog_file")
             echo "changelog_content=$content" >> $GITHUB_ENV
