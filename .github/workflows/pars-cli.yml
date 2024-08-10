@@ -132,7 +132,6 @@ jobs:
           echo 'parts:' >> snap/snapcraft.yaml
           echo '  pars:' >> snap/snapcraft.yaml
           echo '    plugin: go' >> snap/snapcraft.yaml
-          echo '    go-importpath: github.com/parsdevkit/pars' >> snap/snapcraft.yaml
           echo '    source: ./' >> snap/snapcraft.yaml
 
           # Build the snap
