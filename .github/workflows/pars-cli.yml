@@ -233,15 +233,15 @@ jobs:
           asset_content_type: application/gzip
 
           
-          - name: Upload Linux 386 DEB Package
-          uses: actions/upload-release-asset@v1
-          env:
-            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          with:
-            upload_url: ${{ steps.create_release.outputs.upload_url }}
-            asset_path: ./downloads/pars-linux-386.deb.tar.gz
-            asset_name: pars-linux-386.deb.tar.gz
-            asset_content_type: application/gzip
+      - name: Upload Linux 386 DEB Package
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./downloads/pars-linux-386.deb.tar.gz
+          asset_name: pars-linux-386.deb.tar.gz
+          asset_content_type: application/gzip
   
   
       - name: Upload Linux 386 RPM Package
