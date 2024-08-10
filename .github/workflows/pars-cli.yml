@@ -141,38 +141,38 @@ jobs:
           echo '  pars:' >> snap/snapcraft.yaml
 
           # Build the snap
-          snapcraft --target-arch=i386 --build-for=i386 --destructive-mode --enable-experimental-target-arch
+          # snapcraft --target-arch=i386 --build-for=i386 --destructive-mode --enable-experimental-target-arch
 
-      # - name: Set up LXC
-      #   run: |
+      - name: Set up LXC
+        run: |
           
-      #     # Set up LXC
-      #     sudo lxc-create -t ubuntu -n snap-build -- -a i386
-      #     sudo lxc-start -n snap-build -d
+          # Set up LXC
+          sudo lxc-create -t download --dist ubuntu -n snap-build -- -a i386
+          sudo lxc-start -n snap-build -d
 
-      #     # Transfer files to LXC container
-      #     sudo lxc-attach -n snap-build -- mkdir -p /home/ubuntu/snap
-      #     sudo lxc-attach -n snap-build -- mkdir -p /home/ubuntu/snap/local
-      #     sudo lxc-attach -n snap-build -- mkdir -p /home/ubuntu/releases
+          # Transfer files to LXC container
+          sudo lxc-attach -n snap-build -- mkdir -p /home/ubuntu/snap
+          sudo lxc-attach -n snap-build -- mkdir -p /home/ubuntu/snap/local
+          sudo lxc-attach -n snap-build -- mkdir -p /home/ubuntu/releases
 
-      #     sudo lxc-attach -n snap-build -- bash -c "mkdir -p /home/ubuntu/snap"
-      #     sudo lxc-attach -n snap-build -- bash -c "mkdir -p /home/ubuntu/snap/local"
-      #     sudo lxc-attach -n snap-build -- bash -c "mkdir -p /home/ubuntu/releases"
+          sudo lxc-attach -n snap-build -- bash -c "mkdir -p /home/ubuntu/snap"
+          sudo lxc-attach -n snap-build -- bash -c "mkdir -p /home/ubuntu/snap/local"
+          sudo lxc-attach -n snap-build -- bash -c "mkdir -p /home/ubuntu/releases"
 
-      #     sudo lxc-file push releases/bin snap-build/home/ubuntu/snap/local/
-      #     sudo lxc-file push snap/snapcraft.yaml snap-build/home/ubuntu/snap/snapcraft.yaml
+          sudo lxc-file push releases/bin snap-build/home/ubuntu/snap/local/
+          sudo lxc-file push snap/snapcraft.yaml snap-build/home/ubuntu/snap/snapcraft.yaml
 
-      #     # Build the snap inside the container
-      #     sudo lxc-attach -n snap-build -- bash -c "snapcraft --target-arch=i386 --destructive-mode --enable-experimental-target-arch"
+          # Build the snap inside the container
+          sudo lxc-attach -n snap-build -- bash -c "snapcraft --target-arch=i386 --destructive-mode --enable-experimental-target-arch"
 
-      #     # Move the snap package to the releases directory
-      #     sudo lxc-attach -n snap-build -- bash -c "mv *.snap /home/ubuntu/releases/pars_i386.snap"
+          # Move the snap package to the releases directory
+          sudo lxc-attach -n snap-build -- bash -c "mv *.snap /home/ubuntu/releases/pars_i386.snap"
 
-      #     # Copy the snap package back to the host
-      #     sudo lxc-file pull snap-build/home/ubuntu/releases/pars_i386.snap releases/snap/i386/pars_i386.snap
+          # Copy the snap package back to the host
+          sudo lxc-file pull snap-build/home/ubuntu/releases/pars_i386.snap releases/snap/i386/pars_i386.snap
 
-      #     sudo lxc-stop -n snap-build
-      #     sudo lxc-destroy -n snap-build
+          sudo lxc-stop -n snap-build
+          sudo lxc-destroy -n snap-build
 
 
       - name: Archive .snap i386
