@@ -169,8 +169,6 @@ jobs:
           sudo lxc-stop -n snap-build
           sudo lxc-destroy -n snap-build
 
-          mkdir -p releases/snap/i386
-          mv *.snap releases/snap/i386/pars_i386.snap
 
       - name: Archive .snap i386
         run: |
