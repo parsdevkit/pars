@@ -64,7 +64,7 @@ jobs:
         run: |
           sudo dpkg --add-architecture i386
           sudo apt-get update
-          sudo apt-get install -y rpm gcc libc6-dev gcc-multilib rpm-build
+          sudo apt-get install -y rpm gcc libc6-dev gcc-multilib
   
 
       - name: Prepare build environment
