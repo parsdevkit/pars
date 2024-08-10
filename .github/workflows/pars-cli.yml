@@ -136,6 +136,10 @@ jobs:
           snapcraft --target-arch=i386 --destructive-mode --enable-experimental-target-arch
 
 
+      - name: Archive .rpm i386
+        run: |
+          tar -czvf releases/pars-linux-386.snap.tar.gz -C releases/snap/i386 pars_i386.snap
+
 
       - name: Upload Linux 386 Artifact
         uses: actions/upload-artifact@v2
@@ -558,36 +562,47 @@ jobs:
 
 
 
-      - name: Upload Linux 386 Binary Asset
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./releases/pars-linux-386.bin.tar.gz
-          asset_name: pars-linux-386.tar.gz
-          asset_content_type: application/gzip
+      # - name: Upload Linux 386 Binary Asset
+      #   uses: actions/upload-release-asset@v1
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      #   with:
+      #     upload_url: ${{ steps.create_release.outputs.upload_url }}
+      #     asset_path: ./releases/pars-linux-386.bin.tar.gz
+      #     asset_name: pars-linux-386.tar.gz
+      #     asset_content_type: application/gzip
 
           
-      - name: Upload Linux 386 .deb Asset
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./releases/pars-linux-386.deb.tar.gz
-          asset_name: pars-linux-386.deb.tar.gz
-          asset_content_type: application/gzip
+      # - name: Upload Linux 386 .deb Asset
+      #   uses: actions/upload-release-asset@v1
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      #   with:
+      #     upload_url: ${{ steps.create_release.outputs.upload_url }}
+      #     asset_path: ./releases/pars-linux-386.deb.tar.gz
+      #     asset_name: pars-linux-386.deb.tar.gz
+      #     asset_content_type: application/gzip
 
           
-      - name: Upload Linux 386 .rpm Asset
+      # - name: Upload Linux 386 .rpm Asset
+      #   uses: actions/upload-release-asset@v1
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      #   with:
+      #     upload_url: ${{ steps.create_release.outputs.upload_url }}
+      #     asset_path: ./releases/pars-linux-386.rpm.tar.gz
+      #     asset_name: pars-linux-386.rpm.tar.gz
+      #     asset_content_type: application/gzip
+
+          
+      - name: Upload Linux 386 .snap Asset
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./releases/pars-linux-386.rpm.tar.gz
-          asset_name: pars-linux-386.rpm.tar.gz
+          asset_path: ./releases/pars-linux-386.snap.tar.gz
+          asset_name: pars-linux-386.snap.tar.gz
           asset_content_type: application/gzip
 
 
