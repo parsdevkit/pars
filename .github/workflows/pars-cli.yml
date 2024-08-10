@@ -19,10 +19,14 @@ jobs:
           go-version: '1.21'
 
       - name: Build Binary
+        run: |
+          mkdir -p /releases
+          mkdir -p /releases/src
+          cp ./src /releases/src
+
+      - name: Build Binary
         working-directory: ./src
         run: |
-          mkdir -p ../releases
-          cp ./ ../releases/src
           GOOS=linux GOARCH=386 go build -o ../releases/bin ./pars.go
 
       - name: Archive Binary Build
