@@ -202,13 +202,12 @@ jobs:
       - name: Read Changelog File
         id: changelog
         run: |
-          tag=${{ env.tag_name }}
-          changelog_file="downloads/contents/en/pars/changelogs/${ tag }.md"
+          changelog_file="downloads/contents/en/pars/changelogs/${{ env.tag_name }}.md"
           if [ -f "$changelog_file" ]; then
             content=$(cat "$changelog_file")
             echo "changelog_content=$content" >> $GITHUB_ENV
           else
-            echo "Changelog file not found for tag $tag"
+            echo "Changelog file not found for tag ${{ env.tag_name }}"
             exit 1
           fi
 
