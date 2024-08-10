@@ -86,7 +86,6 @@ jobs:
           echo 'License: MIT' >> ~/rpmbuild/SPECS/pars.spec
           echo 'Source0: pars-linux-386.bin.tar.gz' >> ~/rpmbuild/SPECS/pars.spec
           echo 'BuildArch: i386' >> ~/rpmbuild/SPECS/pars.spec
-          echo 'TargetArch: i386' >> ~/rpmbuild/SPECS/pars.spec
           echo '%description' >> ~/rpmbuild/SPECS/pars.spec
           echo 'Pars.' >> ~/rpmbuild/SPECS/pars.spec
           echo '%prep' >> ~/rpmbuild/SPECS/pars.spec
