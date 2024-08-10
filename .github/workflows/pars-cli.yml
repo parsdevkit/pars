@@ -64,7 +64,7 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y rpm
-          sudo apt-get install -y gcc glibc-devel
+          sudo apt-get install -y gcc libc6-dev
   
         
       - name: Build .rpm Package
@@ -105,7 +105,7 @@ jobs:
           mv ~/rpmbuild/RPMS/i386/pars-*.i386.rpm ~/rpmbuild/RPMS/i386/pars-${{ env.version }}.i386.rpm
 
       - name: Archive .rpm i386
-        run: tar -czvf releases/pars-linux-386.rpm.tar.gz -C ~/rpmbuild/RPMS/i386/ pars-${{ env.version }}.x86_64.rpm
+        run: tar -czvf releases/pars-linux-386.rpm.tar.gz -C ~/rpmbuild/RPMS/i386/ pars-${{ env.version }}.i386.rpm
   
   
 
