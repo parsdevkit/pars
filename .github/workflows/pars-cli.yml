@@ -111,7 +111,7 @@ jobs:
         run: |
           # Update package list and install required packages
           sudo apt-get update
-          sudo apt-get install -y snapd
+          sudo apt-get install -y snapd net-tools
           sudo snap install snapcraft --classic
           sudo snap install multipass
 
@@ -149,23 +149,23 @@ jobs:
 
       - name: Build .snap Package
         run: |
-          # Create a new Multipass VM
-          multipass launch --name snap-build --cpus 2 --disk 20G --mem 2G
-
+          # Launch a new Multipass VM with updated syntax
+          multipass launch --name snap-build --cpus 2 --disk 20G --memory 2G
+      
           # Create snap directories inside the VM
           multipass exec snap-build -- bash -c "mkdir -p ~/snap && mkdir -p ~/snap/local"
-
+      
           # Copy source code and snapcraft.yaml to the VM
           multipass transfer bin snap-build:/home/ubuntu/snap/local/
           multipass transfer snap/snapcraft.yaml snap-build:/home/ubuntu/snap/snapcraft.yaml
-
+      
           # Build Snap package inside the VM
           multipass exec snap-build -- bash -c "snapcraft"
-
+      
           # Copy the Snap package back to the host
           multipass exec snap-build -- bash -c "mkdir -p /home/ubuntu/releases && cp *.snap /home/ubuntu/releases/"
           multipass transfer snap-build:/home/ubuntu/releases ./
-
+      
           # Clean up
           multipass delete snap-build --yes
           multipass purge --yes
