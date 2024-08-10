@@ -36,6 +36,59 @@ jobs:
             artifacts/bin
             artifacts/pars-linux-386.bin.tar.gz
 
+
+  create_release:
+    needs: 
+      - build-linux-386
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - name: Get Tag Name
+        id: get_tag_name
+        run: |
+          echo "Tag name is: ${{ github.ref }}"
+          TAG_NAME=$(echo "${{ github.ref }}" | sed 's/refs\/tags\///')
+          echo "tag_name=$TAG_NAME" >> $GITHUB_ENV
+
+
+
+      - name: Clone Downloads Repository
+        run: |
+          git clone https://github.com/parsdevkit/downloads.git
+
+
+      - name: Read Changelog File
+        id: changelog
+        run: |
+          changelog_file="downloads/contents/en/pars/changelogs/v1.0.164.md"
+          if [ -f "$changelog_file" ]; then
+            content=$(cat "$changelog_file")
+            echo "changelog_content=$content" >> $GITHUB_ENV
+          else
+            echo "Changelog file not found for tag ${{ env.tag_name }}"
+            exit 1
+          fi
+
+
+      - name: Create GitHub Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ env.tag_name }}
+          release_name: Release ${{ env.tag_name }}
+          body: ${{ env.changelog_content }}
+          draft: false
+          prerelease: false
+
+      - name: Set Release Upload Url
+        run: |
+          echo "release_upload_url=${{ steps.create_release.outputs.upload_url }}" >> $GITHUB_ENV
+
+
+          
   package-linux-386-deb:
     needs: 
       - build-linux-386
@@ -195,7 +248,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          upload_url: ${{ env.release_upload_url }}
           asset_path: ./downloads/pars-linux-386.bin.tar.gz
           asset_name: pars-linux-386.tar.gz
           asset_content_type: application/gzip
@@ -206,7 +259,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          upload_url: ${{ env.release_upload_url }}
           asset_path: ./downloads/pars-linux-386.deb.tar.gz
           asset_name: pars-linux-386.deb.tar.gz
           asset_content_type: application/gzip
@@ -217,59 +270,11 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          upload_url: ${{ env.release_upload_url }}
           asset_path: ./downloads/pars-linux-386.rpm.tar.gz
           asset_name: pars-linux-386.rpm.tar.gz
           asset_content_type: application/gzip
 
-
-
-
-  create_release:
-    needs: 
-      - build-linux-386
-    runs-on: ubuntu-latest
-
-    steps:
-
-      - name: Get Tag Name
-        id: get_tag_name
-        run: |
-          echo "Tag name is: ${{ github.ref }}"
-          TAG_NAME=$(echo "${{ github.ref }}" | sed 's/refs\/tags\///')
-          echo "tag_name=$TAG_NAME" >> $GITHUB_ENV
-
-
-
-      - name: Clone Downloads Repository
-        run: |
-          git clone https://github.com/parsdevkit/downloads.git
-
-
-      - name: Read Changelog File
-        id: changelog
-        run: |
-          changelog_file="downloads/contents/en/pars/changelogs/v1.0.164.md"
-          if [ -f "$changelog_file" ]; then
-            content=$(cat "$changelog_file")
-            echo "changelog_content=$content" >> $GITHUB_ENV
-          else
-            echo "Changelog file not found for tag ${{ env.tag_name }}"
-            exit 1
-          fi
-
-
-      - name: Create GitHub Release
-        id: create_release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          tag_name: ${{ env.tag_name }}
-          release_name: Release ${{ env.tag_name }}
-          body: ${{ env.changelog_content }}
-          draft: false
-          prerelease: false
 
 
 
