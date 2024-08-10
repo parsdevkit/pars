@@ -27,7 +27,6 @@ jobs:
       - name: Archive Binary Build
         run: | 
           tar -czvf releases/pars-linux-386.bin.tar.gz -C releases/ bin
-          ls releases
 
       - name: Upload Linux 386 Artifact
         uses: actions/upload-artifact@v2
@@ -35,6 +34,7 @@ jobs:
           name: linux-386-build
           path: |
             releases/pars-linux-386.bin.tar.gz
+            releases/bin
 
 
 
@@ -67,11 +67,9 @@ jobs:
 
       - name: Build .deb Package
         run: |
-          ls downloads
-
           mkdir -p releases/deb/DEBIAN
           mkdir -p releases/deb/usr/local/bin
-          cp ./downloads releases/deb/usr/local/bin/
+          cp ./downloads/bin releases/deb/usr/local/bin/
           echo "Package: Pars" > releases/deb/DEBIAN/control
           echo "Version: ${{ env.version }}" >> releases/deb/DEBIAN/control
           echo "Section: base" >> releases/deb/DEBIAN/control
