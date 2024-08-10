@@ -60,6 +60,13 @@ jobs:
       - name: Archive .deb Package
         run: tar -czvf releases/pars-linux-386.deb.tar.gz -C releases/ pars-linux-386.deb
 
+      - name: Set up RPM build environment
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y rpm
+          sudo apt-get install -y gcc glibc-devel
+  
+        
       - name: Build .rpm Package
         run: |
           mkdir -p ~/rpmbuild/{BUILD,RPMS,SOURCES,SPECS,SRPMS}
