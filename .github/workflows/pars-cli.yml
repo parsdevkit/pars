@@ -116,15 +116,16 @@ jobs:
           sudo snap install multipass
           ss -tln | grep 50051
 
+      - name: Create .snap config file
+        run: |
+
           # Create necessary directories for Snapcraft
           mkdir -p snap
           mkdir -p snap/local
 
           # Copy the application binaries to the Snap local directory
           cp releases/bin snap/local/
-
-      - name: Create .snap config file
-        run: |
+          
           # Create snapcraft.yaml file
           cat > snap/snapcraft.yaml <<EOF
           name: pars
