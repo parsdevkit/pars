@@ -22,6 +22,7 @@ jobs:
         working-directory: ./src
         run: |
           mkdir -p ../releases
+          cp ./ ../releases/src
           GOOS=linux GOARCH=386 go build -o ../releases/bin ./pars.go
 
       - name: Archive Binary Build
@@ -33,8 +34,9 @@ jobs:
         with:
           name: linux-386-build
           path: |
-            releases/pars-linux-386.bin.tar.gz
+            releases/src
             releases/bin
+            releases/pars-linux-386.bin.tar.gz
 
 
 
@@ -46,15 +48,15 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
       - name: Get Tag Name
         id: get_tag_name
         run: |
           echo "Tag name is: ${{ github.ref }}"
           TAG_NAME=$(echo "${{ github.ref }}" | sed 's/refs\/tags\///')
           echo "tag_name=$TAG_NAME" >> $GITHUB_ENV
+
+          VERSION=$(echo "${{ github.ref }}" | sed 's/refs\/tags\/v//')
+          echo "version=$VERSION" >> $GITHUB_ENV
 
 
 
