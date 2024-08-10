@@ -136,7 +136,7 @@ jobs:
           echo '    source: ./' >> snap/snapcraft.yaml
 
           # Build the snap
-          snapcraft --target-arch=i386 --destructive-mode --output releases/snap/i386/pars_i386.snap
+          snapcraft --target-arch=i386 --destructive-mode
 
 
 
