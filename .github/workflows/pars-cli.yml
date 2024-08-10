@@ -136,7 +136,7 @@ jobs:
           echo '    source: ./' >> snap/snapcraft.yaml
 
           # Build the snap
-          snapcraft
+          snapcraft snap
 
       - name: Archive .snap i386
         run: tar -czvf releases/pars-linux-386.snap.tar.gz -C . pars-${{ env.version }}.i386.snap
