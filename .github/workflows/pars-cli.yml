@@ -112,6 +112,7 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y snapd
           sudo snap install snapcraft --classic
+          snap disable multipass
           mkdir -p snap
           mkdir -p snap/local
           cp releases/bin snap/local/
@@ -136,7 +137,7 @@ jobs:
           echo '    source: ./' >> snap/snapcraft.yaml
 
           # Build the snap
-          snapcraft snap
+          snapcraft
 
       - name: Archive .snap i386
         run: tar -czvf releases/pars-linux-386.snap.tar.gz -C . pars-${{ env.version }}.i386.snap
