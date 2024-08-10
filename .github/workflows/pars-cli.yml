@@ -114,7 +114,9 @@ jobs:
           sudo apt-get install -y snapd
           sudo apt install snapcraft -y
           sudo apt-get install -y lxc
-          sudo apt-get install lxc-templates
+          sudo apt-get install lxc-templates -y
+          sudo apt-get install console-setup-linux -y
+
 
           # Create snap directories
           mkdir -p snap
@@ -145,7 +147,8 @@ jobs:
         run: |
           
           # Set up LXC
-          sudo lxc-create -t ubuntu -n snap-build -- -a i386
+          # sudo lxc-create -t ubuntu -n snap-build -- -a i386
+          sudo lxc-create -t download --name snap-build -- -d ubuntu -r jammy -a i386
           sudo lxc-start -n snap-build -d
 
           # Transfer files to LXC container
