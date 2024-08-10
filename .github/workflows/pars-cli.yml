@@ -25,7 +25,9 @@ jobs:
           GOOS=linux GOARCH=386 go build -o ../releases/bin ./pars.go
 
       - name: Archive Binary Build
-        run: tar -czvf releases/pars-linux-386.bin.tar.gz -C releases/ bin
+        run: | 
+          tar -czvf releases/pars-linux-386.bin.tar.gz -C releases/ bin
+          ls releases
 
       - name: Upload Linux 386 Artifact
         uses: actions/upload-artifact@v2
@@ -66,7 +68,7 @@ jobs:
       - name: Build .deb Package
         run: |
           ls downloads
-          
+
           mkdir -p releases/deb/DEBIAN
           mkdir -p releases/deb/usr/local/bin
           cp ./downloads releases/deb/usr/local/bin/
