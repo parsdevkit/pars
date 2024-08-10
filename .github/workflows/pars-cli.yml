@@ -19,14 +19,9 @@ jobs:
           go-version: '1.21'
 
       - name: Build Binary
-        run: |
-          mkdir -p /releases
-          mkdir -p /releases/src
-          cp ./src /releases/src
-
-      - name: Build Binary
         working-directory: ./src
         run: |
+          mkdir -p ../releases
           GOOS=linux GOARCH=386 go build -o ../releases/bin ./pars.go
 
       - name: Archive Binary Build
@@ -38,7 +33,6 @@ jobs:
         with:
           name: linux-386-build
           path: |
-            releases/src
             releases/bin
             releases/pars-linux-386.bin.tar.gz
 
