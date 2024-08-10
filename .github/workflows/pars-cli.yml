@@ -112,7 +112,7 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y snapd
           mkdir -p snap
-          cp pars snap/
+          cp releases/bin snap/
           
           # Create snapcraft.yaml
           echo 'name: pars' > snap/snapcraft.yaml
