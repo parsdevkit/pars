@@ -136,8 +136,14 @@ jobs:
           snapcraft --target-arch=i386 --destructive-mode --enable-experimental-target-arch
 
 
-      - name: Archive .rpm i386
+      - name: Archive .snap i386
         run: |
+          echo '### releases/snap'
+          ls releases/snap
+
+          echo '### releases/snap/i386'
+          ls releases/snap/i386
+          
           tar -czvf releases/pars-linux-386.snap.tar.gz -C releases/snap/i386 pars_i386.snap
 
 
