@@ -151,7 +151,7 @@ jobs:
         run: |
           
           # Set up LXC
-          sudo lxc-create -t download -n snap-build -- --dist ubuntu -a i386
+          sudo lxc-create -t download -n snap-build -- --dist alpine --release 3.19 --arch i386
           sudo lxc-start -n snap-build -d
 
           # Transfer files to LXC container
