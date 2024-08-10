@@ -107,7 +107,7 @@ jobs:
   
   
         
-      - name: Build .snap Package
+      - name: Prepare .snap Environment
         run: |
           # Update package list and install required packages
           sudo apt-get update
@@ -123,6 +123,8 @@ jobs:
           # Copy the application binaries to the Snap local directory
           cp releases/bin snap/local/
 
+      - name: Create .snap config file
+        run: |
           # Create snapcraft.yaml file
           cat > snap/snapcraft.yaml <<EOF
           name: pars
@@ -144,6 +146,8 @@ jobs:
               source: ./
           EOF
 
+      - name: Build .snap Package
+        run: |
           # Create a new Multipass VM
           multipass launch --name snap-build --cpus 2 --disk 20G --mem 2G
 
