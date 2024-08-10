@@ -107,76 +107,38 @@ jobs:
   
   
         
-      - name: Prepare .snap Environment
+      - name: Build .snap Package
         run: |
-          # Update package list and install required packages
           sudo apt-get update
-          sudo apt-get install -y snapd net-tools
+          sudo apt-get install -y snapd
           sudo snap install snapcraft --classic
-          sudo snap install multipass
-
-
-      - name: Create .snap config file
-        run: |
-          # Create necessary directories for Snapcraft
+          sudo snap disable multipass
           mkdir -p snap
           mkdir -p snap/local
-
-          # Copy the application binaries to the Snap local directory
           cp releases/bin snap/local/
           
-          # Create snapcraft.yaml file
-          cat > snap/snapcraft.yaml <<EOF
-          name: pars
-          version: "${{ env.version }}"
-          summary: Pars
-          description: |
-            Pars.
-          confinement: strict
-          base: core20
-          architectures:
-            - build-on: i386
-          apps:
-            pars:
-              command: bin/pars
-          parts:
-            pars:
-              plugin: go
-              go-importpath: github.com/parsdevkit/pars
-              source: ./
-          EOF
+          # Create snapcraft.yaml
+          echo 'name: pars' > snap/snapcraft.yaml
+          echo 'version: "${{ env.version }}"' >> snap/snapcraft.yaml
+          echo 'summary: Pars' >> snap/snapcraft.yaml
+          echo 'description: |' >> snap/snapcraft.yaml
+          echo '  Pars.' >> snap/snapcraft.yaml
+          echo 'confinement: strict' >> snap/snapcraft.yaml
+          echo 'base: core20' >> snap/snapcraft.yaml
+          echo 'architectures:' >> snap/snapcraft.yaml
+          echo '  - build-on: i386' >> snap/snapcraft.yaml
+          echo 'apps:' >> snap/snapcraft.yaml
+          echo '  pars:' >> snap/snapcraft.yaml
+          echo '    command: bin/pars' >> snap/snapcraft.yaml
+          echo 'parts:' >> snap/snapcraft.yaml
+          echo '  pars:' >> snap/snapcraft.yaml
+          echo '    plugin: go' >> snap/snapcraft.yaml
+          echo '    go-importpath: github.com/parsdevkit/pars' >> snap/snapcraft.yaml
+          echo '    source: ./' >> snap/snapcraft.yaml
 
-      - name: Check if multipass is available
-        run: |
-          multipass version
-          multipass list
+          # Build the snap
+          snapcraft --target-arch=i386 --destructive-mode --output releases/snap/i386/pars_i386.snap
 
-      - name: Create and manage Multipass VM
-        run: |
-          # Launch a new Multipass VM with updated syntax
-          multipass launch --name snap-build --cpus 2 --disk 20G --memory 2G
-
-          # Create snap directories inside the VM
-          multipass exec snap-build -- bash -c "mkdir -p ~/snap && mkdir -p ~/snap/local"
-
-          # Copy source code and snapcraft.yaml to the VM
-          multipass transfer bin snap-build:/home/ubuntu/snap/local/
-          multipass transfer snap/snapcraft.yaml snap-build:/home/ubuntu/snap/snapcraft.yaml
-
-          # Build Snap package inside the VM
-          multipass exec snap-build -- bash -c "snapcraft"
-
-          # Copy the Snap package back to the host
-          multipass exec snap-build -- bash -c "mkdir -p /home/ubuntu/releases && cp *.snap /home/ubuntu/releases/"
-          multipass transfer snap-build:/home/ubuntu/releases ./
-
-          # Clean up
-          multipass delete snap-build --yes
-          multipass purge --yes
-
-      - name: Archive .snap i386
-        run: tar -czvf releases/pars-linux-386.snap.tar.gz -C . pars-${{ env.version }}.i386.snap
-  
 
 
       - name: Upload Linux 386 Artifact
