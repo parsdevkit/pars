@@ -136,7 +136,7 @@ jobs:
           echo '    source: ./' >> snap/snapcraft.yaml
 
           # Build the snap
-          snapcraft --target-arch=i386 --destructive-mode
+          snapcraft --target-arch=i386 --destructive-mode --enable-experimental-target-arch
 
 
 
