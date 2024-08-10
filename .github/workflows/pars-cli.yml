@@ -121,10 +121,6 @@ jobs:
           cp releases/bin snap/local/
 
           
-          # Set up LXC
-          sudo lxc-create -t ubuntu -n snap-build -- -a i386
-          sudo lxc-start -n snap-build -d
-          
           # Create snapcraft.yaml
           echo 'name: pars' > snap/snapcraft.yaml
           echo 'version: "${{ env.version }}"' >> snap/snapcraft.yaml
@@ -144,6 +140,12 @@ jobs:
           # Build the snap
           # snapcraft --target-arch=i386 --destructive-mode --enable-experimental-target-arch
 
+      - name: Set up LXC
+        run: |
+          
+          # Set up LXC
+          sudo lxc-create -t ubuntu -n snap-build -- -a i386
+          sudo lxc-start -n snap-build -d
 
           # Transfer files to LXC container
           sudo lxc-attach -n snap-build -- mkdir -p /home/ubuntu/snap
