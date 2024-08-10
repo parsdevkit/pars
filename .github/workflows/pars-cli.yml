@@ -275,9 +275,7 @@ jobs:
 
   publish_release:
     needs: 
-      - create_release
-    #   - package-linux-386-deb
-    #   - package-linux-386-rpm
+      - upload-linux-386-artifacts
     runs-on: ubuntu-latest
 
     steps:
