@@ -132,8 +132,8 @@ jobs:
           echo '  Pars.' >> snap/snapcraft.yaml
           echo 'confinement: strict' >> snap/snapcraft.yaml
           echo 'base: core22' >> snap/snapcraft.yaml
-          echo 'architectures:' >> snap/snapcraft.yaml
-          echo '  - build-on: i386' >> snap/snapcraft.yaml
+          # echo 'architectures:' >> snap/snapcraft.yaml
+          # echo '  - build-on: i386' >> snap/snapcraft.yaml
           echo 'apps:' >> snap/snapcraft.yaml
           echo '  pars:' >> snap/snapcraft.yaml
           echo '    command: bin/pars' >> snap/snapcraft.yaml
@@ -141,7 +141,7 @@ jobs:
           echo '  pars:' >> snap/snapcraft.yaml
 
           # Build the snap
-          snapcraft --target-arch=i386 --destructive-mode --enable-experimental-target-arch
+          snapcraft --target-arch=i386 --build-for=i386 --destructive-mode --enable-experimental-target-arch
 
       # - name: Set up LXC
       #   run: |
