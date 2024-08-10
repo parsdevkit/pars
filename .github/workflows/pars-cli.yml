@@ -131,8 +131,6 @@ jobs:
           echo '    command: bin/pars' >> snap/snapcraft.yaml
           echo 'parts:' >> snap/snapcraft.yaml
           echo '  pars:' >> snap/snapcraft.yaml
-          echo '    plugin: go' >> snap/snapcraft.yaml
-          echo '    source: ./' >> snap/snapcraft.yaml
 
           # Build the snap
           snapcraft --target-arch=i386 --destructive-mode --enable-experimental-target-arch
