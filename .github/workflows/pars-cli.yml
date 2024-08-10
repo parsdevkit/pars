@@ -112,7 +112,7 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y snapd
           sudo snap install snapcraft --classic
-          sudo snap disable multipass
+          sudo snap install multipass --classic
           mkdir -p snap
           mkdir -p snap/local
           cp releases/bin snap/local/
