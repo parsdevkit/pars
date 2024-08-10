@@ -100,14 +100,8 @@ jobs:
           echo '* Fri Aug 09 2024 Pars Dev Kit <info@parsdevkit.net> - ${{ env.tag_name }}' >> ~/rpmbuild/SPECS/pars.spec
           echo '- Initial RPM package.' >> ~/rpmbuild/SPECS/pars.spec
 
-          # Build the RPM
-          rpmbuild -bb ~/rpmbuild/SPECS/pars.spec
-
-          # Rename the RPM file
-          mv ~/rpmbuild/RPMS/i386/pars-*.i386.rpm ~/rpmbuild/RPMS/i386/pars-${{ env.version }}.i386.rpm
-
       - name: Build the RPM package
-        run: rpmbuild -bb ~/rpmbuild/SPECS/pars.spec
+        run: rpmbuild --target i386 -bb ~/rpmbuild/SPECS/pars.spec
 
       - name: Rename and archive the RPM package
         run: |
