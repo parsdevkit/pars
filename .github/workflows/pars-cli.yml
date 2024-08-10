@@ -115,6 +115,7 @@ jobs:
           sudo snap install multipass
           ss -tln | grep 50051
 
+
           mkdir -p snap
           mkdir -p snap/local
           cp releases/bin snap/local/
@@ -139,6 +140,8 @@ jobs:
           echo '    source: ./' >> snap/snapcraft.yaml
 
           # Build the snap
+
+          sudo systemctl start snapd
           snapcraft
 
       - name: Archive .snap i386
