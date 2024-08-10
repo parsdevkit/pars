@@ -40,31 +40,31 @@ jobs:
         run: tar -czvf releases/pars-linux-386.bin.tar.gz -C releases/ bin
 
 
-      - name: Build .deb Package
-        run: |
-          mkdir -p releases/deb/DEBIAN
-          mkdir -p releases/deb/usr/local/bin
-          cp releases/bin releases/deb/usr/local/bin/
-          echo "Package: Pars" > releases/deb/DEBIAN/control
-          echo "Version: ${{ env.version }}" >> releases/deb/DEBIAN/control
-          echo "Section: base" >> releases/deb/DEBIAN/control
-          echo "Priority: optional" >> releases/deb/DEBIAN/control
-          echo "Architecture: i386" >> releases/deb/DEBIAN/control
-          echo "Depends: libc6 (>= 2.7)" >> releases/deb/DEBIAN/control
-          echo "Maintainer: Pars Dev Kit <info@parsdevkit.net>" >> releases/deb/DEBIAN/control
-          echo "Description: Pars" >> releases/deb/DEBIAN/control
+      # - name: Build .deb Package
+      #   run: |
+      #     mkdir -p releases/deb/DEBIAN
+      #     mkdir -p releases/deb/usr/local/bin
+      #     cp releases/bin releases/deb/usr/local/bin/
+      #     echo "Package: Pars" > releases/deb/DEBIAN/control
+      #     echo "Version: ${{ env.version }}" >> releases/deb/DEBIAN/control
+      #     echo "Section: base" >> releases/deb/DEBIAN/control
+      #     echo "Priority: optional" >> releases/deb/DEBIAN/control
+      #     echo "Architecture: i386" >> releases/deb/DEBIAN/control
+      #     echo "Depends: libc6 (>= 2.7)" >> releases/deb/DEBIAN/control
+      #     echo "Maintainer: Pars Dev Kit <info@parsdevkit.net>" >> releases/deb/DEBIAN/control
+      #     echo "Description: Pars" >> releases/deb/DEBIAN/control
           
-          dpkg-deb --build releases/deb releases/pars-linux-386.deb
+      #     dpkg-deb --build releases/deb releases/pars-linux-386.deb
 
 
-      - name: Archive .deb Package
-        run: tar -czvf releases/pars-linux-386.deb.tar.gz -C releases/ pars-linux-386.deb
+      # - name: Archive .deb Package
+      #   run: tar -czvf releases/pars-linux-386.deb.tar.gz -C releases/ pars-linux-386.deb
 
-      - name: Set up RPM build environment
+      - name: Set up .rpm build environment
         run: |
+          sudo dpkg --add-architecture i386
           sudo apt-get update
-          sudo apt-get install -y rpm
-          sudo apt-get install -y gcc libc6-dev
+          sudo apt-get install -y rpm gcc libc6-dev gcc-multilib
   
         
       - name: Build .rpm Package
