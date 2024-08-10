@@ -64,7 +64,7 @@ jobs:
         run: |
           sudo dpkg --add-architecture i386
           sudo apt-get update
-          sudo apt-get install -y rpm gcc libc6-dev gcc-multilib
+          sudo apt-get install -y rpm gcc libc6-dev gcc-multilib rpm-build
   
 
       - name: Prepare build environment
@@ -102,7 +102,7 @@ jobs:
           echo '- Initial RPM package.' >> ~/rpmbuild/SPECS/pars.spec
 
       - name: Build the RPM package
-        run: rpmbuild --target i386 -bb ~/rpmbuild/SPECS/pars.spec
+        run: setarch i386 rpmbuild --target i386 -bb ~/rpmbuild/SPECS/pars.spec
 
       - name: Rename and archive the RPM package
         run: |
