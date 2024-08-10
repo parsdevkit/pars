@@ -177,10 +177,10 @@ jobs:
 
 
   create_release:
-    needs: 
-      - build-linux-386
-      - package-linux-386-deb
-      - package-linux-386-rpm
+    # needs: 
+    #   - build-linux-386
+    #   - package-linux-386-deb
+    #   - package-linux-386-rpm
     runs-on: ubuntu-latest
 
     steps:
@@ -229,50 +229,50 @@ jobs:
 
 
 
-      #  386
+      # #  386
 
 
-      - name: Download Linux 386 Artifact
-        uses: actions/download-artifact@v2
-        with:
-          name: linux-386-artifacts
-          path: downloads
+      # - name: Download Linux 386 Artifact
+      #   uses: actions/download-artifact@v2
+      #   with:
+      #     name: linux-386-artifacts
+      #     path: downloads
 
 
 
 
 
-      - name: Upload Linux 386 Binary
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./downloads/pars-linux-386.bin.tar.gz
-          asset_name: pars-linux-386.tar.gz
-          asset_content_type: application/gzip
+      # - name: Upload Linux 386 Binary
+      #   uses: actions/upload-release-asset@v1
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      #   with:
+      #     upload_url: ${{ steps.create_release.outputs.upload_url }}
+      #     asset_path: ./downloads/pars-linux-386.bin.tar.gz
+      #     asset_name: pars-linux-386.tar.gz
+      #     asset_content_type: application/gzip
 
           
-      - name: Upload Linux 386 DEB Package
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./downloads/pars-linux-386.deb.tar.gz
-          asset_name: pars-linux-386.deb.tar.gz
-          asset_content_type: application/gzip
+      # - name: Upload Linux 386 DEB Package
+      #   uses: actions/upload-release-asset@v1
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      #   with:
+      #     upload_url: ${{ steps.create_release.outputs.upload_url }}
+      #     asset_path: ./downloads/pars-linux-386.deb.tar.gz
+      #     asset_name: pars-linux-386.deb.tar.gz
+      #     asset_content_type: application/gzip
   
   
-      - name: Upload Linux 386 RPM Package
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./downloads/pars-linux-386.rpm.tar.gz
-          asset_name: pars-linux-386.rpm.tar.gz
-          asset_content_type: application/gzip
+      # - name: Upload Linux 386 RPM Package
+      #   uses: actions/upload-release-asset@v1
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      #   with:
+      #     upload_url: ${{ steps.create_release.outputs.upload_url }}
+      #     asset_path: ./downloads/pars-linux-386.rpm.tar.gz
+      #     asset_name: pars-linux-386.rpm.tar.gz
+      #     asset_content_type: application/gzip
 
 
   
