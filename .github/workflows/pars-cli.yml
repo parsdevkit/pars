@@ -67,7 +67,7 @@ jobs:
         run: |
           mkdir -p releases/deb/DEBIAN
           mkdir -p releases/deb/usr/local/bin
-          cp releases releases/deb/usr/local/bin/
+          cp ./releases releases/deb/usr/local/bin/
           echo "Package: Pars" > releases/deb/DEBIAN/control
           echo "Version: ${{ env.version }}" >> releases/deb/DEBIAN/control
           echo "Section: base" >> releases/deb/DEBIAN/control
@@ -158,5 +158,5 @@ jobs:
           asset_name: pars-linux-386.deb.tar.gz
           asset_content_type: application/gzip
 
-          
+
 
