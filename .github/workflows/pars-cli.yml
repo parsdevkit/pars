@@ -60,14 +60,14 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: linux-386-build
-          path: releases
+          path: downloads
 
 
       - name: Build .deb Package
         run: |
           mkdir -p releases/deb/DEBIAN
           mkdir -p releases/deb/usr/local/bin
-          cp ./releases releases/deb/usr/local/bin/
+          cp ./downloads releases/deb/usr/local/bin/
           echo "Package: Pars" > releases/deb/DEBIAN/control
           echo "Version: ${{ env.version }}" >> releases/deb/DEBIAN/control
           echo "Section: base" >> releases/deb/DEBIAN/control
