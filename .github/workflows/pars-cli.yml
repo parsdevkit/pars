@@ -33,7 +33,7 @@ jobs:
       - name: Upload Artifact
         uses: actions/upload-artifact@v2
         with:
-          name: linux-386-artifacts
+          name: windows-386-artifacts
           path: |
             artifacts/bin
             artifacts/pars-windows-386.bin.zip
@@ -63,7 +63,7 @@ jobs:
       - name: Upload Artifact
         uses: actions/upload-artifact@v2
         with:
-          name: linux-amd64-artifacts
+          name: windows-amd64-artifacts
           path: |
             artifacts/bin
             artifacts/pars-windows-amd64.bin.zip
