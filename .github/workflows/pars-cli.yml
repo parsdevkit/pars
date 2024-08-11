@@ -7,6 +7,24 @@ on:
     - '!*-rc[0-9]+'
 
 jobs:
+  job1:
+    runs-on: ubuntu-latest
+    outputs:
+      data: ${{ steps.prepare.outputs.data }}
+    steps:
+      - name: Prepare data
+        id: prepare
+        run: echo "::set-output name=data::$(date +'%Y-%m-%d')"
+
+  job2:
+    needs: job1
+    runs-on: ubuntu-latest
+    steps:
+      - name: Use the output from job1
+        run: |
+          echo "Data from job1: ${{ needs.job1.outputs.data }}"
+
+
   build-linux-386:
     runs-on: ubuntu-latest
 
@@ -112,7 +130,7 @@ jobs:
           tag_name: ${{ env.tag_name }}
           release_name: Release ${{ env.tag_name }}
           body: ${{ env.changelog_content }}
-          draft: false
+          draft: true
           prerelease: false
 
       - name: Set Release Upload Url
