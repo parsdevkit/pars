@@ -135,8 +135,7 @@ jobs:
 
       - name: Set Release Upload Url
         id: upload_url
-        run: |
-          echo "${{ steps.create_release.outputs.upload_url }}"
+        run: echo "::set-output name=data::${{ steps.create_release.outputs.upload_url }}"
 
 
 
