@@ -27,7 +27,8 @@ jobs:
           go build -o ../artifacts/bin/pars.exe ./pars.go
 
       - name: Archive Binary Build
-        run: Compress-Archive -Path ../artifacts/bin/* -Destination artifacts/pars-windows-386.bin.zip
+        run: Compress-Archive -Path artifacts/bin/* -Destination artifacts/pars-windows-386.bin.zip
+
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v2
@@ -57,7 +58,7 @@ jobs:
           go build -o ../artifacts/bin/pars.exe ./pars.go
 
       - name: Archive Binary Build
-        run: Compress-Archive -Path ../artifacts/bin/* -Destination artifacts/pars-windows-amd64.bin.zip
+        run: Compress-Archive -Path artifacts/bin/* -Destination artifacts/pars-windows-amd64.bin.zip
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v2
