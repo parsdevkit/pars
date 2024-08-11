@@ -183,6 +183,63 @@ jobs:
             artifacts/bin
             artifacts/pars-linux-arm64.bin.tar.gz
 
+  build-darwin-amd64:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: '1.21'
+
+      - name: Build Binary
+        working-directory: ./src
+        run: |
+          mkdir -p ../artifacts
+          GOOS=darwin GOARCH=amd64 go build -o ../artifacts/bin ./pars.go
+
+      - name: Archive Binary Build
+        run: | 
+          tar -czvf artifacts/pars-darwin-amd64.bin.tar.gz -C artifacts/ bin
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: darwin-amd64-artifacts
+          path: |
+            artifacts/bin
+            artifacts/pars-darwin-amd64.bin.tar.gz
+
+  build-darwin-arm64:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: '1.21'
+
+      - name: Build Binary
+        working-directory: ./src
+        run: |
+          mkdir -p ../artifacts
+          GOOS=darwin GOARCH=arm64 go build -o ../artifacts/bin ./pars.go
+
+      - name: Archive Binary Build
+        run: | 
+          tar -czvf artifacts/pars-darwin-arm64.bin.tar.gz -C artifacts/ bin
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: darwin-arm64-artifacts
+          path: |
+            artifacts/bin
+            artifacts/pars-darwin-arm64.bin.tar.gz
 
   create-release:
     needs: 
@@ -192,6 +249,8 @@ jobs:
       - build-linux-amd64
       - build-linux-arm
       - build-linux-arm64
+      - build-darwin-amd64
+      - build-darwin-arm64
     runs-on: ubuntu-latest
     outputs:
       upload_url: ${{ steps.upload_url.outputs.data }}
@@ -1046,6 +1105,57 @@ jobs:
 
 
 
+  upload-darwin-amd64-artifacts:
+    needs: 
+      - create-release
+      - build-darwin-amd64
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - name: Download Artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: darwin-amd64-artifacts
+          path: downloads
+
+
+      - name: Upload Binary
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ needs.create-release.outputs.upload_url }}
+          asset_path: ./downloads/pars-darwin-amd64.bin.tar.gz
+          asset_name: pars-darwin-amd64.tar.gz
+          asset_content_type: application/gzip
+
+  upload-darwin-arm64-artifacts:
+    needs: 
+      - create-release
+      - build-darwin-arm64
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - name: Download Artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: darwin-arm64-artifacts
+          path: downloads
+
+
+      - name: Upload Binary
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ needs.create-release.outputs.upload_url }}
+          asset_path: ./downloads/pars-darwin-arm64.bin.tar.gz
+          asset_name: pars-darwin-arm64.tar.gz
+          asset_content_type: application/gzip
+
+
 
   publish_release:
     needs: 
@@ -1055,6 +1165,8 @@ jobs:
       - upload-linux-amd64-artifacts
       - upload-linux-arm-artifacts
       - upload-linux-arm64-artifacts
+      - upload-darwin-amd64-artifacts
+      - upload-darwin-arm64-artifacts
     runs-on: ubuntu-latest
 
     steps:
