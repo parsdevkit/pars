@@ -523,25 +523,20 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-
-      - name: Get Tag Name
-        id: get_tag_name
+      - name: Get Release ID
+        id: get_release
         run: |
-          echo "Tag name is: ${{ github.ref }}"
-          TAG_NAME=$(echo "${{ github.ref }}" | sed 's/refs\/tags\///')
-          echo "tag_name=$TAG_NAME" >> $GITHUB_ENV
-
+          release_id=$(curl \
+            -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+            -H "Accept: application/vnd.github.v3+json" \
+            https://api.github.com/repos/${{ github.repository }}/releases/tags/v1.0.174 | jq -r '.id')
+          echo "release_id=$release_id" >> $GITHUB_ENV
 
       - name: Publish Release (Remove Draft Status)
         run: |
-          release_id=$(jq -r '.id' <(curl \
+          curl \
+            -X PATCH \
             -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
             -H "Accept: application/vnd.github.v3+json" \
-            https://api.github.com/repos/${{ github.repository }}/releases/tags/v1.0.174
-
-          curl -X PATCH \
-            -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
-            -H "Accept: application/vnd.github.v3+json" \
-            https://api.github.com/repos/${{ github.repository }}/releases/$release_id \
+            https://api.github.com/repos/${{ github.repository }}/releases/${{ env.release_id }} \
             -d '{"draft": false}'
-
