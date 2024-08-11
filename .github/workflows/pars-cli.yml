@@ -41,6 +41,8 @@ jobs:
     needs: 
       - build-linux-386
     runs-on: ubuntu-latest
+    outputs:
+      upload_url: ${{ steps.upload_url.outputs.data }}
 
     steps:
 
@@ -84,8 +86,9 @@ jobs:
           prerelease: false
 
       - name: Set Release Upload Url
+        id: upload_url
         run: |
-          echo "release_upload_url=${{ steps.create_release.outputs.upload_url }}" >> $GITHUB_ENV
+          echo "${{ steps.create_release.outputs.upload_url }}"
 
 
 
@@ -248,7 +251,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          upload_url: ${{ env.GITHUB_TOKEN.release_upload_url }}
+          upload_url: ${{ needs.create-release.outputs.upload_url }}
           asset_path: ./downloads/pars-linux-386.bin.tar.gz
           asset_name: pars-linux-386.tar.gz
           asset_content_type: application/gzip
@@ -259,7 +262,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          upload_url: ${{ env.release_upload_url }}
+          upload_url: ${{ needs.create-release.outputs.upload_url }}
           asset_path: ./downloads/pars-linux-386.deb.tar.gz
           asset_name: pars-linux-386.deb.tar.gz
           asset_content_type: application/gzip
@@ -270,7 +273,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          upload_url: ${{ env.release_upload_url }}
+          upload_url: ${{ needs.create-release.outputs.upload_url }}
           asset_path: ./downloads/pars-linux-386.rpm.tar.gz
           asset_name: pars-linux-386.rpm.tar.gz
           asset_content_type: application/gzip
