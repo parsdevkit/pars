@@ -596,93 +596,93 @@ jobs:
           path: |
             artifacts/pars-linux-amd64.deb.tar.gz
 
-  # package-linux-amd64-rpm:
-  #   needs: 
-  #     - build-linux-amd64
-  #   runs-on: ubuntu-latest
+  package-linux-amd64-rpm:
+    needs: 
+      - build-linux-amd64
+    runs-on: ubuntu-latest
 
-  #   steps:
-  #     - name: Get Tag Name
-  #       id: get_tag_name
-  #       run: |
-  #         echo "Tag name is: ${{ github.ref }}"
-  #         TAG_NAME=$(echo "${{ github.ref }}" | sed 's/refs\/tags\///')
-  #         echo "tag_name=$TAG_NAME" >> $GITHUB_ENV
+    steps:
+      - name: Get Tag Name
+        id: get_tag_name
+        run: |
+          echo "Tag name is: ${{ github.ref }}"
+          TAG_NAME=$(echo "${{ github.ref }}" | sed 's/refs\/tags\///')
+          echo "tag_name=$TAG_NAME" >> $GITHUB_ENV
 
-  #         VERSION=$(echo "${{ github.ref }}" | sed 's/refs\/tags\/v//')
-  #         echo "version=$VERSION" >> $GITHUB_ENV
-
-
-
-  #     - name: Download Artifact
-  #       uses: actions/download-artifact@v2
-  #       with:
-  #         name: linux-amd64-artifacts
-  #         path: downloads
+          VERSION=$(echo "${{ github.ref }}" | sed 's/refs\/tags\/v//')
+          echo "version=$VERSION" >> $GITHUB_ENV
 
 
-  #     - name: Build Package
-  #       run: |
-  #         mkdir -p artifacts
-  #         sudo apt-get update
-  #         sudo apt-get install -y rpm
-  #         sudo apt-get install -y rpm gcc libc6-dev gcc-multilib
 
-  #         mkdir -p ~/rpmbuild/{BUILD,RPMS,SOURCES,SPECS,SRPMS}
-  #         mkdir -p ~/rpmbuild/BUILD/pars
-  #         cp downloads/bin ~/rpmbuild/BUILD/pars/
+      - name: Download Artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: linux-amd64-artifacts
+          path: downloads
+
+
+      - name: Build Package
+        run: |
+          mkdir -p artifacts
+          sudo apt-get update
+          sudo apt-get install -y rpm
+          sudo apt-get install -y rpm gcc libc6-dev gcc-multilib
+
+          mkdir -p ~/rpmbuild/{BUILD,RPMS,SOURCES,SPECS,SRPMS}
+          mkdir -p ~/rpmbuild/BUILD/pars
+          cp downloads/bin ~/rpmbuild/BUILD/pars/
             
-  #         cd ~/rpmbuild/SOURCES
-  #         tar -czf pars-linux-amd64.bin.tar.gz -C ../BUILD pars
+          cd ~/rpmbuild/SOURCES
+          tar -czf pars-linux-amd64.bin.tar.gz -C ../BUILD pars
           
-  #         # Create a SPEC file
-  #         echo 'Name: pars' > ~/rpmbuild/SPECS/pars.spec
-  #         echo 'Version: ${{ env.version }}' >> ~/rpmbuild/SPECS/pars.spec
-  #         echo 'Release: 1%{?dist}' >> ~/rpmbuild/SPECS/pars.spec
-  #         echo 'Summary: Pars' >> ~/rpmbuild/SPECS/pars.spec
-  #         echo 'License: MIT' >> ~/rpmbuild/SPECS/pars.spec
-  #         echo 'Source0: pars-linux-amd64.bin.tar.gz' >> ~/rpmbuild/SPECS/pars.spec
-  #         echo 'BuildArch: x86_64' >> ~/rpmbuild/SPECS/pars.spec
-  #         echo '%description' >> ~/rpmbuild/SPECS/pars.spec
-  #         echo 'Pars.' >> ~/rpmbuild/SPECS/pars.spec
-  #         echo '%prep' >> ~/rpmbuild/SPECS/pars.spec
-  #         echo '%setup -q -n pars' >> ~/rpmbuild/SPECS/pars.spec
-  #         echo '%build' >> ~/rpmbuild/SPECS/pars.spec
-  #         echo '%install' >> ~/rpmbuild/SPECS/pars.spec
-  #         echo 'mkdir -p %{buildroot}/usr/local/bin' >> ~/rpmbuild/SPECS/pars.spec
-  #         echo 'cp -a bin %{buildroot}/usr/local/bin/' >> ~/rpmbuild/SPECS/pars.spec
-  #         echo '%files' >> ~/rpmbuild/SPECS/pars.spec
-  #         echo '/usr/local/bin/bin' >> ~/rpmbuild/SPECS/pars.spec
-  #         echo '%changelog' >> ~/rpmbuild/SPECS/pars.spec
-  #         echo '* Fri Aug 09 2024 Pars Dev Kit <info@parsdevkit.net> - ${{ env.tag_name }}' >> ~/rpmbuild/SPECS/pars.spec
-  #         echo '- Initial RPM package.' >> ~/rpmbuild/SPECS/pars.spec
+          # Create a SPEC file
+          echo 'Name: pars' > ~/rpmbuild/SPECS/pars.spec
+          echo 'Version: ${{ env.version }}' >> ~/rpmbuild/SPECS/pars.spec
+          echo 'Release: 1%{?dist}' >> ~/rpmbuild/SPECS/pars.spec
+          echo 'Summary: Pars' >> ~/rpmbuild/SPECS/pars.spec
+          echo 'License: MIT' >> ~/rpmbuild/SPECS/pars.spec
+          echo 'Source0: pars-linux-amd64.bin.tar.gz' >> ~/rpmbuild/SPECS/pars.spec
+          echo 'BuildArch: x86_64' >> ~/rpmbuild/SPECS/pars.spec
+          echo '%description' >> ~/rpmbuild/SPECS/pars.spec
+          echo 'Pars.' >> ~/rpmbuild/SPECS/pars.spec
+          echo '%prep' >> ~/rpmbuild/SPECS/pars.spec
+          echo '%setup -q -n pars' >> ~/rpmbuild/SPECS/pars.spec
+          echo '%build' >> ~/rpmbuild/SPECS/pars.spec
+          echo '%install' >> ~/rpmbuild/SPECS/pars.spec
+          echo 'mkdir -p %{buildroot}/usr/local/bin' >> ~/rpmbuild/SPECS/pars.spec
+          echo 'cp -a bin %{buildroot}/usr/local/bin/' >> ~/rpmbuild/SPECS/pars.spec
+          echo '%files' >> ~/rpmbuild/SPECS/pars.spec
+          echo '/usr/local/bin/bin' >> ~/rpmbuild/SPECS/pars.spec
+          echo '%changelog' >> ~/rpmbuild/SPECS/pars.spec
+          echo '* Fri Aug 09 2024 Pars Dev Kit <info@parsdevkit.net> - ${{ env.tag_name }}' >> ~/rpmbuild/SPECS/pars.spec
+          echo '- Initial RPM package.' >> ~/rpmbuild/SPECS/pars.spec
 
-  #         # Build the RPM
-  #         setarch x86_64 rpmbuild --target x86_64 -bb ~/rpmbuild/SPECS/pars.spec
+          # Build the RPM
+          setarch x86_64 rpmbuild --target x86_64 -bb ~/rpmbuild/SPECS/pars.spec
 
-  #         # Rename the RPM file
-  #         mv ~/rpmbuild/RPMS/x86_64/pars-*.x86_64.rpm ~/rpmbuild/RPMS/x86_64/pars-${{ env.version }}.x86_64.rpm
+          # Rename the RPM file
+          mv ~/rpmbuild/RPMS/x86_64/pars-*.x86_64.rpm ~/rpmbuild/RPMS/x86_64/pars-${{ env.version }}.x86_64.rpm
 
-  #     - name: Archive Package
-  #       run: tar -czvf artifacts/pars-linux-amd64.rpm.tar.gz -C ~/rpmbuild/RPMS/x86_64/ pars-${{ env.version }}.x86_64.rpm
-
-
+      - name: Archive Package
+        run: tar -czvf artifacts/pars-linux-amd64.rpm.tar.gz -C ~/rpmbuild/RPMS/x86_64/ pars-${{ env.version }}.x86_64.rpm
 
 
-  #     - name: Upload Artifact
-  #       uses: actions/upload-artifact@v2
-  #       with:
-  #         name: linux-amd64-artifacts
-  #         path: |
-  #           artifacts/pars-linux-amd64.rpm.tar.gz
-          
+
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: linux-amd64-artifacts
+          path: |
+            artifacts/pars-linux-amd64.rpm.tar.gz
+
 
   upload-linux-amd64-artifacts:
     needs: 
       - create-release
       - build-linux-amd64
       - package-linux-amd64-deb
-      # - package-linux-amd64-rpm
+      - package-linux-amd64-rpm
     runs-on: ubuntu-latest
 
     steps:
@@ -784,85 +784,85 @@ jobs:
           path: |
             artifacts/pars-linux-arm.deb.tar.gz
 
-  package-linux-arm-rpm:
-    needs: 
-      - build-linux-arm
-    runs-on: ubuntu-latest
+  # package-linux-arm-rpm:
+  #   needs: 
+  #     - build-linux-arm
+  #   runs-on: ubuntu-latest
 
-    steps:
-      - name: Get Tag Name
-        id: get_tag_name
-        run: |
-          echo "Tag name is: ${{ github.ref }}"
-          TAG_NAME=$(echo "${{ github.ref }}" | sed 's/refs\/tags\///')
-          echo "tag_name=$TAG_NAME" >> $GITHUB_ENV
+  #   steps:
+  #     - name: Get Tag Name
+  #       id: get_tag_name
+  #       run: |
+  #         echo "Tag name is: ${{ github.ref }}"
+  #         TAG_NAME=$(echo "${{ github.ref }}" | sed 's/refs\/tags\///')
+  #         echo "tag_name=$TAG_NAME" >> $GITHUB_ENV
 
-          VERSION=$(echo "${{ github.ref }}" | sed 's/refs\/tags\/v//')
-          echo "version=$VERSION" >> $GITHUB_ENV
-
-
-
-      - name: Download Artifact
-        uses: actions/download-artifact@v2
-        with:
-          name: linux-arm-artifacts
-          path: downloads
+  #         VERSION=$(echo "${{ github.ref }}" | sed 's/refs\/tags\/v//')
+  #         echo "version=$VERSION" >> $GITHUB_ENV
 
 
-      - name: Build Package
-        run: |
-          mkdir -p artifacts
-          sudo apt-get update
-          sudo apt-get install -y rpm
-          sudo apt-get install -y rpm gcc libc6-dev gcc-multilib
 
-          mkdir -p ~/rpmbuild/{BUILD,RPMS,SOURCES,SPECS,SRPMS}
-          mkdir -p ~/rpmbuild/BUILD/pars
-          cp downloads/bin ~/rpmbuild/BUILD/pars/
+  #     - name: Download Artifact
+  #       uses: actions/download-artifact@v2
+  #       with:
+  #         name: linux-arm-artifacts
+  #         path: downloads
+
+
+  #     - name: Build Package
+  #       run: |
+  #         mkdir -p artifacts
+  #         sudo apt-get update
+  #         sudo apt-get install -y rpm
+  #         sudo apt-get install -y rpm gcc libc6-dev gcc-multilib
+
+  #         mkdir -p ~/rpmbuild/{BUILD,RPMS,SOURCES,SPECS,SRPMS}
+  #         mkdir -p ~/rpmbuild/BUILD/pars
+  #         cp downloads/bin ~/rpmbuild/BUILD/pars/
             
-          cd ~/rpmbuild/SOURCES
-          tar -czf pars-linux-arm.bin.tar.gz -C ../BUILD pars
+  #         cd ~/rpmbuild/SOURCES
+  #         tar -czf pars-linux-arm.bin.tar.gz -C ../BUILD pars
           
-          # Create a SPEC file
-          echo 'Name: pars' > ~/rpmbuild/SPECS/pars.spec
-          echo 'Version: ${{ env.version }}' >> ~/rpmbuild/SPECS/pars.spec
-          echo 'Release: 1%{?dist}' >> ~/rpmbuild/SPECS/pars.spec
-          echo 'Summary: Pars' >> ~/rpmbuild/SPECS/pars.spec
-          echo 'License: MIT' >> ~/rpmbuild/SPECS/pars.spec
-          echo 'Source0: pars-linux-arm.bin.tar.gz' >> ~/rpmbuild/SPECS/pars.spec
-          echo 'BuildArch: armv7hl' >> ~/rpmbuild/SPECS/pars.spec
-          echo '%description' >> ~/rpmbuild/SPECS/pars.spec
-          echo 'Pars.' >> ~/rpmbuild/SPECS/pars.spec
-          echo '%prep' >> ~/rpmbuild/SPECS/pars.spec
-          echo '%setup -q -n pars' >> ~/rpmbuild/SPECS/pars.spec
-          echo '%build' >> ~/rpmbuild/SPECS/pars.spec
-          echo '%install' >> ~/rpmbuild/SPECS/pars.spec
-          echo 'mkdir -p %{buildroot}/usr/local/bin' >> ~/rpmbuild/SPECS/pars.spec
-          echo 'cp -a bin %{buildroot}/usr/local/bin/' >> ~/rpmbuild/SPECS/pars.spec
-          echo '%files' >> ~/rpmbuild/SPECS/pars.spec
-          echo '/usr/local/bin/bin' >> ~/rpmbuild/SPECS/pars.spec
-          echo '%changelog' >> ~/rpmbuild/SPECS/pars.spec
-          echo '* Fri Aug 09 2024 Pars Dev Kit <info@parsdevkit.net> - ${{ env.tag_name }}' >> ~/rpmbuild/SPECS/pars.spec
-          echo '- Initial RPM package.' >> ~/rpmbuild/SPECS/pars.spec
+  #         # Create a SPEC file
+  #         echo 'Name: pars' > ~/rpmbuild/SPECS/pars.spec
+  #         echo 'Version: ${{ env.version }}' >> ~/rpmbuild/SPECS/pars.spec
+  #         echo 'Release: 1%{?dist}' >> ~/rpmbuild/SPECS/pars.spec
+  #         echo 'Summary: Pars' >> ~/rpmbuild/SPECS/pars.spec
+  #         echo 'License: MIT' >> ~/rpmbuild/SPECS/pars.spec
+  #         echo 'Source0: pars-linux-arm.bin.tar.gz' >> ~/rpmbuild/SPECS/pars.spec
+  #         echo 'BuildArch: armv7hl' >> ~/rpmbuild/SPECS/pars.spec
+  #         echo '%description' >> ~/rpmbuild/SPECS/pars.spec
+  #         echo 'Pars.' >> ~/rpmbuild/SPECS/pars.spec
+  #         echo '%prep' >> ~/rpmbuild/SPECS/pars.spec
+  #         echo '%setup -q -n pars' >> ~/rpmbuild/SPECS/pars.spec
+  #         echo '%build' >> ~/rpmbuild/SPECS/pars.spec
+  #         echo '%install' >> ~/rpmbuild/SPECS/pars.spec
+  #         echo 'mkdir -p %{buildroot}/usr/local/bin' >> ~/rpmbuild/SPECS/pars.spec
+  #         echo 'cp -a bin %{buildroot}/usr/local/bin/' >> ~/rpmbuild/SPECS/pars.spec
+  #         echo '%files' >> ~/rpmbuild/SPECS/pars.spec
+  #         echo '/usr/local/bin/bin' >> ~/rpmbuild/SPECS/pars.spec
+  #         echo '%changelog' >> ~/rpmbuild/SPECS/pars.spec
+  #         echo '* Fri Aug 09 2024 Pars Dev Kit <info@parsdevkit.net> - ${{ env.tag_name }}' >> ~/rpmbuild/SPECS/pars.spec
+  #         echo '- Initial RPM package.' >> ~/rpmbuild/SPECS/pars.spec
 
-          # Build the RPM
-          setarch armv7hl rpmbuild --target armv7hl -bb ~/rpmbuild/SPECS/pars.spec
+  #         # Build the RPM
+  #         setarch armv7hl rpmbuild --target armv7hl -bb ~/rpmbuild/SPECS/pars.spec
 
-          # Rename the RPM file
-          mv ~/rpmbuild/RPMS/armv7hl/pars-*.armv7hl.rpm ~/rpmbuild/RPMS/armv7hl/pars-${{ env.version }}.armv7hl.rpm
+  #         # Rename the RPM file
+  #         mv ~/rpmbuild/RPMS/armv7hl/pars-*.armv7hl.rpm ~/rpmbuild/RPMS/armv7hl/pars-${{ env.version }}.armv7hl.rpm
 
-      - name: Archive Package
-        run: tar -czvf artifacts/pars-linux-arm.rpm.tar.gz -C ~/rpmbuild/RPMS/armv7hl/ pars-${{ env.version }}.armv7hl.rpm
-
-
+  #     - name: Archive Package
+  #       run: tar -czvf artifacts/pars-linux-arm.rpm.tar.gz -C ~/rpmbuild/RPMS/armv7hl/ pars-${{ env.version }}.armv7hl.rpm
 
 
-      - name: Upload Artifact
-        uses: actions/upload-artifact@v2
-        with:
-          name: linux-arm-artifacts
-          path: |
-            artifacts/pars-linux-arm.rpm.tar.gz
+
+
+  #     - name: Upload Artifact
+  #       uses: actions/upload-artifact@v2
+  #       with:
+  #         name: linux-arm-artifacts
+  #         path: |
+  #           artifacts/pars-linux-arm.rpm.tar.gz
 
 
   upload-linux-arm-artifacts:
@@ -870,7 +870,7 @@ jobs:
       - create-release
       - build-linux-arm
       - package-linux-arm-deb
-      - package-linux-arm-rpm
+      # - package-linux-arm-rpm
     runs-on: ubuntu-latest
 
     steps:
