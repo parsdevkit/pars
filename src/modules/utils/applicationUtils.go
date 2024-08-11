@@ -124,20 +124,15 @@ func GetBinariesLocation() string {
 	return filepath.Join(GetExecutionLocation(), "binaries")
 }
 func GetDataLocation() string {
-	path := os.Getenv("PARS_PROJECT")
+	path := getDefaultPlatformDataDir()
 
-	if IsEmpty(path) {
-		path = filepath.Join(GetExecutionLocation(), "data")
-	} else {
-		path = getDefaultPlatformDataDir()
-	}
-
-	_, err := os.Stat(path)
-	if os.IsNotExist(err) {
+	if _, err := os.Stat(path); os.IsNotExist(err) {
 		err := os.MkdirAll(path, 0755)
 		if err != nil {
-			return ""
+			return err.Error()
 		}
+	} else if err != nil {
+		return ""
 	}
 
 	return path

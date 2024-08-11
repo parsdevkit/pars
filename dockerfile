@@ -1,16 +1,24 @@
+# Go base image
 FROM golang:1.21 AS builder
 
+# Set the Current Working Directory inside the container
 WORKDIR /app
 
-COPY ./src/go.mod ./src/go.sum ./
-RUN go mod download
-
+# Copy the source code into the container
 COPY src/ .
 
-RUN go build -o pars ./src/pars.go
+# Build the Go app
+RUN go mod tidy
+RUN go build -o pars ./pars.go
 
-FROM scratch
+# Start a new stage from busybox
+FROM busybox:latest
 
-COPY --from=builder /app/pars /pars
+# Copy the Pre-built binary file from the previous stage
+COPY --from=builder /app/pars /usr/local/bin/pars
 
-ENTRYPOINT ["/pars"]
+# Set /home as the working directory
+WORKDIR /home
+
+# Keep the container running
+ENTRYPOINT ["sleep", "infinity"]
