@@ -412,7 +412,7 @@ jobs:
           echo 'Summary: Pars' >> ~/rpmbuild/SPECS/pars.spec
           echo 'License: MIT' >> ~/rpmbuild/SPECS/pars.spec
           echo 'Source0: pars-linux-amd64.bin.tar.gz' >> ~/rpmbuild/SPECS/pars.spec
-          echo 'BuildArch: amd64' >> ~/rpmbuild/SPECS/pars.spec
+          echo 'BuildArch: x86_64' >> ~/rpmbuild/SPECS/pars.spec
           echo '%description' >> ~/rpmbuild/SPECS/pars.spec
           echo 'Pars.' >> ~/rpmbuild/SPECS/pars.spec
           echo '%prep' >> ~/rpmbuild/SPECS/pars.spec
@@ -428,13 +428,13 @@ jobs:
           echo '- Initial RPM package.' >> ~/rpmbuild/SPECS/pars.spec
 
           # Build the RPM
-          setarch amd64 rpmbuild --target amd64 -bb ~/rpmbuild/SPECS/pars.spec
+          setarch x86_64 rpmbuild --target x86_64 -bb ~/rpmbuild/SPECS/pars.spec
 
           # Rename the RPM file
-          mv ~/rpmbuild/RPMS/amd64/pars-*.amd64.rpm ~/rpmbuild/RPMS/amd64/pars-${{ env.version }}.amd64.rpm
+          mv ~/rpmbuild/RPMS/x86_64/pars-*.x86_64.rpm ~/rpmbuild/RPMS/x86_64/pars-${{ env.version }}.x86_64.rpm
 
       - name: Archive Package
-        run: tar -czvf artifacts/pars-linux-amd64.rpm.tar.gz -C ~/rpmbuild/RPMS/amd64/ pars-${{ env.version }}.amd64.rpm
+        run: tar -czvf artifacts/pars-linux-amd64.rpm.tar.gz -C ~/rpmbuild/RPMS/x86_64/ pars-${{ env.version }}.x86_64.rpm
 
 
 
@@ -445,7 +445,7 @@ jobs:
           name: linux-amd64-artifacts
           path: |
             artifacts/pars-linux-amd64.rpm.tar.gz
-
+          
 
   upload-linux-amd64-artifacts:
     needs: 
@@ -502,6 +502,7 @@ jobs:
   publish_release:
     needs: 
       - upload-linux-386-artifacts
+      - upload-linux-amd64-artifacts
     runs-on: ubuntu-latest
 
     steps:
