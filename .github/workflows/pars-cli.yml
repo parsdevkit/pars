@@ -1,5 +1,5 @@
 name: Pars CLI
-
+ 
 on:
   push:
     tags:
@@ -905,15 +905,15 @@ jobs:
           asset_content_type: application/gzip
   
   
-      - name: Upload RPM Package
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ needs.create-release.outputs.upload_url }}
-          asset_path: ./downloads/pars-linux-arm.rpm.tar.gz
-          asset_name: pars-linux-arm.rpm.tar.gz
-          asset_content_type: application/gzip
+      # - name: Upload RPM Package
+      #   uses: actions/upload-release-asset@v1
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      #   with:
+      #     upload_url: ${{ needs.create-release.outputs.upload_url }}
+      #     asset_path: ./downloads/pars-linux-arm.rpm.tar.gz
+      #     asset_name: pars-linux-arm.rpm.tar.gz
+      #     asset_content_type: application/gzip
 
 
 
@@ -1094,15 +1094,15 @@ jobs:
           asset_content_type: application/gzip
   
   
-      - name: Upload RPM Package
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ needs.create-release.outputs.upload_url }}
-          asset_path: ./downloads/pars-linux-arm64.rpm.tar.gz
-          asset_name: pars-linux-arm64.rpm.tar.gz
-          asset_content_type: application/gzip
+      # - name: Upload RPM Package
+      #   uses: actions/upload-release-asset@v1
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      #   with:
+      #     upload_url: ${{ needs.create-release.outputs.upload_url }}
+      #     asset_path: ./downloads/pars-linux-arm64.rpm.tar.gz
+      #     asset_name: pars-linux-arm64.rpm.tar.gz
+      #     asset_content_type: application/gzip
 
 
 
