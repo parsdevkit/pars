@@ -5,7 +5,6 @@
 /dist/**
 /temp/**
 /workspace**/**
-/src/vendor/**
 /.venv/**
 /.VSCodeCounter/**
 pars*.db

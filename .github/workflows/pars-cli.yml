@@ -34,6 +34,7 @@ jobs:
           mkdir -p ../artifacts
           set GOOS=windows
           set GOARCH=386
+          go mod tidy
           go build -o ../artifacts/bin/pars.exe ./pars.go
 
       - name: Archive Binary Build
@@ -75,6 +76,7 @@ jobs:
           mkdir -p ../artifacts
           set GOOS=windows
           set GOARCH=amd64
+          go mod tidy
           go build -o ../artifacts/bin/pars.exe ./pars.go
 
       - name: Archive Binary Build
@@ -113,6 +115,7 @@ jobs:
         working-directory: ./src
         run: |
           mkdir -p ../artifacts
+          go mod tidy
           GOOS=linux GOARCH=386 go build -o ../artifacts/bin ./pars.go
 
       - name: Archive Binary Build
@@ -152,6 +155,7 @@ jobs:
         working-directory: ./src
         run: |
           mkdir -p ../artifacts
+          go mod tidy
           GOOS=linux GOARCH=amd64 go build -o ../artifacts/bin ./pars.go
 
       - name: Archive Binary Build
@@ -191,6 +195,7 @@ jobs:
         working-directory: ./src
         run: |
           mkdir -p ../artifacts
+          go mod tidy
           GOOS=linux GOARCH=arm go build -o ../artifacts/bin ./pars.go
 
       - name: Archive Binary Build
@@ -230,6 +235,7 @@ jobs:
         working-directory: ./src
         run: |
           mkdir -p ../artifacts
+          go mod tidy
           GOOS=linux GOARCH=arm64 go build -o ../artifacts/bin ./pars.go
 
       - name: Archive Binary Build
@@ -269,6 +275,7 @@ jobs:
         working-directory: ./src
         run: |
           mkdir -p ../artifacts
+          go mod tidy
           GOOS=darwin GOARCH=amd64 go build -o ../artifacts/bin ./pars.go
 
       - name: Archive Binary Build
@@ -308,6 +315,7 @@ jobs:
         working-directory: ./src
         run: |
           mkdir -p ../artifacts
+          go mod tidy
           GOOS=darwin GOARCH=arm64 go build -o ../artifacts/bin ./pars.go
 
       - name: Archive Binary Build
