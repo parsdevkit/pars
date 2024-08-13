@@ -10,11 +10,18 @@ jobs:
         runs-on: ubuntu-latest
 
         steps:
-            - uses: actions/checkout@v2
-            - name: Set env
-              run: echo "GITHUB_SHA_SHORT=$(echo $GITHUB_SHA | cut -c 1-6)" >> $GITHUB_ENV
-            - name: Test
-              run: echo $GITHUB_SHA_SHORT
+            - name: Set and Retrieve Github ENV variables
+              run: |
+                # define variables      
+                tests=16
+                failures=2
+
+                # set them as GitHub ENV variables
+                echo "Tests=$tests" >> $GITHUB_ENV
+                echo "Failures=$failures" >> $GITHUB_ENV
+
+                # retrieve these GitHub ENV variables
+                echo "${{ env.Failures }} out of ${{ env.Tests }} tests failed on CI"
 
     #   - name: Bump DEV version
     #     run: |
