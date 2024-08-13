@@ -10,43 +10,23 @@ jobs:
   env:
     runs-on: ubuntu-latest
     steps:
-      - name: Check if WORKING_VERSION variable exists
-        id: check_variable
-        run: |
-          RESPONSE=$(curl -s -o response.txt -w "%{http_code}" \
-            -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
-            -H "Accept: application/vnd.github.v3+json" \
-            https://api.github.com/repos/${{ github.repository }}/actions/variables/WORKING_VERSION)
-          
-          if [[ "$RESPONSE" -eq 200 ]]; then
-            echo "Variable exists."
-            echo "EXISTS=true" >> $GITHUB_ENV
-            echo "VALUE=$(jq -r .value < response.txt)" >> $GITHUB_ENV
-          else
-            echo "Variable does not exist."
-            echo "EXISTS=false" >> $GITHUB_ENV
-          fi
 
-      - name: Print the current value of WORKING_VERSION
-        if: env.EXISTS == 'true'
-        run: "echo Current WORKING_VERSION value: ${{ env.VALUE }}"
-
-      - name: Create or Update WORKING_VERSION variable
+      - name: Bump DEV version
         run: |
-          if [[ "$EXISTS" == "false" ]]; then
-            NEW_VERSION="v1.0.0-dev.1"
-            echo "Creating WORKING_VERSION variable with value: $NEW_VERSION"
-            curl -X POST \
-              -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
-              -H "Accept: application/vnd.github.v3+json" \
-              https://api.github.com/repos/${{ github.repository }}/actions/variables \
-              -d '{"name":"WORKING_VERSION", "value":"'"$NEW_VERSION"'"}'
+          version=$(cat VERSION)
+          if [[ -z "$version" ]]; then
+            version="v1.0.0-dev.1"
+            echo $version > VERSION
           else
-            NEW_VERSION="v1.0.0-dev.$(( $(echo ${{ env.VALUE }} | grep -o '[0-9]*$') + 1 ))"
-            echo "Updating WORKING_VERSION variable to: $NEW_VERSION"
-            curl -X PATCH \
-              -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
-              -H "Accept: application/vnd.github.v3+json" \
-              https://api.github.com/repos/${{ github.repository }}/actions/variables/WORKING_VERSION \
-              -d '{"name":"WORKING_VERSION", "value":"'"$NEW_VERSION"'"}'
+            version=$(echo $version | awk -F. -v OFS=. '{$3+=1; print}')
+            echo $version > VERSION
           fi
+          echo "WORKING_VERSION=$version" >> $GITHUB_ENV
+
+      - name: Commit and push updated version
+        run: |
+          git config user.name "GitHub Actions"
+          git config user.email "actions@github.com"
+          git add VERSION
+          git commit -m "Bump dev version to $WORKING_VERSION"
+          git push origin dev
