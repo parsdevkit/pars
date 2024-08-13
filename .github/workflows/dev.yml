@@ -10,21 +10,43 @@ jobs:
   env:
     runs-on: ubuntu-latest
     steps:
-      - name: Set ENV var
+      - name: Check if WORKING_VERSION variable exists
+        id: check_variable
         run: |
-          echo "CUSTOM_VAR=IT WORKS" >> $GITHUB_ENV
+          RESPONSE=$(curl -s -o response.txt -w "%{http_code}" \
+            -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+            -H "Accept: application/vnd.github.v3+json" \
+            https://api.github.com/repos/${{ github.repository }}/actions/variables/WORKING_VERSION)
+          
+          if [[ "$RESPONSE" -eq 200 ]]; then
+            echo "Variable exists."
+            echo "EXISTS=true" >> $GITHUB_ENV
+            echo "VALUE=$(jq -r .value < response.txt)" >> $GITHUB_ENV
+          else
+            echo "Variable does not exist."
+            echo "EXISTS=false" >> $GITHUB_ENV
+          fi
 
-      - name: Use ENV var via `env` block
+      - name: Print the current value of WORKING_VERSION
+        if: env.EXISTS == 'true'
+        run: echo "Current WORKING_VERSION value: ${{ env.VALUE }}"
+
+      - name: Create or Update WORKING_VERSION variable
         run: |
-          echo $CUSTOM_VAR # OK
-          echo ${{ env.CUSTOM_VAR }} # OK
-          echo $USE_CUSTOM_VAR # NOT OK, prints ''
-          echo ${{ env.USE_CUSTOM_VAR }} # NOT OK, prints ''
-          echo $USE_CUSTOM_VAR_2 # NOT OK, prints '$CUSTOM_VAR'
-          echo ${{ env.USE_CUSTOM_VAR_2 }} # OK
-          echo $USE_CUSTOM_VAR_3 # NOT OK, prints '$GLOBAL_WORKFLOW_ENV'
-          echo ${{ env.USE_CUSTOM_VAR_3 }} # OK
-        env:
-          USE_CUSTOM_VAR: ${{ env.CUSTOM_VAR }}
-          USE_CUSTOM_VAR_2: $CUSTOM_VAR
-          USE_CUSTOM_VAR_3: $GLOBAL_WORKFLOW_ENV
+          if [[ "$EXISTS" == "false" ]]; then
+            NEW_VERSION="v1.0.0-dev.1"
+            echo "Creating WORKING_VERSION variable with value: $NEW_VERSION"
+            curl -X POST \
+              -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+              -H "Accept: application/vnd.github.v3+json" \
+              https://api.github.com/repos/${{ github.repository }}/actions/variables \
+              -d '{"name":"WORKING_VERSION", "value":"'"$NEW_VERSION"'"}'
+          else
+            NEW_VERSION="v1.0.0-dev.$(( $(echo ${{ env.VALUE }} | grep -o '[0-9]*$') + 1 ))"
+            echo "Updating WORKING_VERSION variable to: $NEW_VERSION"
+            curl -X PATCH \
+              -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+              -H "Accept: application/vnd.github.v3+json" \
+              https://api.github.com/repos/${{ github.repository }}/actions/variables/WORKING_VERSION \
+              -d '{"name":"WORKING_VERSION", "value":"'"$NEW_VERSION"'"}'
+          fi
