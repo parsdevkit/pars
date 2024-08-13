@@ -5,32 +5,26 @@ on:
     branches:
       - dev
 
+
 jobs:
-    build:
-        runs-on: ubuntu-latest
+  env:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set ENV var
+        run: |
+          echo "CUSTOM_VAR=IT WORKS" >> $GITHUB_ENV
 
-        steps:
-            - name: Set and Retrieve Github ENV variables
-              run: |
-                # define variables      
-                tests=16
-                failures=2
-
-                # set them as GitHub ENV variables
-                echo "Tests=$tests" >> $GITHUB_ENV
-                echo "Failures=$failures" >> $GITHUB_ENV
-
-                # retrieve these GitHub ENV variables
-                echo "${{ env.Failures }} out of ${{ env.Tests }} tests failed on CI"
-
-    #   - name: Bump DEV version
-    #     run: |
-    #       if [[ -z "${{ env.WORKING_VERSION }}" ]]; then
-    #         echo "WORKING_VERSION=v1.0.0-dev.1" >> $GITHUB_ENV
-    #       else
-    #         echo "Updating WORKING_VERSION to ${WORKING_VERSION}" >> $GITHUB_ENV
-    #       fi
-
-
-    #   - name: Print WORKING_VERSION
-    #     run: echo "WORKING_VERSION is $WORKING_VERSION"
+      - name: Use ENV var via `env` block
+        run: |
+          echo $CUSTOM_VAR # OK
+          echo ${{ env.CUSTOM_VAR }} # OK
+          echo $USE_CUSTOM_VAR # NOT OK, prints ''
+          echo ${{ env.USE_CUSTOM_VAR }} # NOT OK, prints ''
+          echo $USE_CUSTOM_VAR_2 # NOT OK, prints '$CUSTOM_VAR'
+          echo ${{ env.USE_CUSTOM_VAR_2 }} # OK
+          echo $USE_CUSTOM_VAR_3 # NOT OK, prints '$GLOBAL_WORKFLOW_ENV'
+          echo ${{ env.USE_CUSTOM_VAR_3 }} # OK
+        env:
+          USE_CUSTOM_VAR: ${{ env.CUSTOM_VAR }}
+          USE_CUSTOM_VAR_2: $CUSTOM_VAR
+          USE_CUSTOM_VAR_3: $GLOBAL_WORKFLOW_ENV
