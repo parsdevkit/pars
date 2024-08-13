@@ -11,6 +11,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
 
+
+      - name: Ensure VERSION exists
+        run: |
+          if [ ! -f VERSION ]; then
+            echo "v1.0.0-dev.1" > VERSION
+          fi
+          
       - name: Bump DEV version
         run: |
           version=$(cat VERSION)
