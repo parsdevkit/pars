@@ -29,7 +29,7 @@ jobs:
 
       - name: Print the current value of WORKING_VERSION
         if: env.EXISTS == 'true'
-        run: echo "Current WORKING_VERSION value: ${{ env.VALUE }}"
+        run: "echo Current WORKING_VERSION value: ${{ env.VALUE }}"
 
       - name: Create or Update WORKING_VERSION variable
         run: |
