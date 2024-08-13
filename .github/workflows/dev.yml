@@ -10,10 +10,6 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-
-
       - name: Bump DEV version
         run: |
           if [[ -z "${{ env.WORKING_VERSION }}" ]]; then
@@ -21,3 +17,7 @@ jobs:
           else
             echo "Updating WORKING_VERSION to ${WORKING_VERSION}" >> $GITHUB_ENV
           fi
+
+
+      - name: Print WORKING_VERSION
+        run: echo "WORKING_VERSION is $WORKING_VERSION"
