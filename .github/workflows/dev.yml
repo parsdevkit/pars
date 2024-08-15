@@ -55,7 +55,7 @@ jobs:
         run: |
           # Ensure branch name is valid
           echo "Merging dev into release/$WORKING_VERSION"
-          # git fetch origin
+          git fetch origin
           git checkout release/$WORKING_VERSION
           git merge origin/dev --no-ff --commit -m "Merge dev into release/$WORKING_VERSION"
           git push origin release/$WORKING_VERSION
