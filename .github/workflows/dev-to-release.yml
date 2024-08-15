@@ -15,5 +15,5 @@ jobs:
     - name: Get WORKING_VERSION from VERSION file
       uses: ./.github/actions/get-version
 
-    - name: Check if release branch exists
-      uses: ./.github/actions/check-release-branch
+    - name: Shift dev to release
+      uses: ./.github/actions/shift-dev-to-release
