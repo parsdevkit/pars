@@ -19,6 +19,11 @@ jobs:
         git config user.name "GitHub Actions"
         git config user.email "actions@github.com"
 
+    - name: Set up script and VERSION permissions
+      run: |
+        chmod +x ./scripts/*
+        chmod +x VERSION
+
     - name: Get WORKING_VERSION from VERSION file
       id: get-version
       run: |
