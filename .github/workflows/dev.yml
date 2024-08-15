@@ -1,42 +1,70 @@
 name: Dev Workflow
 
 on:
+  workflow_dispatch: # Manuel tetikleme desteği
   push:
     branches:
       - dev
-
+  # schedule:
+  #   # Cron her dakikada bir çalışır (*/1 * * * *).
+  #   - cron: "*/1 * * * *"
 
 jobs:
-  env:
+  dev-workflow:
     runs-on: ubuntu-latest
     steps:
-
       - name: Checkout code
         uses: actions/checkout@v3
 
-
-      - name: Ensure VERSION exists
+      - name: Get WORKING_VERSION
+        id: get-version
         run: |
-          if [ ! -f VERSION ]; then
-            echo "v1.0.0-dev.1" > VERSION
-          fi
+          source ./scripts/functions.sh
+          WORKING_VERSION=$(read_key_value "VERSION" "WORKING_VERSION")
+          echo "WORKING_VERSION=$WORKING_VERSION" >> $GITHUB_ENV
 
       - name: Bump DEV version
         run: |
-          version=$(cat VERSION)
-          if [[ -z "$version" ]]; then
-            version="v1.0.0-dev.1"
-            echo $version > VERSION
+          ./scripts/dev-number.sh
+
+      - name: Get NEW_WORKING_VERSION
+        id: get-new-version
+        run: |
+          source ./scripts/functions.sh
+          NEW_WORKING_VERSION=$(read_key_value "VERSION" "WORKING_VERSION")
+          echo "NEW_WORKING_VERSION=$NEW_WORKING_VERSION" >> $GITHUB_ENV
+
+      - name: Check if release branch exists
+        id: check-branch
+        run: |
+          if git ls-remote --exit-code --heads origin release/$NEW_WORKING_VERSION; then
+            echo "Branch release/$NEW_WORKING_VERSION already exists."
+            echo "BRANCH_EXISTS=true" >> $GITHUB_ENV
           else
-            version=$(echo $version | awk -F. -v OFS=. '{$3+=1; print}')
-            echo $version > VERSION
+            echo "Branch release/$NEW_WORKING_VERSION does not exist."
+            echo "BRANCH_EXISTS=false" >> $GITHUB_ENV
           fi
-          echo "WORKING_VERSION=$version" >> $GITHUB_ENV
+
+      - name: Create release branch (if not exists)
+        if: env.BRANCH_EXISTS == 'false'
+        run: |
+          git checkout dev
+          git pull origin dev
+          git checkout -b release/$NEW_WORKING_VERSION
+          git push origin release/$NEW_WORKING_VERSION
+
+      - name: Merge dev into release branch
+        if: env.BRANCH_EXISTS == 'true'
+        run: |
+          git fetch origin
+          git checkout release/$NEW_WORKING_VERSION
+          git merge origin/dev --no-ff --commit -m "Merge dev into release/$NEW_WORKING_VERSION"
+          git push origin release/$NEW_WORKING_VERSION
 
       - name: Commit and push updated version
-        run: | 
+        run: |
           git config user.name "GitHub Actions"
           git config user.email "actions@github.com"
           git add VERSION
-          git commit -m "Bump dev version to $WORKING_VERSION"
+          git commit -m "Bump dev version to $NEW_WORKING_VERSION"
           git push origin dev
