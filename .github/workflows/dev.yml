@@ -48,8 +48,9 @@ jobs:
       - name: Fetch and checkout release branch (if exists)
         if: env.BRANCH_EXISTS == 'true'
         run: |
+          git fetch origin
           echo "Fetching and checking out release branch release/$WORKING_VERSION"
-          git fetch origin release/$WORKING_VERSION:release/$WORKING_VERSION
+          # git fetch origin release/$WORKING_VERSION:release/$WORKING_VERSION
           git checkout release/$WORKING_VERSION
 
       - name: Merge dev into release branch
