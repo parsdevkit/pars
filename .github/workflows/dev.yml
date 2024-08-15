@@ -25,7 +25,7 @@ jobs:
         id: get-version
         run: |
           source ./scripts/functions.sh
-          WORKING_VERSION=$(read_key_value "VERSION" "WORKING_VERSION")
+          WORKING_VERSION=$(read_key_value "VERSION" "WORKING_VERSION" "v1.0.0")
           echo "WORKING_VERSION=$WORKING_VERSION" >> $GITHUB_ENV
 
 
