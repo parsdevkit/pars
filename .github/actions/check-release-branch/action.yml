@@ -1,0 +1,17 @@
+name: 'Check Release Branch'
+description: 'Check if release branch exists and update it'
+runs:
+  using: 'bash'
+  steps:
+    - name: Check if release branch exists
+      run: |
+        git config user.name "GitHub Actions"
+        git config user.email "actions@github.com"
+        if git ls-remote --heads origin release/$WORKING_VERSION | grep "refs/heads/release/$WORKING_VERSION"; then
+          git fetch origin release/$WORKING_VERSION:release/$WORKING_VERSION
+          git checkout release/$WORKING_VERSION
+          git merge --allow-unrelated-histories --strategy-option theirs dev || true
+        else
+          git checkout -b release/$WORKING_VERSION
+        fi
+        git push origin release/$WORKING_VERSION
