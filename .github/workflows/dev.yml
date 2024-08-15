@@ -1,3 +1,4 @@
+# test yorum
 name: Release Branch Management
 
 on:
@@ -58,3 +59,4 @@ jobs:
 
         git commit -am "Bump version after release $NEW_WORKING_VERSION"
         git push origin dev
+
