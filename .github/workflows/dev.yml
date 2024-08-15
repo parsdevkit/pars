@@ -36,7 +36,7 @@ jobs:
         id: get-new-version
         run: |
           source ./scripts/functions.sh
-          NEW_WORKING_VERSION=$(read_key_value "VERSION" "WORKING_VERSION")
+          NEW_WORKING_VERSION=$(read_key_value "VERSION" "WORKING_VERSION" "v1.0.0")
           echo "NEW_WORKING_VERSION=$NEW_WORKING_VERSION" >> $GITHUB_ENV
 
       - name: "Debug: Show environment variables"

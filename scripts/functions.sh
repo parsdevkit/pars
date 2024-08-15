@@ -1,8 +1,31 @@
 #!/bin/bash
 
-# Function to read the key value from the VERSION file
+# Function to read the key value from the VERSION file with a default value
 read_key_value() {
-    grep "^$2=" "$1" | cut -d'=' -f2
+    # Parameters:
+    # $1 - file name
+    # $2 - key
+    # $3 - default value (optional)
+    
+    local file=$1
+    local key=$2
+    local default_value=$3
+    
+    # Check if the file exists
+    if [ ! -f "$file" ]; then
+        echo "$default_value"
+        return
+    fi
+    
+    # Extract the value for the key from the file
+    local value=$(grep "^$key=" "$file" | cut -d'=' -f2)
+    
+    # If the value is empty or not found, return the default value
+    if [ -z "$value" ]; then
+        echo "$default_value"
+    else
+        echo "$value"
+    fi
 }
 
 # Function to write or update the key value in the VERSION file
