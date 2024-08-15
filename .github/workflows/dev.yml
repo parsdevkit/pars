@@ -58,13 +58,22 @@ jobs:
           # git fetch origin release/$WORKING_VERSION:release/$WORKING_VERSION
           git checkout release/$WORKING_VERSION
 
-      - name: Merge dev into release branch
+      - name: Merge dev into release branch with conflict resolution
         if: env.BRANCH_EXISTS == 'true'
         run: |
           echo "Merging dev into release/$WORKING_VERSION"
           git config user.name "GitHub Actions"
           git config user.email "actions@github.com"
-          git merge dev --no-ff --commit --allow-unrelated-histories -m "Merge dev into release/$WORKING_VERSION"
+          git merge dev --no-ff --commit --allow-unrelated-histories -m "Merge dev into release/$WORKING_VERSION" || true
+
+          # Automatically resolve conflicts by choosing the dev branch version (theirs)
+          git diff --name-only --diff-filter=U | while read file; do
+            git checkout --theirs "$file"
+            git add "$file"
+          done
+
+          # Commit the merge result after resolving conflicts
+          git commit --no-edit
           git push origin release/$WORKING_VERSION
           git checkout dev
           
