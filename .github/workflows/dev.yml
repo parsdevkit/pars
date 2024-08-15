@@ -37,6 +37,7 @@ jobs:
         # Check if release/<version> branch exists
         if git ls-remote --heads origin release/$WORKING_VERSION | grep "refs/heads/release/$WORKING_VERSION"; then
           # If exists, fetch it and merge dev into it
+          git pull origin dev
           git fetch origin release/$WORKING_VERSION:release/$WORKING_VERSION
           git checkout release/$WORKING_VERSION
           git merge --strategy-option theirs dev || true
