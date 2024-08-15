@@ -80,3 +80,4 @@ jobs:
           git add VERSION
           git commit -m "Bump dev version to $NEW_WORKING_VERSION"
           git push origin dev
+ 
