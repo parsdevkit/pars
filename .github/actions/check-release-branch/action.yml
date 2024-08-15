@@ -1,9 +1,10 @@
 name: 'Check Release Branch'
 description: 'Check if release branch exists and update it'
 runs:
-  using: 'bash'
+  using: composite
   steps:
     - name: Check if release branch exists
+      shell: bash
       run: |
         git config user.name "GitHub Actions"
         git config user.email "actions@github.com"

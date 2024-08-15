@@ -1,14 +1,16 @@
 name: 'Get Version'
 description: 'Get WORKING_VERSION from VERSION file'
 runs:
-  using: 'bash'
+  using: composite
   steps:
     - name: Set up script and VERSION permissions
+      shell: bash
       run: |
         chmod +x ./scripts/*
         chmod +x VERSION
 
     - name: Get WORKING_VERSION from VERSION file
+      shell: bash
       run: |
         source ./scripts/functions.sh
         WORKING_VERSION=$(read_key_value "VERSION" "WORKING_VERSION" "v1.0.0")
