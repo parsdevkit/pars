@@ -28,29 +28,15 @@ jobs:
           WORKING_VERSION=$(read_key_value "VERSION" "WORKING_VERSION")
           echo "WORKING_VERSION=$WORKING_VERSION" >> $GITHUB_ENV
 
-      - name: Bump DEV version
-        run: |
-          ./scripts/dev-number.sh
-
-      - name: Get NEW_WORKING_VERSION
-        id: get-new-version
-        run: |
-          source ./scripts/functions.sh
-          NEW_WORKING_VERSION=$(read_key_value "VERSION" "WORKING_VERSION" "v1.0.0")
-          echo "NEW_WORKING_VERSION=$NEW_WORKING_VERSION" >> $GITHUB_ENV
-
-      - name: "Debug: Show environment variables"
-        run: |
-          echo "NEW_WORKING_VERSION=$NEW_WORKING_VERSION"
 
       - name: Check if release branch exists
         id: check-branch
         run: |
-          if git ls-remote --exit-code --heads origin release/$NEW_WORKING_VERSION; then
-            echo "Branch release/$NEW_WORKING_VERSION already exists."
+          if git ls-remote --exit-code --heads origin release/$WORKING_VERSION; then
+            echo "Branch release/$WORKING_VERSION already exists."
             echo "BRANCH_EXISTS=true" >> $GITHUB_ENV
           else
-            echo "Branch release/$NEW_WORKING_VERSION does not exist."
+            echo "Branch release/$WORKING_VERSION does not exist."
             echo "BRANCH_EXISTS=false" >> $GITHUB_ENV
           fi
 
@@ -58,21 +44,32 @@ jobs:
         if: env.BRANCH_EXISTS == 'false'
         run: |
           # Ensure branch name is valid
-          echo "Creating release branch release/$NEW_WORKING_VERSION"
+          echo "Creating release branch release/$WORKING_VERSION"
           git checkout dev
           git pull origin dev
-          git checkout -b release/$NEW_WORKING_VERSION
-          git push origin release/$NEW_WORKING_VERSION
+          git checkout -b release/$WORKING_VERSION
+          git push origin release/$WORKING_VERSION
 
       - name: Merge dev into release branch
         if: env.BRANCH_EXISTS == 'true'
         run: |
           # Ensure branch name is valid
-          echo "Merging dev into release/$NEW_WORKING_VERSION"
+          echo "Merging dev into release/$WORKING_VERSION"
           git fetch origin
-          git checkout release/$NEW_WORKING_VERSION
-          git merge origin/dev --no-ff --commit -m "Merge dev into release/$NEW_WORKING_VERSION"
-          git push origin release/$NEW_WORKING_VERSION
+          git checkout release/$WORKING_VERSION
+          git merge origin/dev --no-ff --commit -m "Merge dev into release/$WORKING_VERSION"
+          git push origin release/$WORKING_VERSION
+          
+      - name: Bump DEV version
+        run: |
+          ./scripts/bump-vesion.sh
+
+      - name: Get NEW_WORKING_VERSION
+        id: get-new-version
+        run: |
+          source ./scripts/functions.sh
+          NEW_WORKING_VERSION=$(read_key_value "VERSION" "WORKING_VERSION" "v1.0.0")
+          echo "NEW_WORKING_VERSION=$NEW_WORKING_VERSION" >> $GITHUB_ENV
 
       - name: Commit and push updated version
         run: |
