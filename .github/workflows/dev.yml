@@ -44,6 +44,11 @@ jobs:
           git checkout -b release/$WORKING_VERSION
           git push origin release/$WORKING_VERSION
           git checkout dev
+          
+      - name: Stash local changes (if any)
+        if: env.BRANCH_EXISTS == 'true'
+        run: |
+          git diff --quiet || git stash
 
       - name: Fetch and checkout release branch (if exists)
         if: env.BRANCH_EXISTS == 'true'
