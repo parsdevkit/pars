@@ -6,23 +6,46 @@ source "$(dirname "$0")/functions.sh"
 # Set the path to the VERSION file
 VERSION_FILE="$(dirname "$0")/../VERSION"
 
-# Default values if the VERSION file does not exist
+# Default values
 DEFAULT_MAJOR="1"
 DEFAULT_WORKING_VERSION="1.0.0"
 DEFAULT_WORKING_VERSION_DEV_NUMBER="1"
 
-# Create VERSION file if it doesn't exist and initialize default values
-if [ ! -f "$VERSION_FILE" ]; then
+# Function to create and initialize the VERSION file
+initialize_version_file() {
     echo "Creating VERSION file with default values..."
     echo "MAJOR=$DEFAULT_MAJOR" > "$VERSION_FILE"
     echo "WORKING_VERSION=$DEFAULT_WORKING_VERSION" >> "$VERSION_FILE"
     echo "WORKING_VERSION_DEV_NUMBER=$DEFAULT_WORKING_VERSION_DEV_NUMBER" >> "$VERSION_FILE"
+}
+
+# Check if VERSION file exists
+if [ ! -f "$VERSION_FILE" ]; then
+    initialize_version_file
+else
+    # If VERSION file exists but is empty, initialize it
+    if [ ! -s "$VERSION_FILE" ]; then
+        initialize_version_file
+    fi
 fi
 
 # Read current values from the VERSION file
 MAJOR=$(read_key_value "$VERSION_FILE" "MAJOR")
 WORKING_VERSION=$(read_key_value "$VERSION_FILE" "WORKING_VERSION")
 WORKING_VERSION_DEV_NUMBER=$(read_key_value "$VERSION_FILE" "WORKING_VERSION_DEV_NUMBER")
+
+# If any key is missing, initialize it with the default value
+if [ -z "$MAJOR" ]; then
+    MAJOR="$DEFAULT_MAJOR"
+fi
+
+if [ -z "$WORKING_VERSION" ]; then
+    WORKING_VERSION="$DEFAULT_WORKING_VERSION"
+fi
+
+if [ -z "$WORKING_VERSION_DEV_NUMBER" ]; then
+    WORKING_VERSION_DEV_NUMBER="$DEFAULT_WORKING_VERSION_DEV_NUMBER"
+fi
 
 # Extract the major and minor version components from WORKING_VERSION
 CURRENT_MAJOR=$(echo "$WORKING_VERSION" | cut -d'.' -f1)
