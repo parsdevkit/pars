@@ -16,7 +16,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Set up script permissions
+      - name: Set up script and VERSION permissions
         run: |
           chmod +x ./scripts/*
           chmod +x VERSION
@@ -39,6 +39,10 @@ jobs:
           NEW_WORKING_VERSION=$(read_key_value "VERSION" "WORKING_VERSION")
           echo "NEW_WORKING_VERSION=$NEW_WORKING_VERSION" >> $GITHUB_ENV
 
+      - name: Debug: Show environment variables
+        run: |
+          echo "NEW_WORKING_VERSION=$NEW_WORKING_VERSION"
+
       - name: Check if release branch exists
         id: check-branch
         run: |
@@ -53,6 +57,8 @@ jobs:
       - name: Create release branch (if not exists)
         if: env.BRANCH_EXISTS == 'false'
         run: |
+          # Ensure branch name is valid
+          echo "Creating release branch release/$NEW_WORKING_VERSION"
           git checkout dev
           git pull origin dev
           git checkout -b release/$NEW_WORKING_VERSION
@@ -61,6 +67,8 @@ jobs:
       - name: Merge dev into release branch
         if: env.BRANCH_EXISTS == 'true'
         run: |
+          # Ensure branch name is valid
+          echo "Merging dev into release/$NEW_WORKING_VERSION"
           git fetch origin
           git checkout release/$NEW_WORKING_VERSION
           git merge origin/dev --no-ff --commit -m "Merge dev into release/$NEW_WORKING_VERSION"
