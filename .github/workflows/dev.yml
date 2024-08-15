@@ -49,16 +49,18 @@ jobs:
           # git pull origin dev
           git checkout -b release/$WORKING_VERSION
           git push origin release/$WORKING_VERSION
+          git checkout dev
 
       - name: Merge dev into release branch
         if: env.BRANCH_EXISTS == 'true'
         run: |
           # Ensure branch name is valid
           echo "Merging dev into release/$WORKING_VERSION"
-          git fetch origin
+          # git fetch origin
           git checkout release/$WORKING_VERSION
           git merge origin/dev --no-ff --commit -m "Merge dev into release/$WORKING_VERSION"
           git push origin release/$WORKING_VERSION
+          git checkout dev
           
       - name: Bump DEV version
         run: |
