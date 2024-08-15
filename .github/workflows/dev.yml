@@ -58,7 +58,7 @@ jobs:
           echo "Merging dev into release/$WORKING_VERSION"
           git config user.name "GitHub Actions"
           git config user.email "actions@github.com"
-          git merge dev --no-ff --commit --allow-unrelated-histories -m "Merge dev into release/$WORKING_VERSION"
+          git merge dev --no-ff --commit -m "Merge dev into release/$WORKING_VERSION"
           git push origin release/$WORKING_VERSION
           git checkout dev
           
