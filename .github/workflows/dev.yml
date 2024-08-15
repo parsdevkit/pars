@@ -28,11 +28,10 @@ jobs:
           WORKING_VERSION=$(read_key_value "VERSION" "WORKING_VERSION" "v1.0.0")
           echo "WORKING_VERSION=$WORKING_VERSION" >> $GITHUB_ENV
 
-
       - name: Check if release branch exists
         id: check-branch
         run: |
-          if git ls-remote --exit-code --heads origin release/$WORKING_VERSION; then
+          if git show-ref --verify --quiet refs/heads/release/$WORKING_VERSION; then
             echo "Branch release/$WORKING_VERSION already exists."
             echo "BRANCH_EXISTS=true" >> $GITHUB_ENV
           else
@@ -43,26 +42,21 @@ jobs:
       - name: Create release branch (if not exists)
         if: env.BRANCH_EXISTS == 'false'
         run: |
-          # Ensure branch name is valid
           echo "Creating release branch release/$WORKING_VERSION"
-          # git checkout dev
-          # git pull origin dev
           git checkout -b release/$WORKING_VERSION
           git push origin release/$WORKING_VERSION
 
       - name: Merge dev into release branch
         if: env.BRANCH_EXISTS == 'true'
         run: |
-          # Ensure branch name is valid
           echo "Merging dev into release/$WORKING_VERSION"
-          # git fetch origin
           git checkout release/$WORKING_VERSION
-          git merge origin/dev --no-ff --commit -m "Merge dev into release/$WORKING_VERSION"
+          git merge dev --no-ff --commit -m "Merge dev into release/$WORKING_VERSION"
           git push origin release/$WORKING_VERSION
           
       - name: Bump DEV version
         run: |
-          ./scripts/bump-vesion.sh
+          ./scripts/bump-version.sh
 
       - name: Get NEW_WORKING_VERSION
         id: get-new-version

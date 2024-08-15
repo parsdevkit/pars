@@ -8,7 +8,7 @@ VERSION_FILE="$(dirname "$0")/../VERSION"
 
 # Default values
 DEFAULT_MAJOR="1"
-DEFAULT_WORKING_VERSION="1.0.0"
+DEFAULT_WORKING_VERSION="v1.0.0"
 DEFAULT_WORKING_VERSION_DEV_NUMBER="1"
 
 # Function to create and initialize the VERSION file
@@ -48,7 +48,7 @@ if [ -z "$WORKING_VERSION_DEV_NUMBER" ]; then
 fi
 
 # Extract the major and minor version components from WORKING_VERSION
-CURRENT_MAJOR=$(echo "$WORKING_VERSION" | cut -d'.' -f1)
+CURRENT_MAJOR=$(echo "$WORKING_VERSION" | cut -d'.' -f1 | sed 's/v//')
 CURRENT_MINOR=$(echo "$WORKING_VERSION" | cut -d'.' -f2)
 
 # Get the major version argument, if provided
@@ -61,11 +61,11 @@ if [ -n "$ARG_MAJOR" ] && [ "$ARG_MAJOR" != "$MAJOR" ]; then
     CURRENT_MAJOR=$ARG_MAJOR
     CURRENT_MINOR="0"
     WORKING_VERSION_DEV_NUMBER="1"
-    WORKING_VERSION="$CURRENT_MAJOR.$CURRENT_MINOR.0"
+    WORKING_VERSION="v$CURRENT_MAJOR.$CURRENT_MINOR.0"
 else
     # Increment the minor version and reset the dev number
     CURRENT_MINOR=$((CURRENT_MINOR + 1))
-    WORKING_VERSION="$CURRENT_MAJOR.$CURRENT_MINOR.0"
+    WORKING_VERSION="v$CURRENT_MAJOR.$CURRENT_MINOR.0"
     WORKING_VERSION_DEV_NUMBER="1"
 fi
 
