@@ -1,6 +1,7 @@
 name: Release Branch Management
 
 on:
+  workflow_dispatch: # Supports manuel trigger
   push:
     branches:
       - dev
