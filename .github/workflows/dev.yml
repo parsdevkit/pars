@@ -50,5 +50,10 @@ jobs:
       run: |
         git checkout dev
         ./scripts/bump-version.sh
-        git commit -am "Bump version after release $WORKING_VERSION"
+
+        source ./scripts/functions.sh
+        NEW_WORKING_VERSION=$(read_key_value "VERSION" "WORKING_VERSION" "v1.0.0")
+        echo "NEW_WORKING_VERSION=$NEW_WORKING_VERSION" >> $GITHUB_ENV
+
+        git commit -am "Bump version after release $NEW_WORKING_VERSION"
         git push origin dev
