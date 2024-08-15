@@ -49,7 +49,7 @@ jobs:
         if: env.BRANCH_EXISTS == 'true'
         run: |
           echo "Fetching and checking out release branch release/$WORKING_VERSION"
-          git fetch origin release/$WORKING_VERSION:release/$WORKING_VERSION
+          git merge dev --no-ff --commit --allow-unrelated-histories -m "Merge dev into release/$WORKING_VERSION"
           git checkout release/$WORKING_VERSION
 
       - name: Merge dev into release branch
