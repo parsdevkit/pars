@@ -27,7 +27,8 @@ jobs:
     - name: Get WORKING_VERSION from VERSION file
       id: get-version
       run: |
-        WORKING_VERSION=$(./scripts/functions.sh read_key_value "VERSION" "WORKING_VERSION" "v1.0.0")
+        source ./scripts/functions.sh
+        WORKING_VERSION=$(read_key_value "VERSION" "WORKING_VERSION" "v1.0.0")
         echo "WORKING_VERSION=$WORKING_VERSION" >> $GITHUB_ENV
 
     - name: Check if release branch exists
