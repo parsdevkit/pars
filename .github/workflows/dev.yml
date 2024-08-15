@@ -45,8 +45,8 @@ jobs:
         run: |
           # Ensure branch name is valid
           echo "Creating release branch release/$WORKING_VERSION"
-          # git checkout dev
-          # git pull origin dev
+          git checkout dev
+          git pull origin dev
           git checkout -b release/$WORKING_VERSION
           git push origin release/$WORKING_VERSION
           git checkout dev
