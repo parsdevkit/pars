@@ -39,7 +39,7 @@ jobs:
           NEW_WORKING_VERSION=$(read_key_value "VERSION" "WORKING_VERSION")
           echo "NEW_WORKING_VERSION=$NEW_WORKING_VERSION" >> $GITHUB_ENV
 
-      - name: Debug: Show environment variables
+      - name: "Debug: Show environment variables"
         run: |
           echo "NEW_WORKING_VERSION=$NEW_WORKING_VERSION"
 
