@@ -76,6 +76,11 @@ jobs:
           git commit --no-edit
           git push origin release/$WORKING_VERSION
           git checkout dev
+
+      - name: Set up script and VERSION permissions
+        run: |
+          chmod +x ./scripts/*
+          chmod +x VERSION
           
       - name: Bump DEV version
         run: |
