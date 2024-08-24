@@ -26,17 +26,17 @@ func getDefaultPlatformApplicationDir() string {
 		}
 		return "C:\\Program Files\\pars"
 	case "darwin":
-		return "/usr/local/bin"
+		return "/usr/bin"
 	case "linux":
-		return "/usr/local/bin"
+		return "/usr/bin"
 	case "freebsd":
-		return "/usr/local/bin"
+		return "/usr/bin"
 	case "openbsd":
-		return "/usr/local/bin"
+		return "/usr/bin"
 	case "netbsd":
-		return "/usr/local/bin"
+		return "/usr/bin"
 	default:
-		return "/usr/local/bin"
+		return "/usr/bin"
 	}
 }
 

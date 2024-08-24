@@ -15,7 +15,7 @@ RUN go build -o pars ./pars.go
 FROM busybox:latest
 
 # Copy the Pre-built binary file from the previous stage
-COPY --from=builder /app/pars /usr/local/bin/pars
+COPY --from=builder /app/pars /usr/bin/pars
 
 # Set /home as the working directory
 WORKDIR /home
