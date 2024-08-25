@@ -13,6 +13,7 @@ import (
 
 var (
 	environment string
+	version     string
 	logLevel    core.LogLevel
 )
 
@@ -90,6 +91,13 @@ func getDefaultPlatformConfigDir() string {
 
 func getDefaultPlatformTempDir() string {
 	return os.TempDir()
+}
+
+func SetVersion(version string) {
+	version = version
+}
+func GetVersion() string {
+	return version
 }
 
 func SetEnvironment(env string) {

@@ -2,7 +2,10 @@ package main
 
 import (
 	"parsdevkit.net/cmd"
+	"parsdevkit.net/core/utils"
 )
+
+var version string
 
 func main() {
 
@@ -18,4 +21,6 @@ func main() {
 	// } else {
 	// 	fmt.Println("Zaten istenmiyor!!!")
 	// }
+
+	utils.SetVersion(version)
 }

@@ -17,7 +17,7 @@ var InfoCmd = &cobra.Command{
 
 func executeFunc(cmd *cobra.Command, args []string) {
 	fmt.Println("New generation SDK")
-	fmt.Printf("Version: %v\n", "v0.0.1")
+	fmt.Printf("Version: %v\n", utils.GetVersion())
 	fmt.Printf("Data Directory: %v\n", utils.GetDataLocation())
 }
 
