@@ -13,6 +13,7 @@ import (
 
 var (
 	environment string
+	version     string
 	logLevel    core.LogLevel
 )
 
@@ -26,17 +27,17 @@ func getDefaultPlatformApplicationDir() string {
 		}
 		return "C:\\Program Files\\pars"
 	case "darwin":
-		return "/usr/local/bin"
+		return "/usr/bin"
 	case "linux":
-		return "/usr/local/bin"
+		return "/usr/bin"
 	case "freebsd":
-		return "/usr/local/bin"
+		return "/usr/bin"
 	case "openbsd":
-		return "/usr/local/bin"
+		return "/usr/bin"
 	case "netbsd":
-		return "/usr/local/bin"
+		return "/usr/bin"
 	default:
-		return "/usr/local/bin"
+		return "/usr/bin"
 	}
 }
 
@@ -90,6 +91,13 @@ func getDefaultPlatformConfigDir() string {
 
 func getDefaultPlatformTempDir() string {
 	return os.TempDir()
+}
+
+func SetVersion(version string) {
+	version = version
+}
+func GetVersion() string {
+	return version
 }
 
 func SetEnvironment(env string) {
