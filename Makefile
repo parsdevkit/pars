@@ -15,6 +15,10 @@ OS ?=
 ARCH ?=
 TAG ?= 
 
+OS_LINUX = linux
+OS_WINDOWS = windows
+OS_MACOS = darwin
+
 
 include $(MAKEFILES)
 

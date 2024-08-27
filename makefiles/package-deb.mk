@@ -1,6 +1,7 @@
 
 # Debian/control dosyasının konumu
-DEB_ROOT_DIR = ./package/$(TAG)/$(OS)/$(ARCH)
+
+DEB_ROOT_DIR = ./package/$(TAG)/$(OS_LINUX)/$(ARCH)
 DEB_DEBIAN_DIR = $(DEB_ROOT_DIR)/debian
 DEB_INSTALLATION_DIR = /usr/bin
 DEB_INSTALLATION_PATH = $(DEB_INSTALLATION_DIR)/$(APPLICATION_NAME)
