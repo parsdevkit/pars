@@ -44,6 +44,7 @@ replace parsdevkit.net/cmd => ./cmd
 
 require (
 	parsdevkit.net/cmd v0.0.0-00010101000000-000000000000
+	parsdevkit.net/core/utils v0.0.0-00010101000000-000000000000
 	parsdevkit.net/structs v0.0.0-00010101000000-000000000000
 )
 
@@ -88,7 +89,6 @@ require (
 	parsdevkit.net/common v0.0.0-00010101000000-000000000000 // indirect
 	parsdevkit.net/context v0.0.0-00010101000000-000000000000 // indirect
 	parsdevkit.net/core v0.0.0-00010101000000-000000000000 // indirect
-	parsdevkit.net/core/utils v0.0.0-00010101000000-000000000000 // indirect
 	parsdevkit.net/engines v0.0.0-00010101000000-000000000000 // indirect
 	parsdevkit.net/models v0.0.0-00010101000000-000000000000 // indirect
 	parsdevkit.net/operation/services v0.0.0-00010101000000-000000000000 // indirect

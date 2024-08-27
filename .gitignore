@@ -1,4 +1,6 @@
+/bin/**
 /bins/**
+/package/**
 /packing/**
 /binaries/**
 /data/**
