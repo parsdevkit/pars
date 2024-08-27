@@ -67,7 +67,7 @@ else
 endif
 
 ifeq ($(OS), windows)
-	TARGET := $(APP).exe
+	TARGET := $(APPLICATION_NAME).exe
 endif
 ifeq ($(TAG), )
 	TAG := v0.0.0
