@@ -3,6 +3,7 @@ APPLICATION_FULL_NAME := Pars
 APPLICATION_NAME := pars
 ORGANIZATION := Pars Community
 MAINTANER := Pars Dev Kit <parsdevkit@gmail.com>
+OWNER := Ahmet Soner <ahmettsoner@gmail.com>
 HOMEPAGE := https://parsdevkit.net
 GIT := https://github.com/parsdevkit/pars
 LICENCE_TYPE := Apache-2.0
