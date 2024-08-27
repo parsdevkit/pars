@@ -1,7 +1,4 @@
-
-# Debian/control dosyasının konumu
-
-DEB_ROOT_DIR = ./package/$(TAG)/$(OS_LINUX)/$(ARCH)
+DEB_ROOT_DIR = ./package/$(TAG)/$(OS_LINUX)/deb/$(ARCH)
 DEB_DEBIAN_DIR = $(DEB_ROOT_DIR)/debian
 DEB_INSTALLATION_DIR = /usr/bin
 DEB_INSTALLATION_PATH = $(DEB_INSTALLATION_DIR)/$(APPLICATION_NAME)
@@ -26,16 +23,18 @@ $(info DEB_ARCH is set to $(DEB_ARCH))
 
 debian/control: debian-init arch-setup
 	echo "Source: $(APPLICATION_NAME)" > $(DEB_ROOT_DIR)/$@
-	echo "Package: $(APPLICATION_NAME)" >> $(DEB_ROOT_DIR)/$@
-	echo "Version: $(TAG)" >> $(DEB_ROOT_DIR)/$@
+	# echo "Version: $(TAG)" >> $(DEB_ROOT_DIR)/$@
 	echo "Section: utils" >> $(DEB_ROOT_DIR)/$@
 	echo "Priority: optional" >> $(DEB_ROOT_DIR)/$@
 	echo "Maintainer: $(MAINTANER)" >> $(DEB_ROOT_DIR)/$@
-	echo "Homepage: $(HOMEPAGE)" >> $(DEB_ROOT_DIR)/$@
 	echo "Build-Depends: debhelper (>= 12)" >> $(DEB_ROOT_DIR)/$@
 	echo "Standards-Version: 4.5.0" >> $(DEB_ROOT_DIR)/$@
-	echo 'Depends: $${shlibs:Depends}, $${misc:Depends}, go' >> $(DEB_ROOT_DIR)/$@
+	echo "Homepage: $(HOMEPAGE)" >> $(DEB_ROOT_DIR)/$@
+
+	echo "" >> $(DEB_ROOT_DIR)/$@
+	echo "Package: $(APPLICATION_NAME)" >> $(DEB_ROOT_DIR)/$@
 	echo "Architecture: $(DEB_ARCH)" >> $(DEB_ROOT_DIR)/$@
+	echo 'Depends: $${shlibs:Depends}, $${misc:Depends}, go' >> $(DEB_ROOT_DIR)/$@
 	echo "Description: $(DESCRIPTION)" >> $(DEB_ROOT_DIR)/$@
 
 debian/changelog: debian-init arch-setup
@@ -78,7 +77,7 @@ debian/copyright: debian-init arch-setup
 	echo " See the Apache License, Version 2.0 for the full license text." >> $(DEB_ROOT_DIR)/$@
 	echo "" >> $(DEB_ROOT_DIR)/$@
 	echo "Files: debian/*" >> $(DEB_ROOT_DIR)/$@
-	echo "Copyright: 2024, $(MAINTANER)" >> $(DEB_ROOT_DIR)/$@
+	echo "Copyright: 2024, $(OWNER)" >> $(DEB_ROOT_DIR)/$@
 	echo "License: Apache-2.0" >> $(DEB_ROOT_DIR)/$@
 	echo " The Apache License, Version 2.0, January 2004" >> $(DEB_ROOT_DIR)/$@
 	echo " http://www.apache.org/licenses/LICENSE-2.0" >> $(DEB_ROOT_DIR)/$@
@@ -144,5 +143,6 @@ debian/postrm: debian-init arch-setup
 debian-files: debian/control debian/changelog debian/rules debian/format debian/copyright debian/compat debian/install debian/preinst debian/postinst debian/prerm debian/postrm
 
 debian-package: debian-files
-	@echo dpkg-buildpackage -kBDB332535DAE79A3BA4DCC0BAF2F469A17DB3651 -b
+	cp $(BIN_ROOT_DIR)/$(TARGET) $(DEB_ROOT_DIR)
+	cd $(DEB_ROOT_DIR) && dpkg-buildpackage -kBDB332535DAE79A3BA4DCC0BAF2F469A17DB3651 -b
 	@echo "Package has been created with version $(TAG)"
