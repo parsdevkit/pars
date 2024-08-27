@@ -142,6 +142,6 @@ debian/postrm: debian-init arch-setup
 
 debian-files: debian/control debian/changelog debian/rules debian/format debian/copyright debian/compat debian/install debian/preinst debian/postinst debian/prerm debian/postrm
 
-package: debian-files
+debian-package: debian-files
 	@echo dpkg-buildpackage -kBDB332535DAE79A3BA4DCC0BAF2F469A17DB3651 -b
 	@echo "Package has been created with version $(TAG)"
