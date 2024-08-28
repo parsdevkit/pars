@@ -41,9 +41,9 @@ debian/control: debian-init arch-setup
 debian/changelog: debian-init arch-setup
 	echo "$(APPLICATION_NAME) ($(TAG)) bionic; urgency=medium" > $(DEB_ROOT_DIR)/$@
 	echo "" >> $(DEB_ROOT_DIR)/$@
-	echo "	* Initial release." >> $(DEB_ROOT_DIR)/$@
+	echo "  * Initial release." >> $(DEB_ROOT_DIR)/$@
 	echo "" >> $(DEB_ROOT_DIR)/$@
-	echo "	-- $(MAINTANER)  Tue, 21 Aug 2024 00:00:00 +0000" >> $(DEB_ROOT_DIR)/$@
+	echo "  -- $(MAINTANER)  Tue, 21 Aug 2024 00:00:00 +0000" >> $(DEB_ROOT_DIR)/$@
 
 debian/rules: debian-init arch-setup
 	echo "#!/usr/bin/make -f" > $(DEB_ROOT_DIR)/$@
