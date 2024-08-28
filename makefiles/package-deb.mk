@@ -54,6 +54,9 @@ debian/rules: debian-init arch-setup
 	echo "override_dh_dwz:" >> $(DEB_ROOT_DIR)/$@
 	echo "	true" >> $(DEB_ROOT_DIR)/$@
 	echo "" >> $(DEB_ROOT_DIR)/$@
+	echo "override_dh_build:" >> $(DEB_ROOT_DIR)/$@
+	echo '	make build TAG=$(TAG) OS=$(OS) ARCH=$(ARCH)' >> $(DEB_ROOT_DIR)/$@
+	# echo "" >> $(DEB_ROOT_DIR)/$@
 	# echo "override_dh_auto_build:" >> $(DEB_ROOT_DIR)/$@
 	# echo '	for mkfile in $(wildcard makefiles/*.mk); do \' >> $(DEB_ROOT_DIR)/$@
 	# echo '		$$(MAKE) -f $$$${mkfile}; \' >> $(DEB_ROOT_DIR)/$@
@@ -153,6 +156,5 @@ debian/postrm: debian-init arch-setup
 debian-files: debian/control debian/changelog debian/rules debian/format debian/copyright debian/compat debian/install debian/preinst debian/postinst debian/prerm debian/postrm
 
 debian-package: debian-files
-	cp $(BIN_ROOT_DIR)/$(TARGET) $(DEB_ROOT_DIR)
 	cd $(DEB_ROOT_DIR) && dpkg-buildpackage -k$(GPG-KEY) -b
 	@echo "Package has been created with version $(TAG)"
