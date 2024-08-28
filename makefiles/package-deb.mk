@@ -49,12 +49,15 @@ debian/rules: debian-init arch-setup
 	echo "#!/usr/bin/make -f" > $(DEB_ROOT_DIR)/$@
 	echo "" >> $(DEB_ROOT_DIR)/$@
 	echo '%:' >> $(DEB_ROOT_DIR)/$@
-	echo '  dh $$@' >> $(DEB_ROOT_DIR)/$@
+	echo '	dh $$@' >> $(DEB_ROOT_DIR)/$@
 	echo "" >> $(DEB_ROOT_DIR)/$@
-	echo "override_dh_auto_build:" >> $(DEB_ROOT_DIR)/$@
-	echo '	for mkfile in $(wildcard makefiles/*.mk); do \' >> $(DEB_ROOT_DIR)/$@
-	echo '		$$(MAKE) -f $$$${mkfile}; \' >> $(DEB_ROOT_DIR)/$@
-	echo '	done' >> $(DEB_ROOT_DIR)/$@
+	echo "override_dh_dwz:" >> $(DEB_ROOT_DIR)/$@
+	echo "	true" >> $(DEB_ROOT_DIR)/$@
+	echo "" >> $(DEB_ROOT_DIR)/$@
+	# echo "override_dh_auto_build:" >> $(DEB_ROOT_DIR)/$@
+	# echo '	for mkfile in $(wildcard makefiles/*.mk); do \' >> $(DEB_ROOT_DIR)/$@
+	# echo '		$$(MAKE) -f $$$${mkfile}; \' >> $(DEB_ROOT_DIR)/$@
+	# echo '	done' >> $(DEB_ROOT_DIR)/$@
 
 
 debian/format: debian-init arch-setup
