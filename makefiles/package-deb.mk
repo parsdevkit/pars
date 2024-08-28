@@ -43,18 +43,18 @@ debian/changelog: debian-init arch-setup
 	echo "" >> $(DEB_ROOT_DIR)/$@
 	echo "  * Initial release." >> $(DEB_ROOT_DIR)/$@
 	echo "" >> $(DEB_ROOT_DIR)/$@
-	echo "  -- $(MAINTANER)  Tue, 21 Aug 2024 00:00:00 +0000" >> $(DEB_ROOT_DIR)/$@
+	echo " -- $(MAINTANER)  Tue, 21 Aug 2024 00:00:00 +0000" >> $(DEB_ROOT_DIR)/$@
 
 debian/rules: debian-init arch-setup
 	echo "#!/usr/bin/make -f" > $(DEB_ROOT_DIR)/$@
 	echo "" >> $(DEB_ROOT_DIR)/$@
 	echo '%:' >> $(DEB_ROOT_DIR)/$@
-	echo '	dh $$@' >> $(DEB_ROOT_DIR)/$@
+	echo '  dh $$@' >> $(DEB_ROOT_DIR)/$@
 	echo "" >> $(DEB_ROOT_DIR)/$@
 	echo "override_dh_auto_build:" >> $(DEB_ROOT_DIR)/$@
-	echo '	for mkfile in $(wildcard makefiles/*.mk); do \' >> $(DEB_ROOT_DIR)/$@
-	echo '		$$(MAKE) -f $$${mkfile}; \' >> $(DEB_ROOT_DIR)/$@
-	echo '	done' >> $(DEB_ROOT_DIR)/$@
+	echo '  for mkfile in $(wildcard makefiles/*.mk); do \' >> $(DEB_ROOT_DIR)/$@
+	echo '          $$(MAKE) -f $$$${mkfile}; \' >> $(DEB_ROOT_DIR)/$@
+	echo '  done' >> $(DEB_ROOT_DIR)/$@
 
 
 debian/format: debian-init arch-setup
