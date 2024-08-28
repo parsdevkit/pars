@@ -1,3 +1,4 @@
+GPG-KEY ?= 
 DEB_ROOT_DIR = ./package/$(TAG)/$(OS_LINUX)/deb/$(ARCH)
 DEB_DEBIAN_DIR = $(DEB_ROOT_DIR)/debian
 DEB_INSTALLATION_DIR = /usr/bin
@@ -144,5 +145,5 @@ debian-files: debian/control debian/changelog debian/rules debian/format debian/
 
 debian-package: debian-files
 	cp $(BIN_ROOT_DIR)/$(TARGET) $(DEB_ROOT_DIR)
-	cd $(DEB_ROOT_DIR) && dpkg-buildpackage -kBDB332535DAE79A3BA4DCC0BAF2F469A17DB3651 -b
+	cd $(DEB_ROOT_DIR) && dpkg-buildpackage -k$(GPG-KEY) -b
 	@echo "Package has been created with version $(TAG)"
