@@ -28,8 +28,11 @@ include $(MAKEFILES)
 all: print get-deps build
 
 
+ROOT_DIR = .
 SOURCE_ROOT_DIR = ./src
 BIN_ROOT_DIR = ./bin/$(TAG)/$(OS)/$(ARCH)
+PACKAGE_ROOT_DIR = ./bin/$(TAG)/$(OS)/$(ARCH)
+DISTRIBUTION_ROOT_DIR = ./bin/$(TAG)/$(OS)/$(ARCH)
 
 get-deps: $(SOURCE_ROOT_DIR)/go.mod
 	cd $(SOURCE_ROOT_DIR) && go mod tidy

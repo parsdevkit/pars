@@ -1,11 +1,14 @@
 GPG-KEY ?= 
-DEB_ROOT_DIR = ./package/$(TAG)/$(OS_LINUX)/deb/$(ARCH)
+DEB_ROOT_DIR = ./packages/$(TAG)/$(OS_LINUX)/deb/$(ARCH)
 DEB_DEBIAN_DIR = $(DEB_ROOT_DIR)/debian
+DEB_PACKAGE_DIR = $(DEB_ROOT_DIR)/package
 DEB_INSTALLATION_DIR = /usr/bin
 DEB_INSTALLATION_PATH = $(DEB_INSTALLATION_DIR)/$(APPLICATION_NAME)
 
 debian-init:
-	mkdir -p $(DEB_DEBIAN_DIR)
+	# mkdir -p $(DEB_DEBIAN_DIR)
+	# mkdir -p $(DEB_DEBIAN_DIR)/source
+	# mkdir -p $(DEB_PACKAGE_DIR)
 
 arch-setup:
 ifeq ($(ARCH),amd64)
@@ -54,17 +57,14 @@ debian/rules: debian-init arch-setup
 	echo "override_dh_dwz:" >> $(DEB_ROOT_DIR)/$@
 	echo "	true" >> $(DEB_ROOT_DIR)/$@
 	echo "" >> $(DEB_ROOT_DIR)/$@
-	echo "override_dh_build:" >> $(DEB_ROOT_DIR)/$@
-	echo '	make build TAG=$(TAG) OS=$(OS) ARCH=$(ARCH)' >> $(DEB_ROOT_DIR)/$@
-	# echo "" >> $(DEB_ROOT_DIR)/$@
-	# echo "override_dh_auto_build:" >> $(DEB_ROOT_DIR)/$@
-	# echo '	for mkfile in $(wildcard makefiles/*.mk); do \' >> $(DEB_ROOT_DIR)/$@
-	# echo '		$$(MAKE) -f $$$${mkfile}; \' >> $(DEB_ROOT_DIR)/$@
-	# echo '	done' >> $(DEB_ROOT_DIR)/$@
+	echo "override_dh_auto_build:" >> $(DEB_ROOT_DIR)/$@
+	echo '	make -C $(CURDIR) build TAG=$(TAG) OS=$(OS_LINUX) ARCH=$(ARCH)' >> $(DEB_ROOT_DIR)/$@
+	echo "	cd $(CURDIR) && cp $(BIN_ROOT_DIR)/$(TARGET) $(DEB_ROOT_DIR)" >> $(DEB_ROOT_DIR)/$@
 
 
-debian/format: debian-init arch-setup
+debian/source/format: debian-init arch-setup
 	echo "3.0 (native)" > $(DEB_ROOT_DIR)/$@
+	# quilt
 
 debian/copyright: debian-init arch-setup
 	echo "Format: http://www.debian.org/doc/packaging-manuals/copyright-format/1.0/" > $(DEB_ROOT_DIR)/$@
@@ -107,7 +107,7 @@ debian/preinst: debian-init arch-setup
 	echo "" >> $(DEB_ROOT_DIR)/$@
 	echo 'echo "Running pre-installation tasks..."' >> $(DEB_ROOT_DIR)/$@
 	echo "if [ ! -L $(DEB_INSTALLATION_PATH) ]; then" >> $(DEB_ROOT_DIR)/$@
-	echo '    echo "Warning: /usr/bin/pars already exists. It will be overwritten."' >> $(DEB_ROOT_DIR)/$@
+	echo '    echo "Warning: $(DEB_INSTALLATION_PATH) already exists. It will be overwritten."' >> $(DEB_ROOT_DIR)/$@
 	echo "fi" >> $(DEB_ROOT_DIR)/$@
 	echo "" >> $(DEB_ROOT_DIR)/$@
 	echo 'echo "Pre-installation tasks completed."' >> $(DEB_ROOT_DIR)/$@
@@ -153,8 +153,20 @@ debian/postrm: debian-init arch-setup
 	echo 'echo "Post-removal tasks completed."' >> $(DEB_ROOT_DIR)/$@
 
 
-debian-files: debian/control debian/changelog debian/rules debian/format debian/copyright debian/compat debian/install debian/preinst debian/postinst debian/prerm debian/postrm
+debian-files: debian/control debian/changelog debian/rules debian/source/format debian/copyright debian/compat # debian/install debian/preinst debian/postinst debian/prerm debian/postrm
 
-debian-package: debian-files
+
+debian-binary-package: debian-files
 	cd $(DEB_ROOT_DIR) && dpkg-buildpackage -k$(GPG-KEY) -b
+	mv $(DEB_ROOT_DIR)/../$(APPLICATION_NAME)* $(DEB_PACKAGE_DIR)
+	find $(DEB_PACKAGE_DIR) -maxdepth 1 -name "*.deb" | tar -czvf $(DEB_ROOT_DIR)/$(APPLICATION_NAME)-$(OS_LINUX)-$(ARCH).deb.tar.gz -T -
+	@echo "Package has been created with version $(TAG)"
+
+debian-source-package: debian-files
+	cp -r $(ROOT_DIR)/src $(DEB_ROOT_DIR)
+	cp -r $(ROOT_DIR)/makefiles $(DEB_ROOT_DIR)
+	cp $(ROOT_DIR)/Makefile $(DEB_ROOT_DIR)/Makefile
+	# chmod +x $(DEB_ROOT_DIR)
+
+	cd $(DEB_ROOT_DIR) && dpkg-buildpackage -k$(GPG-KEY) -S
 	@echo "Package has been created with version $(TAG)"
