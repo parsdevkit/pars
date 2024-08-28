@@ -156,6 +156,5 @@ debian/postrm: debian-init arch-setup
 debian-files: debian/control debian/changelog debian/rules debian/format debian/copyright debian/compat debian/install debian/preinst debian/postinst debian/prerm debian/postrm
 
 debian-package: debian-files
-	# cp $(BIN_ROOT_DIR)/$(TARGET) $(DEB_ROOT_DIR)
 	cd $(DEB_ROOT_DIR) && dpkg-buildpackage -k$(GPG-KEY) -b
 	@echo "Package has been created with version $(TAG)"
