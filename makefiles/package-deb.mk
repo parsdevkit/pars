@@ -5,6 +5,7 @@ DEB_DEBIAN_DIR = $(DEB_ROOT_DIR)/debian
 DEB_PACKAGE_DIR = $(DEB_ROOT_DIR)/package
 DEB_INSTALLATION_DIR = /usr/bin
 DEB_INSTALLATION_PATH = $(DEB_INSTALLATION_DIR)/$(APPLICATION_NAME)
+DEB_VERSION = bionic
 
 debian-init:
 	@mkdir -p $(DEB_DEBIAN_DIR)
@@ -41,7 +42,7 @@ debian/control: debian-init arch-setup
 	echo "Description: $(DESCRIPTION)" >> $(DEB_ROOT_DIR)/$@
 
 debian/changelog: debian-init arch-setup
-	echo "$(APPLICATION_NAME) ($(TAG)) bionic; urgency=medium" > $(DEB_ROOT_DIR)/$@
+	echo "$(APPLICATION_NAME) ($(TAG)) $(DEB_VERSION); urgency=medium" > $(DEB_ROOT_DIR)/$@
 	echo "" >> $(DEB_ROOT_DIR)/$@
 	echo "  * Initial release." >> $(DEB_ROOT_DIR)/$@
 	echo "" >> $(DEB_ROOT_DIR)/$@
@@ -178,6 +179,5 @@ debian-source-package: debian-files
 	cp -r $(ROOT_DIR)/makefiles $(DEB_ROOT_DIR)
 	cp $(ROOT_DIR)/Makefile $(DEB_ROOT_DIR)/Makefile
 	chmod +x $(DEB_ROOT_DIR)
-	@echo cd $(DEB_ROOT_DIR)
-	@echo cd $(DEB_ROOT_DIR) && dpkg-buildpackage -k$(GPG-KEY) -S
+	@echo (cd $(DEB_ROOT_DIR) && dpkg-buildpackage -k$(GPG-KEY) -S)
 	@echo "Package has been created with version $(TAG)"
