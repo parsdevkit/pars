@@ -1,4 +1,5 @@
 GPG-KEY ?= 
+OS_LINUX = linux
 DEB_ROOT_DIR = ./packages/$(TAG)/$(OS_LINUX)/deb/$(ARCH)
 DEB_DEBIAN_DIR = $(DEB_ROOT_DIR)/debian
 DEB_PACKAGE_DIR = $(DEB_ROOT_DIR)/package
@@ -6,9 +7,9 @@ DEB_INSTALLATION_DIR = /usr/bin
 DEB_INSTALLATION_PATH = $(DEB_INSTALLATION_DIR)/$(APPLICATION_NAME)
 
 debian-init:
-	# mkdir -p $(DEB_DEBIAN_DIR)
-	# mkdir -p $(DEB_DEBIAN_DIR)/source
-	# mkdir -p $(DEB_PACKAGE_DIR)
+	@mkdir -p $(DEB_DEBIAN_DIR)
+	@mkdir -p $(DEB_DEBIAN_DIR)/source
+	@mkdir -p $(DEB_PACKAGE_DIR)
 
 arch-setup:
 ifeq ($(ARCH),amd64)
@@ -19,8 +20,6 @@ else ifeq ($(ARCH),arm32)
   DEB_ARCH = armhf
 else ifeq ($(ARCH),386)
   DEB_ARCH = i386
-else
-  $(error Unknown architecture: $(ARCH))
 endif
 
 $(info DEB_ARCH is set to $(DEB_ARCH))
@@ -51,8 +50,19 @@ debian/changelog: debian-init arch-setup
 debian/rules: debian-init arch-setup
 	echo "#!/usr/bin/make -f" > $(DEB_ROOT_DIR)/$@
 	echo "" >> $(DEB_ROOT_DIR)/$@
+	echo "MY_MAKE_FILES := $(ALL_FULL_PATH_MAKEFILES)" >> $(DEB_ROOT_DIR)/$@
+	echo 'include $$(MY_MAKE_FILES)' >> $(DEB_ROOT_DIR)/$@
+	echo "" >> $(DEB_ROOT_DIR)/$@
+	echo "MY_TARGETS := debian-init arch-setup" >> $(DEB_ROOT_DIR)/$@
+	echo "" >> $(DEB_ROOT_DIR)/$@
 	echo '%:' >> $(DEB_ROOT_DIR)/$@
-	echo '	dh $$@' >> $(DEB_ROOT_DIR)/$@
+	echo '	if [ -z "$$(filter $$(MY_TARGETS), $$@)" ]; then \' >> $(DEB_ROOT_DIR)/$@
+	echo '		dh $$@; \' >> $(DEB_ROOT_DIR)/$@
+	echo '	else \' >> $(DEB_ROOT_DIR)/$@
+	echo '		make -f $$(MY_MAKE_FILES) $$@; \' >> $(DEB_ROOT_DIR)/$@
+	echo '	fi' >> $(DEB_ROOT_DIR)/$@
+	echo "" >> $(DEB_ROOT_DIR)/$@
+	echo "" >> $(DEB_ROOT_DIR)/$@
 	echo "" >> $(DEB_ROOT_DIR)/$@
 	echo "override_dh_dwz:" >> $(DEB_ROOT_DIR)/$@
 	echo "	true" >> $(DEB_ROOT_DIR)/$@
@@ -157,6 +167,7 @@ debian-files: debian/control debian/changelog debian/rules debian/source/format 
 
 
 debian-binary-package: debian-files
+	@echo cd $(DEB_ROOT_DIR)
 	cd $(DEB_ROOT_DIR) && dpkg-buildpackage -k$(GPG-KEY) -b
 	mv $(DEB_ROOT_DIR)/../$(APPLICATION_NAME)* $(DEB_PACKAGE_DIR)
 	find $(DEB_PACKAGE_DIR) -maxdepth 1 -name "*.deb" | tar -czvf $(DEB_ROOT_DIR)/$(APPLICATION_NAME)-$(OS_LINUX)-$(ARCH).deb.tar.gz -T -
@@ -166,7 +177,7 @@ debian-source-package: debian-files
 	cp -r $(ROOT_DIR)/src $(DEB_ROOT_DIR)
 	cp -r $(ROOT_DIR)/makefiles $(DEB_ROOT_DIR)
 	cp $(ROOT_DIR)/Makefile $(DEB_ROOT_DIR)/Makefile
-	# chmod +x $(DEB_ROOT_DIR)
-
-	cd $(DEB_ROOT_DIR) && dpkg-buildpackage -k$(GPG-KEY) -S
+	chmod +x $(DEB_ROOT_DIR)
+	@echo cd $(DEB_ROOT_DIR)
+	@echo cd $(DEB_ROOT_DIR) && dpkg-buildpackage -k$(GPG-KEY) -S
 	@echo "Package has been created with version $(TAG)"
