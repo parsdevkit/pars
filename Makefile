@@ -1,4 +1,7 @@
-MAKEFILES := $(wildcard makefiles/*.mk)
+export MAKEFILES := $(wildcard makefiles/*.mk)
+export FULL_PATH_MAKEFILES := $(addprefix $(CURDIR)/, $(MAKEFILES))
+export ALL_FULL_PATH_MAKEFILES := $(CURDIR)/Makefile $(FULL_PATH_MAKEFILES)
+
 APPLICATION_FULL_NAME := Pars
 APPLICATION_NAME := pars
 ORGANIZATION := Pars Community
@@ -16,12 +19,11 @@ OS ?=
 ARCH ?=
 TAG ?= 
 
-OS_LINUX = linux
 OS_WINDOWS = windows
 OS_MACOS = darwin
 
 
-include $(MAKEFILES)
+include $(FULL_PATH_MAKEFILES)
 
 
 
