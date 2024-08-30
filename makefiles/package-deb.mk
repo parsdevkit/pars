@@ -184,7 +184,7 @@ debian-source-package: debian-files
 	@echo "Package has been created with version $(TAG)"
 
 debian-source-push-ppa: debian-source-package
-	@echo cp -p ./packages/$TAG/linux/deb/pars* ./packages/$TAG/linux/deb/$ARCHITECTURE/package
-	@echo gpg --verify  ./packages/$TAG/linux/deb/$ARCHITECTURE/package/*.changes
-	@echo dput ppa:$(PPA) ./packages/$TAG/linux/deb/$ARCHITECTURE/package/*.changes
+	cp -p ./packages/$(TAG)/linux/deb/pars* ./packages/$(TAG)/linux/deb/$(ARCH)/package
+	gpg --verify  ./packages/$(TAG)/linux/deb/$(ARCH)/package/*.changes
+	dput ppa:$(PPA) ./packages/$(TAG)/linux/deb/$(ARCH)/package/*.changes
 	@echo "Package has been pushed to $(PPA) with version $(TAG)"
