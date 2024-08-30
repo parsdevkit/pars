@@ -1,11 +1,11 @@
 GPG-KEY ?= 
+DEB-SERIES ?= "noble"
 OS_LINUX = linux
 DEB_ROOT_DIR = ./packages/$(TAG)/$(OS_LINUX)/deb/$(ARCH)
 DEB_DEBIAN_DIR = $(DEB_ROOT_DIR)/debian
 DEB_PACKAGE_DIR = $(DEB_ROOT_DIR)/package
 DEB_INSTALLATION_DIR = /usr/bin
 DEB_INSTALLATION_PATH = $(DEB_INSTALLATION_DIR)/$(APPLICATION_NAME)
-DEB_VERSION = bionic
 
 debian-init:
 	@mkdir -p $(DEB_DEBIAN_DIR)
@@ -42,7 +42,7 @@ debian/control: debian-init arch-setup
 	echo "Description: $(DESCRIPTION)" >> $(DEB_ROOT_DIR)/$@
 
 debian/changelog: debian-init arch-setup
-	echo "$(APPLICATION_NAME) ($(TAG)) $(DEB_VERSION); urgency=medium" > $(DEB_ROOT_DIR)/$@
+	echo "$(APPLICATION_NAME) ($(TAG)) $(DEB-SERIES); urgency=medium" > $(DEB_ROOT_DIR)/$@
 	echo "" >> $(DEB_ROOT_DIR)/$@
 	echo "  * Initial release." >> $(DEB_ROOT_DIR)/$@
 	echo "" >> $(DEB_ROOT_DIR)/$@
