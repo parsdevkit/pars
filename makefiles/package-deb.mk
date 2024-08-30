@@ -1,3 +1,4 @@
+PPA ?= 
 GPG-KEY ?= 
 DEB-SERIES ?= "noble"
 OS_LINUX = linux
@@ -179,5 +180,11 @@ debian-source-package: debian-files
 	cp -r $(ROOT_DIR)/makefiles $(DEB_ROOT_DIR)
 	cp $(ROOT_DIR)/Makefile $(DEB_ROOT_DIR)/Makefile
 	chmod +x $(DEB_ROOT_DIR)
-	@echo (cd $(DEB_ROOT_DIR) && dpkg-buildpackage -k$(GPG-KEY) -S)
+	@echo cd $(DEB_ROOT_DIR) && dpkg-buildpackage -k$(GPG-KEY) -S
 	@echo "Package has been created with version $(TAG)"
+
+debian-source-push-ppa: debian-source-package
+	@echo cp -p ./packages/$TAG/linux/deb/pars* ./packages/$TAG/linux/deb/$ARCHITECTURE/package
+	@echo gpg --verify  ./packages/$TAG/linux/deb/$ARCHITECTURE/package/*.changes
+	@echo dput ppa:$(PPA) ./packages/$TAG/linux/deb/$ARCHITECTURE/package/*.changes
+	@echo "Package has been pushed to $(PPA) with version $(TAG)"
