@@ -52,16 +52,13 @@ debian/changelog: debian-init arch-setup
 debian/rules: debian-init arch-setup
 	echo "#!/usr/bin/make -f" > $(DEB_ROOT_DIR)/$@
 	echo "" >> $(DEB_ROOT_DIR)/$@
-	echo "MY_MAKE_FILES := $(ALL_FULL_PATH_MAKEFILES)" >> $(DEB_ROOT_DIR)/$@
-	echo 'include $$(MY_MAKE_FILES)' >> $(DEB_ROOT_DIR)/$@
-	echo "" >> $(DEB_ROOT_DIR)/$@
 	echo "MY_TARGETS := debian-init arch-setup" >> $(DEB_ROOT_DIR)/$@
 	echo "" >> $(DEB_ROOT_DIR)/$@
 	echo '%:' >> $(DEB_ROOT_DIR)/$@
 	echo '	if [ -z "$$(filter $$(MY_TARGETS), $$@)" ]; then \' >> $(DEB_ROOT_DIR)/$@
 	echo '		dh $$@; \' >> $(DEB_ROOT_DIR)/$@
 	echo '	else \' >> $(DEB_ROOT_DIR)/$@
-	echo '		make -f $$(MY_MAKE_FILES) $$@; \' >> $(DEB_ROOT_DIR)/$@
+	echo '		make $$@; \' >> $(DEB_ROOT_DIR)/$@
 	echo '	fi' >> $(DEB_ROOT_DIR)/$@
 	echo "" >> $(DEB_ROOT_DIR)/$@
 	echo "" >> $(DEB_ROOT_DIR)/$@
