@@ -32,14 +32,14 @@ debian/control: debian-init arch-setup
 	echo "Section: utils" >> $(DEB_ROOT_DIR)/$@
 	echo "Priority: optional" >> $(DEB_ROOT_DIR)/$@
 	echo "Maintainer: $(MAINTANER)" >> $(DEB_ROOT_DIR)/$@
-	echo "Build-Depends: debhelper (>= 12)" >> $(DEB_ROOT_DIR)/$@
+	echo "Build-Depends: debhelper (>= 12), golang-go" >> $(DEB_ROOT_DIR)/$@
 	echo "Standards-Version: 4.5.0" >> $(DEB_ROOT_DIR)/$@
 	echo "Homepage: $(HOMEPAGE)" >> $(DEB_ROOT_DIR)/$@
 
 	echo "" >> $(DEB_ROOT_DIR)/$@
 	echo "Package: $(APPLICATION_NAME)" >> $(DEB_ROOT_DIR)/$@
 	echo "Architecture: $(DEB_ARCH)" >> $(DEB_ROOT_DIR)/$@
-	echo 'Depends: $${shlibs:Depends}, $${misc:Depends}, go' >> $(DEB_ROOT_DIR)/$@
+	echo 'Depends: $${shlibs:Depends}, $${misc:Depends}, libc6, ca-certificates' >> $(DEB_ROOT_DIR)/$@
 	echo "Description: $(DESCRIPTION)" >> $(DEB_ROOT_DIR)/$@
 
 debian/changelog: debian-init arch-setup
@@ -67,8 +67,9 @@ debian/rules: debian-init arch-setup
 	echo "	true" >> $(DEB_ROOT_DIR)/$@
 	echo "" >> $(DEB_ROOT_DIR)/$@
 	echo "override_dh_auto_build:" >> $(DEB_ROOT_DIR)/$@
-	echo '	make -C $(CURDIR) build TAG=$(TAG) OS=$(OS_LINUX) ARCH=$(ARCH)' >> $(DEB_ROOT_DIR)/$@
-	echo "	cd $(CURDIR) && cp $(BIN_ROOT_DIR)/$(TARGET) $(DEB_ROOT_DIR)" >> $(DEB_ROOT_DIR)/$@
+	echo "	set -x" >> $(DEB_ROOT_DIR)/$@
+	echo '	make build TAG=$(TAG) OS=$(OS_LINUX) ARCH=$(ARCH)' >> $(DEB_ROOT_DIR)/$@
+	echo "	cp $(BIN_ROOT_DIR)/$(TARGET) $(DEB_ROOT_DIR)" >> $(DEB_ROOT_DIR)/$@
 
 
 debian/source/format: debian-init arch-setup

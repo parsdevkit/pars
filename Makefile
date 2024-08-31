@@ -11,7 +11,6 @@ HOMEPAGE := https://parsdevkit.net
 GIT := https://github.com/parsdevkit/pars
 LICENCE_TYPE := Apache-2.0
 DESCRIPTION := $(APPLICATION_NAME) is a simple utility.
-GO := go
 
 
 TARGET = $(APPLICATION_NAME)
@@ -37,10 +36,14 @@ PACKAGE_ROOT_DIR = ./bin/$(TAG)/$(OS)/$(ARCH)
 DISTRIBUTION_ROOT_DIR = ./bin/$(TAG)/$(OS)/$(ARCH)
 
 get-deps: $(SOURCE_ROOT_DIR)/go.mod
+	mkdir -p $(SOURCE_ROOT_DIR)/.gocache $(SOURCE_ROOT_DIR)/.gomodcache
+	export GOCACHE=$(SOURCE_ROOT_DIR)/.gocache GOMODCACHE=$(SOURCE_ROOT_DIR)/.gomodcache
 	cd $(SOURCE_ROOT_DIR) && go mod tidy
+	cd $(SOURCE_ROOT_DIR) && go mod vendor
 
 build: $(SOURCE_ROOT_DIR)/pars.go
-	cd $(SOURCE_ROOT_DIR) && GOOS=$(OS) GOARCH=$(ARCH)  $(GO) build -ldflags="-X 'parsdevkit.net/core/utils.version=$(TAG)' -buildid=$(TARGET)" -o ../$(BIN_ROOT_DIR)/$(TARGET) pars.go
+	set -x
+	cd $(SOURCE_ROOT_DIR) && GOFLAGS=-mod=vendor GOCACHE=$(CURDIR)/.gocache GOMODCACHE=$(CURDIR)/.gomodcache GOOS=$(OS) GOARCH=$(ARCH) go build -ldflags="-X 'parsdevkit.net/core/utils.version=$(TAG)' -buildid=$(TARGET)" -o ../$(BIN_ROOT_DIR)/$(TARGET) pars.go
 
 build-complete: get-deps build
 
