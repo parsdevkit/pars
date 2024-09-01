@@ -16,7 +16,7 @@ DESCRIPTION := $(APPLICATION_NAME) is a simple utility.
 TARGET = $(APPLICATION_NAME)
 OS ?=
 ARCH ?=
-TAG ?= 
+TAG ?=
 
 OS_WINDOWS = windows
 OS_MACOS = darwin
@@ -34,16 +34,17 @@ SOURCE_ROOT_DIR = ./src
 BIN_ROOT_DIR = ./bin/$(TAG)/$(OS)/$(ARCH)
 PACKAGE_ROOT_DIR = ./bin/$(TAG)/$(OS)/$(ARCH)
 DISTRIBUTION_ROOT_DIR = ./bin/$(TAG)/$(OS)/$(ARCH)
+TMPDIR := /tmp
 
 get-deps: $(SOURCE_ROOT_DIR)/go.mod
-	mkdir -p $(SOURCE_ROOT_DIR)/.gocache $(SOURCE_ROOT_DIR)/.gomodcache
-	export GOCACHE=$(SOURCE_ROOT_DIR)/.gocache GOMODCACHE=$(SOURCE_ROOT_DIR)/.gomodcache
-	cd $(SOURCE_ROOT_DIR) && go mod tidy
-	cd $(SOURCE_ROOT_DIR) && go mod vendor
+	# mkdir -p <<PKGBUILDDIR>>$(SOURCE_ROOT_DIR)/.gocache <<PKGBUILDDIR>>$(SOURCE_ROOT_DIR)/.gomodcache
+	# cd $(SOURCE_ROOT_DIR) && GOCACHE=<<PKGBUILDDIR>>$(SOURCE_ROOT_DIR)/.gocache GOMODCACHE=<<PKGBUILDDIR>>$(SOURCE_ROOT_DIR)/.gomodcache go mod tidy
+
 
 build: $(SOURCE_ROOT_DIR)/pars.go
 	set -x
-	cd $(SOURCE_ROOT_DIR) && GOFLAGS=-mod=vendor GOCACHE=$(CURDIR)/.gocache GOMODCACHE=$(CURDIR)/.gomodcache GOOS=$(OS) GOARCH=$(ARCH) go build -ldflags="-X 'parsdevkit.net/core/utils.version=$(TAG)' -buildid=$(TARGET)" -o ../$(BIN_ROOT_DIR)/$(TARGET) pars.go
+	mkdir -p $(TMPDIR)/.gocache $(TMPDIR)/.gocacheache
+	cd $(SOURCE_ROOT_DIR) && GOCACHE=$(TMPDIR)/.gocache GOMODCACHE=$(TMPDIR)/.gomodcache GOFLAGS=-mod=vendor GOOS=$(OS) GOARCH=$(ARCH) go build -ldflags="-X 'parsdevkit.net/core/utils.version=$(TAG)' -buildid=$(TARGET)" -o ../$(BIN_ROOT_DIR)/$(TARGET) pars.go
 
 build-complete: get-deps build
 

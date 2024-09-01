@@ -68,7 +68,7 @@ debian/rules: debian-init arch-setup
 	echo "" >> $(DEB_ROOT_DIR)/$@
 	echo "override_dh_auto_build:" >> $(DEB_ROOT_DIR)/$@
 	echo "	set -x" >> $(DEB_ROOT_DIR)/$@
-	echo '	make build TAG=$(TAG) OS=$(OS_LINUX) ARCH=$(ARCH)' >> $(DEB_ROOT_DIR)/$@
+	echo '	make build-complete TAG=$(TAG) OS=$(OS_LINUX) ARCH=$(ARCH)' >> $(DEB_ROOT_DIR)/$@
 	echo "	cp $(BIN_ROOT_DIR)/$(TARGET) $(DEB_ROOT_DIR)" >> $(DEB_ROOT_DIR)/$@
 
 
@@ -178,6 +178,7 @@ debian-source-package: debian-files
 	cp -r $(ROOT_DIR)/makefiles $(DEB_ROOT_DIR)
 	cp $(ROOT_DIR)/Makefile $(DEB_ROOT_DIR)/Makefile
 	chmod +x $(DEB_ROOT_DIR)
+	cd $(ROOT_DIR)/src && go mod vendor
 	cd $(DEB_ROOT_DIR) && dpkg-buildpackage -k$(GPG-KEY) -S
 	@echo "Package has been created with version $(TAG)"
 
