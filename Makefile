@@ -43,7 +43,7 @@ get-deps: $(SOURCE_ROOT_DIR)/go.mod
 
 build: $(SOURCE_ROOT_DIR)/pars.go
 	set -x
-	mkdir -p $(TMPDIR)/.gocache $(TMPDIR)/gocacheache
+	mkdir -p $(TMPDIR)/.gocache $(TMPDIR)/.gocacheache
 	cd $(SOURCE_ROOT_DIR) && GOCACHE=$(TMPDIR)/.gocache GOMODCACHE=$(TMPDIR)/.gomodcache GOFLAGS=-mod=vendor GOOS=$(OS) GOARCH=$(ARCH) go build -ldflags="-X 'parsdevkit.net/core/utils.version=$(TAG)' -buildid=$(TARGET)" -o ../$(BIN_ROOT_DIR)/$(TARGET) pars.go
 
 build-complete: get-deps build
