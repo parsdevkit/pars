@@ -1,74 +1,34 @@
+export OS_LINUX = linux
+export OS_WINDOWS = windows
+export OS_MACOS = darwin
+export OS_BSD = bsd
+
+APPLICATION_FULL_NAME := Pars
+APPLICATION_NAME := pars
+ORGANIZATION := Pars Community
+MAINTANER := Pars Dev Kit <parsdevkit@gmail.com>
+OWNER := Ahmet Soner <ahmettsoner@gmail.com>
+HOMEPAGE := https://parsdevkit.net
+GIT := https://github.com/parsdevkit/pars
+LICENCE_TYPE := Apache-2.0
+DESCRIPTION := $(APPLICATION_NAME) is a simple utility.
+
+HOST_OS =
+HOST_ARCH =
+
+APP = $(APPLICATION_NAME)
+APP_OS ?= $(OS)
+APP_ARCH ?= $(ARCH)
+APP_TAG ?=
+
+RELEASE_DATE = Tue, 24 Aug 2024 00:00:00 +0000
 
 
-# Detect the platform if OS is not provided as an argument
-ifeq ($(OS),Windows_NT)
-	# Windows-specific settings		
-	ifeq ($(OS),)
-		OS = windows
-	endif
-	ifeq ($(ARCH),)
-		UNAME_P := $(PROCESSOR_ARCHITECTURE)
-		ifeq ($(UNAME_P),AMD64)
-			ARCH = amd64
-		endif
-		ifeq ($(UNAME_P),x86)
-			ARCH = 386
-		endif
-		ifeq ($(UNAME_P),ARM64)
-			ARCH = arm64
-		endif
-		ifeq ($(UNAME_P),ARM)
-			ARCH = arm
-		endif
-	endif
-else
-	UNAME_S := $(shell uname -s)
-	ifeq ($(UNAME_S),Darwin)
-		# macOS-specific settings
-		ifeq ($(OS),)
-			OS = darwin
-		endif
-		ifeq ($(ARCH),)
-			UNAME_P := $(shell uname -m)
-			ifeq ($(UNAME_P),x86_64)
-				ARCH = amd64
-			endif
-			ifeq ($(UNAME_P),i386)
-				ARCH = 386
-			endif
-			ifeq ($(UNAME_P),arm64)
-				ARCH = arm64
-			endif
-			ifeq ($(UNAME_P),arm)
-				ARCH = arm
-			endif
-		endif
-	else
-		# Linux-specific settings
-		ifeq ($(OS),)
-			OS = linux
-		endif
-		ifeq ($(ARCH),)
-			UNAME_P := $(shell uname -m)
-			ifeq ($(UNAME_P),x86_64)
-				ARCH = amd64
-			endif
-			ifeq ($(UNAME_P),i386)
-				ARCH = 386
-			endif
-			ifeq ($(UNAME_P),arm64)
-				ARCH = arm64
-			endif
-			ifeq ($(UNAME_P),arm)
-				ARCH = arm
-			endif
-		endif
-	endif
-endif
-
-ifeq ($(OS), windows)
-	TARGET := $(APPLICATION_NAME).exe
-endif
-ifeq ($(TAG), )
-	TAG := v0.0.0
-endif
+ROOT_DIR = .
+SOURCE_ROOT_DIR = ./src
+DIST_ROOT_DIR = ./dist
+BIN_ROOT_DIR = $(DIST_ROOT_DIR)/$(APP_TAG)/$(APP_OS)/bin/$(APP_ARCH)
+BIN_ARTIFACTS_DIR = $(BIN_ROOT_DIR)/artifacts
+PACKAGE_ROOT_DIR = $(DIST_ROOT_DIR)/$(APP_TAG)/$(APP_OS)/pkg
+RELEASE_ROOT_DIR = $(DIST_ROOT_DIR)/$(APP_TAG)/release
+TMP_DIR := /tmp
