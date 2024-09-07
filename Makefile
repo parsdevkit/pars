@@ -1,11 +1,21 @@
 include makefiles/common.mk
-include makefiles/variables.mk
 
 
-ifeq ($(MAKECMDGOALS), deb.binary.pack)
+ifeq ($(MAKECMDGOALS), package.deb.build.binary)
 include ./makefiles/modules/package/deb/binary-pack.mk
 endif
 
+
+ifeq ($(MAKECMDGOALS), package.deb.build.source)
+include ./makefiles/modules/package/deb/source-pack.mk
+endif
+
+ifeq ($(MAKECMDGOALS), package.move-source-code-to-package-source)
+include ./makefiles/modules/package/deb/source-pack.mk
+endif
+
+
+### BUILD
 ifeq ($(MAKECMDGOALS), build.binary)
 include ./makefiles/modules/build/bin/common.mk
 endif
@@ -37,3 +47,14 @@ endif
 ifeq ($(MAKECMDGOALS), build.image.containerd)
 include ./makefiles/modules/build/image/containerd.mk
 endif
+
+### RELEASE
+
+ifeq ($(MAKECMDGOALS), changelog.entry.add)
+include ./makefiles/modules/release/changelog.mk
+endif
+
+ifeq ($(MAKECMDGOALS), changelog.clear)
+include ./makefiles/modules/release/changelog.mk
+endif
+

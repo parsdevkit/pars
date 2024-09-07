@@ -1,4 +1,4 @@
 include ./makefiles/modules/build/bin/common.mk
 
 build.binary.bsd:
-	@echo "Building binaries for BSD..."
+	@$(MAKE) build.binary OS=$(OS_BSD) ARCH=$(ARCH)
