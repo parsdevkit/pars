@@ -4,10 +4,10 @@ DEB_BINARY_ROOT_DIR = $(DEB_ROOT_DIR)/binary/$(APP_ARCH)
 DEB_BINARY_ROOT_PACKAGE_DIR = $(DEB_BINARY_ROOT_DIR)/package
 DEB_BINARY_ROOT_SOURCE_DIR = $(DEB_BINARY_ROOT_DIR)/source
 
-DEB_BINARY_DIR = $(DEB_BINARY_ROOT_DIR)/$(APPLICATION_NAME)
-DEB_DEBIAN_DIR = $(DEB_BINARY_DIR)/debian
-DEB_PACKAGE_DIR = $(DEB_BINARY_DIR)/package
-DEB_SOURCE_DIR = $(DEB_BINARY_DIR)/source
+DEB_BASE_DIR = $(DEB_BINARY_ROOT_DIR)/$(APPLICATION_NAME)
+DEB_DEBIAN_DIR = $(DEB_BASE_DIR)/debian
+DEB_PACKAGE_DIR = $(DEB_BASE_DIR)/package
+DEB_SOURCE_DIR = $(DEB_BASE_DIR)/source
 DEB_CONTROL_FILE_PATH = $(DEB_DEBIAN_DIR)/control
 DEB_CHANGELOG_FILE_PATH = $(DEB_DEBIAN_DIR)/changelog
 DEB_RULES_FILE_PATH = $(DEB_DEBIAN_DIR)/rules
@@ -46,9 +46,9 @@ binary/debian/changelog:
 	echo "$(APPLICATION_NAME) ($(RAW_VERSION)) $(DEB-SERIES); urgency=medium" > $(DEB_CHANGELOG_FILE_PATH)
 	echo "" >> $(DEB_CHANGELOG_FILE_PATH)
 	@if [ -f $(CHANGELOG_PATH) ]; then \
-		cat $(CHANGELOG_PATH) >> $(DEB_CHANGELOG_FILE_PATH); \
+		sed 's/^/  /' $(CHANGELOG_PATH) >> $(DEB_CHANGELOG_FILE_PATH); \
 	else \
-		echo "* Not specified any changes" >> $(DEB_CHANGELOG_FILE_PATH); \
+		echo "  * Not specified any changes" >> $(DEB_CHANGELOG_FILE_PATH); \
 	fi
 	echo "" >> $(DEB_CHANGELOG_FILE_PATH)
 	echo " -- $(MAINTANER)  $(RELEASE_DATE)" >> $(DEB_CHANGELOG_FILE_PATH)
@@ -161,9 +161,9 @@ package.deb.build.binary: binary/debian-files
 ifdef GPG_KEY
 	PACKAGE_KEY := -k$(GPG_KEY)
 endif
-	cd $(DEB_BINARY_DIR) && dpkg-buildpackage -b $(PACKAGE_KEY)
-	mv $(BIN_ARTIFACTS_DIR)/$(APPLICATION_NAME)* $(DEB_PACKAGE_DIR)
-	find $(DEB_PACKAGE_DIR) -maxdepth 1 -name "*.deb" | tar -czvf $(DEB_BINARY_DIR)/$(APPLICATION_NAME)-$(OS_LINUX)-$(APP_ARCH).deb.tar.gz -T -
+	cd $(DEB_BASE_DIR) && dpkg-buildpackage -b $(PACKAGE_KEY)
+	cp $(BIN_ARTIFACTS_DIR)/$(TARGET_APP) $(DEB_BASE_DIR)
+	find $(DEB_PACKAGE_DIR) -maxdepth 1 -name "*.deb" | tar -czvf $(DEB_BASE_DIR)/$(APPLICATION_NAME)-$(OS_LINUX)-$(APP_ARCH).deb.tar.gz -T -
 	@echo "Package has been created with version $(APP_TAG)"
 
 
