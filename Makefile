@@ -1,183 +1,39 @@
-export MAKEFILES := $(wildcard makefiles/*.mk)
-export FULL_PATH_MAKEFILES := $(addprefix $(CURDIR)/, $(MAKEFILES))
-export ALL_FULL_PATH_MAKEFILES := $(CURDIR)/Makefile $(FULL_PATH_MAKEFILES)
-
-APPLICATION_FULL_NAME := Pars
-APPLICATION_NAME := pars
-ORGANIZATION := Pars Community
-MAINTANER := Pars Dev Kit <parsdevkit@gmail.com>
-OWNER := Ahmet Soner <ahmettsoner@gmail.com>
-HOMEPAGE := https://parsdevkit.net
-GIT := https://github.com/parsdevkit/pars
-LICENCE_TYPE := Apache-2.0
-DESCRIPTION := $(APPLICATION_NAME) is a simple utility.
+include makefiles/common.mk
+include makefiles/variables.mk
 
 
-TARGET = $(APPLICATION_NAME)
-OS ?=
-ARCH ?=
-TAG ?=
+ifeq ($(MAKECMDGOALS), deb.binary.pack)
+include ./makefiles/modules/package/deb/binary-pack.mk
+endif
 
-OS_WINDOWS = windows
-OS_MACOS = darwin
+ifeq ($(MAKECMDGOALS), build.binary)
+include ./makefiles/modules/build/bin/common.mk
+endif
 
+ifeq ($(MAKECMDGOALS), build.binary.linux)
+include ./makefiles/modules/build/bin/linux.mk
+endif
 
-include $(FULL_PATH_MAKEFILES)
+ifeq ($(MAKECMDGOALS), build.binary.windows)
+include ./makefiles/modules/build/bin/windows.mk
+endif
 
+ifeq ($(MAKECMDGOALS), build.binary.darwin)
+include ./makefiles/modules/build/bin/darwin.mk
+endif
 
+ifeq ($(MAKECMDGOALS), build.binary.bsd)
+include ./makefiles/modules/build/bin/bsd.mk
+endif
 
-all: print get-deps build
+ifeq ($(MAKECMDGOALS), build.image.lxc)
+include ./makefiles/modules/build/image/lxc.mk
+endif
 
+ifeq ($(MAKECMDGOALS), build.image.docker)
+include ./makefiles/modules/build/image/docker.mk
+endif
 
-ROOT_DIR = .
-SOURCE_ROOT_DIR = ./src
-BIN_ROOT_DIR = ./bin/$(TAG)/$(OS)/$(ARCH)
-PACKAGE_ROOT_DIR = ./bin/$(TAG)/$(OS)/$(ARCH)
-DISTRIBUTION_ROOT_DIR = ./bin/$(TAG)/$(OS)/$(ARCH)
-TMPDIR := /tmp
-
-get-deps: $(SOURCE_ROOT_DIR)/go.mod
-	# mkdir -p <<PKGBUILDDIR>>$(SOURCE_ROOT_DIR)/.gocache <<PKGBUILDDIR>>$(SOURCE_ROOT_DIR)/.gomodcache
-	# cd $(SOURCE_ROOT_DIR) && GOCACHE=<<PKGBUILDDIR>>$(SOURCE_ROOT_DIR)/.gocache GOMODCACHE=<<PKGBUILDDIR>>$(SOURCE_ROOT_DIR)/.gomodcache go mod tidy
-
-
-build: $(SOURCE_ROOT_DIR)/pars.go
-	set -x
-	mkdir -p $(TMPDIR)/.gocache $(TMPDIR)/.gocacheache
-	cd $(SOURCE_ROOT_DIR) && GOCACHE=$(TMPDIR)/.gocache GOMODCACHE=$(TMPDIR)/.gomodcache GOFLAGS=-mod=vendor GOOS=$(OS) GOARCH=$(ARCH) go build -ldflags="-X 'parsdevkit.net/core/utils.version=$(TAG)' -buildid=$(TARGET)" -o ../$(BIN_ROOT_DIR)/$(TARGET) pars.go
-
-build-complete: get-deps build
-
-# init:
-# 	@echo "Initialization step"
-
-# install:
-# 	@echo "Install dependencies"
-
-# uninstall:
-# 	@echo "Uninstall application"
-
-# update:
-# 	@echo "Update application"
-
-
-# rebuild: clean build
-# 	@echo "Rebuild application"
-
-# clean:
-# 	@echo "Clean build artifacts"
-
-# distclean: clean
-# 	@echo "Clean all generated files"
-
-# test:
-# 	@echo "Run tests"
-
-# lint:
-# 	@echo "Run linter"
-
-# format:
-# 	@echo "Format code"
-
-# docs:
-# 	@echo "Generate documentation"
-
-# check:
-# 	@echo "Check application"
-
-# package:
-# 	@echo "Package application"
-
-# deploy:
-# 	@echo "Deploy application"
-
-# run:
-# 	@echo "Run application"
-
-# start:
-# 	@echo "Start application"
-
-# stop:
-# 	@echo "Stop application"
-
-# restart: stop start
-# 	@echo "Restart application"
-
-# status:
-# 	@echo "Check application status"
-
-# logs:
-# 	@echo "Show application logs"
-
-# backup:
-# 	@echo "Backup application data"
-
-# # restore:
-# # 	@echo "Restore application data"
-
-# migrate:
-# 	@echo "Run database migrations"
-
-# config:
-# 	@echo "Configure application"
-
-# setup:
-# 	@echo "Setup environment"
-
-# teardown:
-# 	@echo "Teardown environment"
-
-# docker-build:
-# 	@echo "Build Docker image"
-
-# docker-run:
-# 	@echo "Run Docker container"
-
-# docker-stop:
-# 	@echo "Stop Docker container"
-
-# docker-clean:
-# 	@echo "Clean Docker artifacts"
-
-# docker-push:
-# 	@echo "Push Docker image to registry"
-
-# docker-pull:
-# 	@echo "Pull Docker image from registry"
-
-# docker-compose:
-# 	@echo "Run Docker Compose"
-
-# k8s-deploy:
-# 	@echo "Deploy to Kubernetes"
-
-# k8s-undeploy:
-# 	@echo "Undeploy from Kubernetes"
-
-# k8s-status:
-# 	@echo "Check Kubernetes deployment status"
-
-# k8s-logs:
-# 	@echo "Show Kubernetes logs"
-
-# publish:
-# 	@echo "Publish release"
-
-# release:
-# 	@echo "Create release"
-
-# rollback:
-# 	@echo "Rollback release"
-
-# monitor:
-# 	@echo "Monitor application"
-
-# notify:
-# 	@echo "Send notifications"
-
-help:
-	@echo "Available commands:"
-	@echo "  all:			Restore and Build"
-	@echo "  restore:		Get dependencies and packages"
-	@echo "  build:		Build"
-	@echo "  clean:		Clean up build artifacts"
+ifeq ($(MAKECMDGOALS), build.image.containerd)
+include ./makefiles/modules/build/image/containerd.mk
+endif
