@@ -10,7 +10,16 @@ ifeq ($(MAKECMDGOALS), package.deb.build.source)
 include ./makefiles/modules/package/deb/source-pack.mk
 endif
 
+ifeq ($(MAKECMDGOALS), package.deb.push-ppa)
+include ./makefiles/modules/package/deb/source-pack.mk
+endif
+
+
 ifeq ($(MAKECMDGOALS), package.move-source-code-to-package-source)
+include ./makefiles/modules/package/deb/source-pack.mk
+endif
+
+ifeq ($(MAKECMDGOALS), package.move-binary-to-package-source)
 include ./makefiles/modules/package/deb/source-pack.mk
 endif
 
