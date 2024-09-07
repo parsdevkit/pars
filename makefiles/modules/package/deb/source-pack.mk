@@ -199,7 +199,7 @@ endif
 	cd $(DEB_BASE_DIR) && dpkg-buildpackage -S $(PACKAGE_KEY)
 	@echo "Package has been created with version $(APP_TAG)"
 
-package.deb.push-ppa: debian-source-package
+package.deb.push-ppa:
 	gpg --verify  $(DEB_SOURCE_ROOT_DIR)/*.changes
 	dput ppa:$(PPA) $(DEB_SOURCE_ROOT_DIR)/*.changes
 	@echo "Package has been pushed to $(PPA) with version $(APP_TAG)"
@@ -208,7 +208,7 @@ package.deb.push-ppa: debian-source-package
 
 
 package.move-binary-to-package-source:
-	cp $(BIN_ARTIFACTS_DIR)/$(TARGET_APP) $(DEB_BASE_DIR)
+	cp -r $(BIN_ARTIFACTS_DIR)/$(TARGET_APP) $(DEB_BASE_DIR)
 
 package.move-source-code-to-package-source:
 	cp -r $(ROOT_DIR)/src $(DEB_BASE_DIR)
