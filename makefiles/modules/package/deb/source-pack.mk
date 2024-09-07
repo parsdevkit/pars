@@ -200,9 +200,8 @@ endif
 	@echo "Package has been created with version $(APP_TAG)"
 
 debian-source-push-ppa: debian-source-package
-	cp -p ./packages/$(APP_TAG)/linux/deb/pars* ./packages/$(APP_TAG)/linux/deb/$(APP_ARCH)/package
-	gpg --verify  ./packages/$(APP_TAG)/linux/deb/$(APP_ARCH)/package/*.changes
-	dput ppa:$(PPA) ./packages/$(APP_TAG)/linux/deb/$(APP_ARCH)/package/*.changes
+	gpg --verify  $(DEB_SOURCE_ROOT_DIR)/*.changes
+	dput ppa:$(PPA) $(DEB_SOURCE_ROOT_DIR)/*.changes
 	@echo "Package has been pushed to $(PPA) with version $(APP_TAG)"
 
 
