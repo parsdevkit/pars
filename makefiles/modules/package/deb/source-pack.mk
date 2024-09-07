@@ -36,7 +36,7 @@ source/debian/control:
 
 	echo "" >> $(DEB_CONTROL_FILE_PATH)
 	echo "Package: $(APPLICATION_NAME)" >> $(DEB_CONTROL_FILE_PATH)
-	echo "Architecture: $(DEB_ARCH)" >> $(DEB_CONTROL_FILE_PATH)
+	echo "Architecture: any" >> $(DEB_CONTROL_FILE_PATH)
 	echo 'Depends: $${shlibs:Depends}, $${misc:Depends}, libc6, ca-certificates' >> $(DEB_CONTROL_FILE_PATH)
 	echo "Description: $(DESCRIPTION)" >> $(DEB_CONTROL_FILE_PATH)
 
