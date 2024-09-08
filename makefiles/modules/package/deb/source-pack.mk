@@ -206,7 +206,7 @@ package.deb.push-ppa:
 
 
 package.move-binary-to-package-source:
-	@mkdir $(DEB_BASE_DIR)
+	@mkdir -p $(DEB_BASE_DIR)
 	cp -r $(BIN_ARTIFACTS_DIR)/$(TARGET_APP) $(DEB_BASE_DIR)
 
 package.move-source-code-to-package-source:
