@@ -162,7 +162,7 @@ ifdef GPG_KEY
 	PACKAGE_KEY := -k$(GPG_KEY)
 endif
 	cd $(DEB_BASE_DIR) && dpkg-buildpackage -b $(PACKAGE_KEY)
-	cp $(BIN_ARTIFACTS_DIR)/$(TARGET_APP) $(DEB_BASE_DIR)
+	cp $(BIN_ARTIFACTS_DIR)/$(APP) $(DEB_BASE_DIR)
 	find $(DEB_PACKAGE_DIR) -maxdepth 1 -name "*.deb" | tar -czvf $(DEB_BASE_DIR)/$(APPLICATION_NAME)-$(OS_LINUX)-$(APP_ARCH).deb.tar.gz -T -
 	@echo "Package has been created with version $(APP_TAG)"
 

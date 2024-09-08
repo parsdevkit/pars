@@ -130,7 +130,7 @@ source/debian/compat:
 	echo "12" > $(DEB_COMPAT_FILE_PATH)
 
 source/debian/install:
-	echo "$(APPLICATION_NAME) $(DEB_INSTALLATION_DIR)/" > $(DEB_INSTALL_FILE_PATH)
+	echo "$(DEB_BASE_DIR)/$(APP) $(DEB_INSTALLATION_DIR)/" > $(DEB_INSTALL_FILE_PATH)
 
 source/debian/preinst:
 	echo "#!/bin/sh" > $(DEB_PREINST_FILE_PATH)
@@ -207,7 +207,7 @@ package.deb.push-ppa:
 
 package.move-binary-to-package-source:
 	@mkdir -p $(DEB_BASE_DIR)
-	cp -r $(BIN_ARTIFACTS_DIR)/$(TARGET_APP) $(DEB_BASE_DIR)
+	cp -r $(BIN_ARTIFACTS_DIR)/$(APP) $(DEB_BASE_DIR)
 
 package.move-source-code-to-package-source:
 	cp -r $(ROOT_DIR)/src $(DEB_BASE_DIR)
