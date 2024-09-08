@@ -69,26 +69,26 @@ source/debian/rules:
 	
 	echo 'ifeq ($$(DEB_HOST_ARCH), i386)' >> $(DEB_RULES_FILE_PATH)
 # Burda debian-binary-package kullanıbilir?
-	echo '	$(MAKE) build.binary.linux.vendor TAG=$(APP_TAG) ARCH=$(APP_ARCH)' >> $(DEB_RULES_FILE_PATH)
-	echo '	$(MAKE) package.move-binary-to-package-source TAG=$(APP_TAG) OS=$(OS_LINUX) ARCH=$(APP_ARCH)' >> $(DEB_RULES_FILE_PATH)
+	echo '	$(MAKE) build.binary.linux.vendor TAG=$(APP_TAG) ARCH=$(ARCH_LINUX_386)' >> $(DEB_RULES_FILE_PATH)
+	echo '	$(MAKE) package.move-binary-to-package-source TAG=$(APP_TAG) OS=$(OS_LINUX) ARCH=$(ARCH_LINUX_386)' >> $(DEB_RULES_FILE_PATH)
 	echo "endif" >> $(DEB_RULES_FILE_PATH)
 	
 	echo 'ifeq ($$(DEB_HOST_ARCH), amd64)' >> $(DEB_RULES_FILE_PATH)
 # Burda debian-binary-package kullanıbilir?
-	echo '	$(MAKE) build.binary.linux.vendor TAG=$(APP_TAG) ARCH=$(APP_ARCH)' >> $(DEB_RULES_FILE_PATH)
-	echo '	$(MAKE) package.move-binary-to-package-source TAG=$(APP_TAG) OS=$(OS_LINUX) ARCH=$(APP_ARCH)' >> $(DEB_RULES_FILE_PATH)
+	echo '	$(MAKE) build.binary.linux.vendor TAG=$(APP_TAG) ARCH=$(ARCH_LINUX_AMD64)' >> $(DEB_RULES_FILE_PATH)
+	echo '	$(MAKE) package.move-binary-to-package-source TAG=$(APP_TAG) OS=$(OS_LINUX) ARCH=$(ARCH_LINUX_AMD64)' >> $(DEB_RULES_FILE_PATH)
 	echo "endif" >> $(DEB_RULES_FILE_PATH)
 	
 	echo 'ifeq ($$(DEB_HOST_ARCH), armhf)' >> $(DEB_RULES_FILE_PATH)
 # Burda debian-binary-package kullanıbilir?
-	echo '	$(MAKE) build.binary.linux.vendor TAG=$(APP_TAG) ARCH=$(APP_ARCH)' >> $(DEB_RULES_FILE_PATH)
-	echo '	$(MAKE) package.move-binary-to-package-source TAG=$(APP_TAG) OS=$(OS_LINUX) ARCH=$(APP_ARCH)' >> $(DEB_RULES_FILE_PATH)
+	echo '	$(MAKE) build.binary.linux.vendor TAG=$(APP_TAG) ARCH=$(ARCH_LINUX_ARM)' >> $(DEB_RULES_FILE_PATH)
+	echo '	$(MAKE) package.move-binary-to-package-source TAG=$(APP_TAG) OS=$(OS_LINUX) ARCH=$(ARCH_LINUX_ARM)' >> $(DEB_RULES_FILE_PATH)
 	echo "endif" >> $(DEB_RULES_FILE_PATH)
 	
 	echo 'ifeq ($$(DEB_HOST_ARCH), arm64)' >> $(DEB_RULES_FILE_PATH)
 # Burda debian-binary-package kullanıbilir?
-	echo '	$(MAKE) build.binary.linux.vendor TAG=$(APP_TAG) ARCH=$(APP_ARCH)' >> $(DEB_RULES_FILE_PATH)
-	echo '	$(MAKE) package.move-binary-to-package-source TAG=$(APP_TAG) OS=$(OS_LINUX) ARCH=$(APP_ARCH)' >> $(DEB_RULES_FILE_PATH)
+	echo '	$(MAKE) build.binary.linux.vendor TAG=$(APP_TAG) ARCH=$(ARCH_LINUX_ARM64)' >> $(DEB_RULES_FILE_PATH)
+	echo '	$(MAKE) package.move-binary-to-package-source TAG=$(APP_TAG) OS=$(OS_LINUX) ARCH=$(ARCH_LINUX_ARM64)' >> $(DEB_RULES_FILE_PATH)
 	echo "endif" >> $(DEB_RULES_FILE_PATH)
 
 
