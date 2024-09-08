@@ -11,6 +11,7 @@
 /.venv/**
 /.VSCodeCounter/**
 pars*.db
+.channel_number
 
 *.exe
 *.exe~
