@@ -3,6 +3,11 @@ export OS_WINDOWS = windows
 export OS_MACOS = darwin
 export OS_BSD = bsd
 
+export ARCH_LINUX_386 = 386
+export ARCH_LINUX_AMD64 = amd64
+export ARCH_LINUX_ARM = arm
+export ARCH_LINUX_ARM64 = arm64
+
 APPLICATION_FULL_NAME := Pars
 APPLICATION_NAME := pars
 ORGANIZATION := Pars Community
