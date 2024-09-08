@@ -1,6 +1,6 @@
 include ./makefiles/modules/package/deb/common.mk
 
-DEB_SOURCE_ROOT_DIR = $(DEB_ROOT_DIR)/source/
+DEB_SOURCE_ROOT_DIR = $(DEB_ROOT_DIR)/source
 DEB_SOURCE_ROOT_PACKAGE_DIR = $(DEB_SOURCE_ROOT_DIR)/package
 DEB_SOURCE_ROOT_SOURCE_DIR = $(DEB_SOURCE_ROOT_DIR)/source
 DEB_BASE_DIR = $(DEB_SOURCE_ROOT_DIR)/$(APPLICATION_NAME)
@@ -21,8 +21,6 @@ DEB_POSTRM_FILE_PATH = $(DEB_DEBIAN_DIR)/postrm
 binary/debian-init:
 	@mkdir -p $(DEB_DEBIAN_DIR)
 	@mkdir -p $(DEB_DEBIAN_DIR)/source
-	# @mkdir -p $(DEB_SOURCE_ROOT_SOURCE_DIR)
-	# @mkdir -p $(DEB_SOURCE_ROOT_PACKAGE_DIR)
 
 source/debian/control:
 	echo "Source: $(APPLICATION_NAME)" > $(DEB_CONTROL_FILE_PATH)
@@ -208,6 +206,7 @@ package.deb.push-ppa:
 
 
 package.move-binary-to-package-source:
+	@mkdir $(DEB_BASE_DIR)
 	cp -r $(BIN_ARTIFACTS_DIR)/$(TARGET_APP) $(DEB_BASE_DIR)
 
 package.move-source-code-to-package-source:
