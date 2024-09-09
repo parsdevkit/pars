@@ -64,6 +64,12 @@ var RootCmd = &cobra.Command{
 		if logLevelEnumFlag.Value != core.LogLevels.Silence {
 			if logrusLogLevel, err := log.ParseLevel(string(logLevelEnumFlag.Value)); err != nil {
 				fmt.Println(err)
+				// file, err := os.OpenFile(filepath.Join(utils.GetLogLocation(), "app.log"), os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0666)
+				// if err != nil {
+				// 	log.Fatal(err)
+				// }
+				// defer file.Close()
+				// log.SetOutput(file)
 			} else {
 				log.SetLevel(logrusLogLevel)
 			}
@@ -130,12 +136,11 @@ func initConfig() {
 	if !utils.IsEmpty(cfgFile) {
 		viper.SetConfigFile(cfgFile)
 	} else {
-		home, err := os.UserHomeDir()
-		cobra.CheckErr(err)
+		configDir := utils.GetConfigLocation()
 
-		viper.AddConfigPath(home)
+		viper.AddConfigPath(configDir)
+		viper.SetConfigName("config")
 		viper.SetConfigType("yaml")
-		viper.SetConfigName(".pars")
 	}
 
 	viper.AutomaticEnv()

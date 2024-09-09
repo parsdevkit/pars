@@ -20,6 +20,33 @@ func FindBasePath(absolutePath, relativePath string) string {
 	return strings.TrimRight(absolutePath, relativePath)
 
 }
+func BaseDirFromFilePath(filePath, segment string) (string, error) {
+	// Normalize the file path and segment to use the correct path separator
+	absPath, err := filepath.Abs(filePath)
+	if err != nil {
+		return "", fmt.Errorf("error getting absolute path: %v", err)
+	}
+
+	// Convert the segment to use the correct path separator
+	segment = filepath.ToSlash(segment)
+
+	// Convert the file path to use the correct path separator
+	absPath = filepath.ToSlash(absPath)
+
+	// Check if the segment is part of the file path
+	if !strings.HasSuffix(absPath, segment) {
+		return "", fmt.Errorf("segment not found in the file path")
+	}
+
+	// Remove the segment from the file path
+	baseDir := strings.TrimSuffix(absPath, segment)
+
+	// Ensure we end up with a directory path
+	baseDir = filepath.Dir(baseDir)
+
+	// Return the base directory
+	return baseDir, nil
+}
 
 func PathToArray(path string) []string {
 	var separator string = "/"
