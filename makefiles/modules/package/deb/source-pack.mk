@@ -67,25 +67,25 @@ source/debian/rules:
 	echo "" >> $(DEB_RULES_FILE_PATH)
 	echo "override_dh_auto_build:" >> $(DEB_RULES_FILE_PATH)
 	
-	echo 'ifeq ($$(DEB_HOST_ARCH), i386)' >> $(DEB_RULES_FILE_PATH)
+	echo 'ifeq ($$(DEB_HOST_ARCH), $$(LINUX_ARCH_386_VALUE))' >> $(DEB_RULES_FILE_PATH)
 # Burda debian-binary-package kullanıbilir?
 	echo '	$(MAKE) build.binary.linux.vendor TAG=$(APP_TAG) ARCH=$(ARCH_LINUX_386)' >> $(DEB_RULES_FILE_PATH)
 	echo '	$(MAKE) package.move-binary-to-package-source TAG=$(APP_TAG) OS=$(OS_LINUX) ARCH=$(ARCH_LINUX_386)' >> $(DEB_RULES_FILE_PATH)
 	echo "endif" >> $(DEB_RULES_FILE_PATH)
 	
-	echo 'ifeq ($$(DEB_HOST_ARCH), amd64)' >> $(DEB_RULES_FILE_PATH)
+	echo 'ifeq ($$(DEB_HOST_ARCH), $$(LINUX_ARCH_AMD64_VALUE))' >> $(DEB_RULES_FILE_PATH)
 # Burda debian-binary-package kullanıbilir?
 	echo '	$(MAKE) build.binary.linux.vendor TAG=$(APP_TAG) ARCH=$(ARCH_LINUX_AMD64)' >> $(DEB_RULES_FILE_PATH)
 	echo '	$(MAKE) package.move-binary-to-package-source TAG=$(APP_TAG) OS=$(OS_LINUX) ARCH=$(ARCH_LINUX_AMD64)' >> $(DEB_RULES_FILE_PATH)
 	echo "endif" >> $(DEB_RULES_FILE_PATH)
 	
-	echo 'ifeq ($$(DEB_HOST_ARCH), armhf)' >> $(DEB_RULES_FILE_PATH)
+	echo 'ifeq ($$(DEB_HOST_ARCH), $$(LINUX_ARCH_ARM_VALUE))' >> $(DEB_RULES_FILE_PATH)
 # Burda debian-binary-package kullanıbilir?
 	echo '	$(MAKE) build.binary.linux.vendor TAG=$(APP_TAG) ARCH=$(ARCH_LINUX_ARM)' >> $(DEB_RULES_FILE_PATH)
 	echo '	$(MAKE) package.move-binary-to-package-source TAG=$(APP_TAG) OS=$(OS_LINUX) ARCH=$(ARCH_LINUX_ARM)' >> $(DEB_RULES_FILE_PATH)
 	echo "endif" >> $(DEB_RULES_FILE_PATH)
 	
-	echo 'ifeq ($$(DEB_HOST_ARCH), arm64)' >> $(DEB_RULES_FILE_PATH)
+	echo 'ifeq ($$(DEB_HOST_ARCH), $$(LINUX_ARCH_ARM64_VALUE))' >> $(DEB_RULES_FILE_PATH)
 # Burda debian-binary-package kullanıbilir?
 	echo '	$(MAKE) build.binary.linux.vendor TAG=$(APP_TAG) ARCH=$(ARCH_LINUX_ARM64)' >> $(DEB_RULES_FILE_PATH)
 	echo '	$(MAKE) package.move-binary-to-package-source TAG=$(APP_TAG) OS=$(OS_LINUX) ARCH=$(ARCH_LINUX_ARM64)' >> $(DEB_RULES_FILE_PATH)
@@ -130,15 +130,15 @@ source/debian/compat:
 	echo "12" > $(DEB_COMPAT_FILE_PATH)
 
 source/debian/install:
-	echo "$(DEB_BASE_DIR)/$(APP) $(DEB_INSTALLATION_DIR)/" > $(DEB_INSTALL_FILE_PATH)
+	# echo "$(DEB_BASE_DIR)/$(APP) /$(DEB_BINARY_DIR)/" > $(DEB_INSTALL_FILE_PATH)
 
 source/debian/preinst:
 	echo "#!/bin/sh" > $(DEB_PREINST_FILE_PATH)
 	echo "set -e" >> $(DEB_PREINST_FILE_PATH)
 	echo "" >> $(DEB_PREINST_FILE_PATH)
 	echo 'echo "Running pre-installation tasks..."' >> $(DEB_PREINST_FILE_PATH)
-	# echo "if [ ! -L $(DEB_INSTALLATION_PATH) ]; then" >> $(DEB_PREINST_FILE_PATH)
-	# echo '    echo "Warning: $(DEB_INSTALLATION_PATH) already exists. It will be overwritten."' >> $(DEB_PREINST_FILE_PATH)
+	# echo "if [ ! -L /$(DEB_BINARY_PATH) ]; then" >> $(DEB_PREINST_FILE_PATH)
+	# echo '    echo "Warning: /$(DEB_BINARY_PATH) already exists. It will be overwritten."' >> $(DEB_PREINST_FILE_PATH)
 	# echo "fi" >> $(DEB_PREINST_FILE_PATH)
 	echo "" >> $(DEB_PREINST_FILE_PATH)
 	echo 'echo "Pre-installation tasks completed."' >> $(DEB_PREINST_FILE_PATH)
@@ -149,8 +149,8 @@ source/debian/postinst:
 	echo "set -e" >> $(DEB_POSTINT_FILE_PATH)
 	echo "" >> $(DEB_POSTINT_FILE_PATH)
 	echo 'echo "Running post-installation tasks..."' >> $(DEB_POSTINT_FILE_PATH)
-	# echo "if [ ! -L $(DEB_INSTALLATION_PATH) ]; then" >> $(DEB_POSTINT_FILE_PATH)
-	# echo "    ln -s $(DEB_INSTALLATION_PATH) $(DEB_INSTALLATION_PATH)" >> $(DEB_POSTINT_FILE_PATH)
+	# echo "if [ ! -L /$(DEB_BINARY_PATH) ]; then" >> $(DEB_POSTINT_FILE_PATH)
+	# echo "    ln -s /$(DEB_BINARY_PATH) /$(DEB_BINARY_PATH)" >> $(DEB_POSTINT_FILE_PATH)
 	# echo "fi" >> $(DEB_POSTINT_FILE_PATH)
 	# echo "" >> $(DEB_POSTINT_FILE_PATH)
 	# echo "# systemctl enable $(APPLICATION_NAME)" >> $(DEB_POSTINT_FILE_PATH)
@@ -163,8 +163,8 @@ source/debian/prerm:
 	echo "set -e" >> $(DEB_PRERM_FILE_PATH)
 	echo "" >> $(DEB_PRERM_FILE_PATH)
 	echo 'echo "Running pre-removal tasks..."' >> $(DEB_PRERM_FILE_PATH)
-	# echo "if [ ! -L $(DEB_INSTALLATION_PATH) ]; then" >> $(DEB_PRERM_FILE_PATH)
-	# echo "    rm $(DEB_INSTALLATION_PATH) $(DEB_INSTALLATION_PATH)" >> $(DEB_PRERM_FILE_PATH)
+	# echo "if [ ! -L /$(DEB_BINARY_PATH) ]; then" >> $(DEB_PRERM_FILE_PATH)
+	# echo "    rm /$(DEB_BINARY_PATH) /$(DEB_BINARY_PATH)" >> $(DEB_PRERM_FILE_PATH)
 	# echo "fi" >> $(DEB_PRERM_FILE_PATH)
 	# echo "" >> $(DEB_PRERM_FILE_PATH)
 	# echo "# systemctl stop $(APPLICATION_NAME)" >> $(DEB_PRERM_FILE_PATH)
@@ -206,12 +206,22 @@ package.deb.push-ppa:
 
 
 package.move-binary-to-package-source:
-	@mkdir -p $(DEB_BASE_DIR)
-	cp -r $(BIN_ARTIFACTS_DIR)/$(APP) $(DEB_BASE_DIR)
+	@mkdir -p $(DEB_BASE_DIR)/$(DEB_BINARY_DIR)
+	@mkdir -p $(DEB_BASE_DIR)/$(DEB_CONFIG_DIR)
+	@mkdir -p $(DEB_BASE_DIR)/$(DEB_LOG_DIR)
+	@mkdir -p $(DEB_BASE_DIR)/$(DEB_DATA_DIR)
+	@mkdir -p $(DEB_BASE_DIR)/$(DEB_CACHE_DIR)
+	@mkdir -p $(DEB_BASE_DIR)/$(DEB_LIB_DIR)
+	@mkdir -p $(DEB_BASE_DIR)/$(DEB_SHARED_DIR)
+	@mkdir -p $(DEB_BASE_DIR)/$(DEB_DOCS_DIR)
+	cp -r $(BIN_ARTIFACTS_DIR)/$(APP) $(DEB_BASE_DIR)/$(DEB_BINARY_DIR)
+	cp -r $(DOCS_USER_DOCS_DIR) $(DEB_BASE_DIR)/$(DEB_DOCS_DIR)
+
 
 package.move-source-code-to-package-source:
-	cp -r $(ROOT_DIR)/src $(DEB_BASE_DIR)
-	cp -r $(ROOT_DIR)/makefiles $(DEB_BASE_DIR)
-	cp $(ROOT_DIR)/Makefile $(DEB_BASE_DIR)/Makefile
+	cp -r $(SOURCE_ROOT_DIR) $(DEB_BASE_DIR)
+	cp -r $(MAKEFILES_ROOT_DIR) $(DEB_BASE_DIR)
+	cp -r $(DOCS_ROOT_DIR) $(DEB_BASE_DIR)
+	cp $(MAKEFILE_PATH) $(DEB_BASE_DIR)/Makefile
 	chmod +x $(DEB_BASE_DIR)
 

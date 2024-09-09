@@ -101,15 +101,15 @@ binary/debian/compat:
 	echo "12" > $(DEB_COMPAT_FILE_PATH)
 
 binary/debian/install:
-	echo "$(APPLICATION_NAME) $(DEB_INSTALLATION_DIR)/" > $(DEB_INSTALL_FILE_PATH)
+	# echo "$(APPLICATION_NAME) /$(DEB_BINARY_DIR)/" > $(DEB_INSTALL_FILE_PATH)
 
 binary/debian/preinst:
 	echo "#!/bin/sh" > $(DEB_PREINST_FILE_PATH)
 	echo "set -e" >> $(DEB_PREINST_FILE_PATH)
 	echo "" >> $(DEB_PREINST_FILE_PATH)
 	echo 'echo "Running pre-installation tasks..."' >> $(DEB_PREINST_FILE_PATH)
-	# echo "if [ ! -L $(DEB_INSTALLATION_PATH) ]; then" >> $(DEB_PREINST_FILE_PATH)
-	# echo '    echo "Warning: $(DEB_INSTALLATION_PATH) already exists. It will be overwritten."' >> $(DEB_PREINST_FILE_PATH)
+	# echo "if [ ! -L /$(DEB_BINARY_PATH) ]; then" >> $(DEB_PREINST_FILE_PATH)
+	# echo '    echo "Warning: /$(DEB_BINARY_PATH) already exists. It will be overwritten."' >> $(DEB_PREINST_FILE_PATH)
 	# echo "fi" >> $(DEB_PREINST_FILE_PATH)
 	echo "" >> $(DEB_PREINST_FILE_PATH)
 	echo 'echo "Pre-installation tasks completed."' >> $(DEB_PREINST_FILE_PATH)
@@ -120,8 +120,8 @@ binary/debian/postinst:
 	echo "set -e" >> $(DEB_POSTINT_FILE_PATH)
 	echo "" >> $(DEB_POSTINT_FILE_PATH)
 	echo 'echo "Running post-installation tasks..."' >> $(DEB_POSTINT_FILE_PATH)
-	# echo "if [ ! -L $(DEB_INSTALLATION_PATH) ]; then" >> $(DEB_POSTINT_FILE_PATH)
-	# echo "    ln -s $(DEB_INSTALLATION_PATH) $(DEB_INSTALLATION_PATH)" >> $(DEB_POSTINT_FILE_PATH)
+	# echo "if [ ! -L /$(DEB_BINARY_PATH) ]; then" >> $(DEB_POSTINT_FILE_PATH)
+	# echo "    ln -s /$(DEB_BINARY_PATH) /$(DEB_BINARY_PATH)" >> $(DEB_POSTINT_FILE_PATH)
 	# echo "fi" >> $(DEB_POSTINT_FILE_PATH)
 	# echo "" >> $(DEB_POSTINT_FILE_PATH)
 	# echo "# systemctl enable $(APPLICATION_NAME)" >> $(DEB_POSTINT_FILE_PATH)
@@ -134,8 +134,8 @@ binary/debian/prerm:
 	echo "set -e" >> $(DEB_PRERM_FILE_PATH)
 	echo "" >> $(DEB_PRERM_FILE_PATH)
 	echo 'echo "Running pre-removal tasks..."' >> $(DEB_PRERM_FILE_PATH)
-	# echo "if [ ! -L $(DEB_INSTALLATION_PATH) ]; then" >> $(DEB_PRERM_FILE_PATH)
-	# echo "    rm $(DEB_INSTALLATION_PATH) $(DEB_INSTALLATION_PATH)" >> $(DEB_PRERM_FILE_PATH)
+	# echo "if [ ! -L /$(DEB_BINARY_PATH) ]; then" >> $(DEB_PRERM_FILE_PATH)
+	# echo "    rm /$(DEB_BINARY_PATH) /$(DEB_BINARY_PATH)" >> $(DEB_PRERM_FILE_PATH)
 	# echo "fi" >> $(DEB_PRERM_FILE_PATH)
 	# echo "" >> $(DEB_PRERM_FILE_PATH)
 	# echo "# systemctl stop $(APPLICATION_NAME)" >> $(DEB_PRERM_FILE_PATH)
@@ -161,11 +161,20 @@ package.deb.build.binary: binary/debian-files
 ifdef GPG_KEY
 	PACKAGE_KEY := -k$(GPG_KEY)
 endif
+	@mkdir -p $(DEB_BASE_DIR)/$(DEB_BINARY_DIR)
+	@mkdir -p $(DEB_BASE_DIR)/$(DEB_CONFIG_DIR)
+	@mkdir -p $(DEB_BASE_DIR)/$(DEB_LOG_DIR)
+	@mkdir -p $(DEB_BASE_DIR)/$(DEB_DATA_DIR)
+	@mkdir -p $(DEB_BASE_DIR)/$(DEB_CACHE_DIR)
+	@mkdir -p $(DEB_BASE_DIR)/$(DEB_LIB_DIR)
+	@mkdir -p $(DEB_BASE_DIR)/$(DEB_SHARED_DIR)
+	@mkdir -p $(DEB_BASE_DIR)/$(DEB_DOCS_DIR)
+	cp -r $(BIN_ARTIFACTS_DIR)/$(APP) $(DEB_BASE_DIR)/$(DEB_BINARY_DIR)
+	cp -r $(DOCS_USER_DOCS_DIR) $(DEB_BASE_DIR)/$(DEB_DOCS_DIR)
+
 	cd $(DEB_BASE_DIR) && dpkg-buildpackage -b $(PACKAGE_KEY)
-	cp $(BIN_ARTIFACTS_DIR)/$(APP) $(DEB_BASE_DIR)
 	find $(DEB_PACKAGE_DIR) -maxdepth 1 -name "*.deb" | tar -czvf $(DEB_BASE_DIR)/$(APPLICATION_NAME)-$(OS_LINUX)-$(APP_ARCH).deb.tar.gz -T -
 	@echo "Package has been created with version $(APP_TAG)"
-
 
 
 # package.deb.compress:

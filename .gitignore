@@ -6,6 +6,7 @@
 /data/**
 /dist/**
 /temp/**
+/config/**
 /workspace**/**
 /src/vendor/**
 /.venv/**
