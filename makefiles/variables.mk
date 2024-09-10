@@ -38,6 +38,7 @@ GIT := https://github.com/parsdevkit/pars
 LICENCE_TYPE := Apache-2.0
 DESCRIPTION := $(APPLICATION_NAME) is a simple utility.
 
+STAGE ?= prod
 HOST_OS =
 HOST_ARCH =
 
@@ -45,6 +46,7 @@ APP = $(APPLICATION_NAME)
 APP_OS ?= $(OS)
 APP_ARCH ?= $(ARCH)
 APP_TAG ?=
+APP_STAGE ?= $(STAGE)
 
 RELEASE_DATE = Tue, 24 Aug 2024 00:00:00 +0000
 

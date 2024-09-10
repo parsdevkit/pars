@@ -114,17 +114,17 @@ func getDefaultPlatformDocumentDir() string {
 		}
 		return "C:\\Program Files\\Pars\\doc"
 	case "darwin":
-		return "/share/doc/pars"
+		return "/usr/share/doc/pars"
 	case "linux":
-		return "/share/doc/pars"
+		return "/usr/share/doc/pars"
 	case "freebsd":
-		return "/share/doc/pars"
+		return "/usr/share/doc/pars"
 	case "openbsd":
-		return "/share/doc/pars"
+		return "/usr/share/doc/pars"
 	case "netbsd":
-		return "/share/doc/pars"
+		return "/usr/share/doc/pars"
 	default:
-		return "/share/doc/pars"
+		return "/usr/share/doc/pars"
 	}
 }
 
@@ -152,17 +152,17 @@ func getDefaultPlatformDataDir() string {
 	case "windows":
 		return "C:\\ProgramData\\Pars\\data"
 	case "darwin":
-		return "/var/pars/data"
+		return "/var/lib/pars/data"
 	case "linux":
-		return "/var/pars/data"
+		return "/var/lib/pars/data"
 	case "freebsd":
-		return "/var/pars/data"
+		return "/var/lib/pars/data"
 	case "openbsd":
-		return "/var/pars/data"
+		return "/var/lib/pars/data"
 	case "netbsd":
-		return "/var/pars/data"
+		return "/var/lib/pars/data"
 	default:
-		return "/var/pars/data"
+		return "/var/lib/pars/data"
 	}
 }
 
