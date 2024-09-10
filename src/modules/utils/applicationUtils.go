@@ -36,11 +36,11 @@ func getDefaultPlatformApplicationDir() string {
 	switch runtime.GOOS {
 	case "windows":
 		if runtime.GOARCH == "amd64" {
-			return "C:\\Program Files\\pars\\bin"
+			return "C:\\Program Files\\Pars\\bin"
 		} else if runtime.GOARCH == "386" {
-			return "C:\\Program Files (x86)\\pars\\bin"
+			return "C:\\Program Files (x86)\\Pars\\bin"
 		}
-		return "C:\\Program Files\\pars"
+		return "C:\\Program Files\\Pars\\bin"
 	case "darwin":
 		return "/usr/bin"
 	case "linux":
@@ -60,11 +60,11 @@ func getDefaultPlatformLibraryDir() string {
 	switch runtime.GOOS {
 	case "windows":
 		if runtime.GOARCH == "amd64" {
-			return "C:\\Program Files\\pars\\lib"
+			return "C:\\Program Files\\Pars\\lib"
 		} else if runtime.GOARCH == "386" {
-			return "C:\\Program Files (x86)\\pars\\lib"
+			return "C:\\Program Files (x86)\\Pars\\lib"
 		}
-		return "C:\\Program Files\\pars"
+		return "C:\\Program Files\\Pars\\lib"
 	case "darwin":
 		return "/usr/lib/pars"
 	case "linux":
@@ -80,15 +80,15 @@ func getDefaultPlatformLibraryDir() string {
 	}
 }
 
-func getDefaultPlatformDPluginDir() string {
+func getDefaultPlatformPluginDir() string {
 	switch runtime.GOOS {
 	case "windows":
 		if runtime.GOARCH == "amd64" {
-			return "C:\\Program Files\\pars\\plugins"
+			return "C:\\Program Files\\Pars\\plugins"
 		} else if runtime.GOARCH == "386" {
-			return "C:\\Program Files (x86)\\pars\\plugins"
+			return "C:\\Program Files (x86)\\Pars\\plugins"
 		}
-		return "C:\\Program Files\\pars"
+		return "C:\\Program Files\\Pars\\plugins"
 	case "darwin":
 		return "/usr/share/pars/plugins"
 	case "linux":
@@ -108,11 +108,11 @@ func getDefaultPlatformDocumentDir() string {
 	switch runtime.GOOS {
 	case "windows":
 		if runtime.GOARCH == "amd64" {
-			return "C:\\Program Files\\pars\\doc"
+			return "C:\\Program Files\\Pars\\doc"
 		} else if runtime.GOARCH == "386" {
-			return "C:\\Program Files (x86)\\pars\\doc"
+			return "C:\\Program Files (x86)\\Pars\\doc"
 		}
-		return "C:\\Program Files\\pars"
+		return "C:\\Program Files\\Pars\\doc"
 	case "darwin":
 		return "/share/doc/pars"
 	case "linux":
@@ -131,7 +131,7 @@ func getDefaultPlatformDocumentDir() string {
 func getDefaultPlatformConfigDir() string {
 	switch runtime.GOOS {
 	case "windows":
-		return "C:\\ProgramData\\pars\\config"
+		return "C:\\ProgramData\\Pars\\config"
 	case "darwin":
 		return "/etc/pars"
 	case "linux":
@@ -150,7 +150,7 @@ func getDefaultPlatformConfigDir() string {
 func getDefaultPlatformDataDir() string {
 	switch runtime.GOOS {
 	case "windows":
-		return "C:\\ProgramData\\pars\\data"
+		return "C:\\ProgramData\\Pars\\data"
 	case "darwin":
 		return "/var/pars/data"
 	case "linux":
@@ -169,7 +169,7 @@ func getDefaultPlatformDataDir() string {
 func getDefaultPlatformLogDir() string {
 	switch runtime.GOOS {
 	case "windows":
-		return "C:\\ProgramData\\pars\\logs"
+		return "C:\\ProgramData\\Pars\\logs"
 	case "darwin":
 		return "/var/log/pars"
 	case "linux":
@@ -188,7 +188,7 @@ func getDefaultPlatformLogDir() string {
 func getDefaultPlatformCacheDir() string {
 	switch runtime.GOOS {
 	case "windows":
-		return "C:\\ProgramData\\pars\\cache"
+		return "C:\\ProgramData\\Pars\\cache"
 	case "darwin":
 		return "/var/cache/pars"
 	case "linux":
@@ -238,23 +238,15 @@ func GetLogLevel() core.LogLevel {
 
 func GetCodeBaseLocation() string {
 	if IsEmpty(stage) || stage == string(StageTypes.None) {
-
-		project_root := os.Getenv("PARS_PROJECT_ROOT")
-
-		if IsEmpty(project_root) {
-			_, file, _, ok := runtime.Caller(0)
-			if !ok {
-				fmt.Println("Error getting caller")
-			}
-			project_root, err := BaseDirFromFilePath(file, "src/modules/utils/applicationUtils.go")
-			if err != nil {
-				fmt.Println("Error:", err)
-			}
-			return project_root
-
+		_, file, _, ok := runtime.Caller(0)
+		if !ok {
+			fmt.Println("Error getting caller")
+		}
+		project_root, err := BaseDirFromFilePath(file, "src/modules/utils/applicationUtils.go")
+		if err != nil {
+			fmt.Println("Error:", err)
 		}
 		return project_root
-
 	} else if stage == string(StageTypes.Dev) {
 		project_root := os.Getenv("PARS_PROJECT_ROOT")
 
@@ -276,15 +268,67 @@ func GetExecutableLocation() string {
 	return exeDir
 }
 
+func PrepareLocations() error {
+	err := PrepareConfigLocation()
+	if err != nil {
+		return err
+	}
+	err = PrepareLogLocation()
+	if err != nil {
+		return err
+	}
+
+	err = PrepareDocumentLocation()
+	if err != nil {
+		return err
+	}
+
+	err = PrepareDataLocation()
+	if err != nil {
+		return err
+	}
+
+	err = PrepareCacheLocation()
+	if err != nil {
+		return err
+	}
+
+	err = PrepareBinariesLocation()
+	if err != nil {
+		return err
+	}
+
+	err = PreparePluginsLocation()
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
 func GetConfigLocation() string {
 	if IsEmpty(stage) || stage == string(StageTypes.None) {
 		return filepath.Join(GetCodeBaseLocation(), "bin")
 	} else if stage == string(StageTypes.Dev) {
-		return filepath.Join(GetCodeBaseLocation(), "bin")
+		return filepath.Join(GetCodeBaseLocation(), "config")
 	} else if stage == string(StageTypes.Test) {
-		return filepath.Join(GetExecutableLocation(), "bin")
+		return filepath.Join(GetExecutableLocation(), "config")
 	}
 	return getDefaultPlatformConfigDir()
+}
+func PrepareConfigLocation() error {
+	path := GetConfigLocation()
+
+	if _, err := os.Stat(path); os.IsNotExist(err) {
+		err := os.MkdirAll(path, 0755)
+		if err != nil {
+			return err
+		}
+	} else if err != nil {
+		return err
+	}
+
+	return nil
 }
 
 func GetLogLocation() string {
@@ -297,6 +341,20 @@ func GetLogLocation() string {
 	}
 	return getDefaultPlatformLogDir()
 }
+func PrepareLogLocation() error {
+	path := GetLogLocation()
+
+	if _, err := os.Stat(path); os.IsNotExist(err) {
+		err := os.MkdirAll(path, 0755)
+		if err != nil {
+			return err
+		}
+	} else if err != nil {
+		return err
+	}
+
+	return nil
+}
 
 func GetDocumentLocation() string {
 	if IsEmpty(stage) || stage == string(StageTypes.None) {
@@ -308,6 +366,20 @@ func GetDocumentLocation() string {
 	}
 	return getDefaultPlatformDocumentDir()
 }
+func PrepareDocumentLocation() error {
+	path := GetDocumentLocation()
+
+	if _, err := os.Stat(path); os.IsNotExist(err) {
+		err := os.MkdirAll(path, 0755)
+		if err != nil {
+			return err
+		}
+	} else if err != nil {
+		return err
+	}
+
+	return nil
+}
 
 func GetDataLocation() string {
 	if IsEmpty(stage) || stage == string(StageTypes.None) {
@@ -318,19 +390,20 @@ func GetDataLocation() string {
 		return filepath.Join(GetExecutableLocation(), "data")
 	}
 	return getDefaultPlatformDataDir()
+}
+func PrepareDataLocation() error {
+	path := GetDataLocation()
 
-	// path := getDefaultPlatformDataDir()
+	if _, err := os.Stat(path); os.IsNotExist(err) {
+		err := os.MkdirAll(path, 0755)
+		if err != nil {
+			return err
+		}
+	} else if err != nil {
+		return err
+	}
 
-	// if _, err := os.Stat(path); os.IsNotExist(err) {
-	// 	err := os.MkdirAll(path, 0755)
-	// 	if err != nil {
-	// 		return err.Error()
-	// 	}
-	// } else if err != nil {
-	// 	return ""
-	// }
-
-	// return path
+	return nil
 }
 func GetDBLocation(environment string) string {
 	dbName := "pars.db"
@@ -343,6 +416,30 @@ func GetDBLocation(environment string) string {
 	return path
 }
 
+func GetCacheLocation() string {
+	if IsEmpty(stage) || stage == string(StageTypes.None) {
+		return filepath.Join(GetCodeBaseLocation(), "cache")
+	} else if stage == string(StageTypes.Dev) {
+		return filepath.Join(GetCodeBaseLocation(), "cache")
+	} else if stage == string(StageTypes.Test) {
+		return filepath.Join(GetExecutableLocation(), "cache")
+	}
+	return getDefaultPlatformCacheDir()
+}
+func PrepareCacheLocation() error {
+	path := GetCacheLocation()
+
+	if _, err := os.Stat(path); os.IsNotExist(err) {
+		err := os.MkdirAll(path, 0755)
+		if err != nil {
+			return err
+		}
+	} else if err != nil {
+		return err
+	}
+
+	return nil
+}
 func GetBinariesLocation() string {
 	if IsEmpty(stage) || stage == string(StageTypes.None) {
 		return filepath.Join(GetCodeBaseLocation(), "bin")
@@ -351,7 +448,21 @@ func GetBinariesLocation() string {
 	} else if stage == string(StageTypes.Test) {
 		return filepath.Join(GetExecutableLocation(), "bin")
 	}
-	return getDefaultPlatformConfigDir()
+	return getDefaultPlatformLibraryDir()
+}
+func PrepareBinariesLocation() error {
+	path := GetBinariesLocation()
+
+	if _, err := os.Stat(path); os.IsNotExist(err) {
+		err := os.MkdirAll(path, 0755)
+		if err != nil {
+			return err
+		}
+	} else if err != nil {
+		return err
+	}
+
+	return nil
 }
 func GetBinaryLocation(name, version string) string {
 	return filepath.Join(GetBinariesLocation(), name, version)
@@ -365,7 +476,21 @@ func GetPluginsLocation() string {
 	} else if stage == string(StageTypes.Test) {
 		return filepath.Join(GetExecutableLocation(), "plugins")
 	}
-	return getDefaultPlatformDPluginDir()
+	return getDefaultPlatformPluginDir()
+}
+func PreparePluginsLocation() error {
+	path := GetPluginsLocation()
+
+	if _, err := os.Stat(path); os.IsNotExist(err) {
+		err := os.MkdirAll(path, 0755)
+		if err != nil {
+			return err
+		}
+	} else if err != nil {
+		return err
+	}
+
+	return nil
 }
 
 func GetPluginLocation(pluginName string) string {

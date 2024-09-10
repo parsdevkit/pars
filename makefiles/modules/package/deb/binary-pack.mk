@@ -158,9 +158,6 @@ binary/debian/postrm:
 binary/debian-files: binary/debian-init binary/debian/control binary/debian/changelog binary/debian/rules binary/debian/source/format binary/debian/copyright binary/debian/compat binary/debian/install binary/debian/preinst binary/debian/postinst binary/debian/prerm binary/debian/postrm
 
 package.deb.build.binary: binary/debian-files
-ifdef GPG_KEY
-	PACKAGE_KEY := -k$(GPG_KEY)
-endif
 	@mkdir -p $(DEB_BASE_DIR)/$(DEB_BINARY_DIR)
 	@mkdir -p $(DEB_BASE_DIR)/$(DEB_CONFIG_DIR)
 	@mkdir -p $(DEB_BASE_DIR)/$(DEB_LOG_DIR)
@@ -172,7 +169,7 @@ endif
 	cp -r $(BIN_ARTIFACTS_DIR)/$(APP) $(DEB_BASE_DIR)/$(DEB_BINARY_DIR)
 	cp -r $(DOCS_USER_DOCS_DIR) $(DEB_BASE_DIR)/$(DEB_DOCS_DIR)
 
-	cd $(DEB_BASE_DIR) && dpkg-buildpackage -b $(PACKAGE_KEY)
+	cd $(DEB_BASE_DIR) && dpkg-buildpackage -b $(GPG_KEY_FLAG)
 	find $(DEB_PACKAGE_DIR) -maxdepth 1 -name "*.deb" | tar -czvf $(DEB_BASE_DIR)/$(APPLICATION_NAME)-$(OS_LINUX)-$(APP_ARCH).deb.tar.gz -T -
 	@echo "Package has been created with version $(APP_TAG)"
 

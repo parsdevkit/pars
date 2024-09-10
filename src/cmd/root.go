@@ -83,6 +83,8 @@ func Execute() {
 		os.Exit(1)
 	}
 
+	utils.PrepareLocations()
+
 	if !utils.IsEmpty(utils.GetEnvironment()) {
 		fmt.Printf("\nRunning on '%v' environment\n", utils.GetEnvironment())
 	}

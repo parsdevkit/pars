@@ -189,12 +189,9 @@ source/debian-files: binary/debian-init source/debian/control source/debian/chan
 
 
 package.deb.build.source: source/debian-files
-ifdef GPG_KEY
-	PACKAGE_KEY := -k$(GPG_KEY)
-endif
 	$(MAKE) package.move-source-code-to-package-source TAG=$(APP_TAG) OS=$(OS_LINUX) ARCH=$(APP_ARCH)
 	cd $(DEB_BASE_DIR)/src && go mod vendor
-	cd $(DEB_BASE_DIR) && dpkg-buildpackage -S $(PACKAGE_KEY)
+	cd $(DEB_BASE_DIR) && dpkg-buildpackage -S $(GPG_KEY_FLAG)
 	@echo "Package has been created with version $(APP_TAG)"
 
 package.deb.push-ppa:

@@ -28,3 +28,8 @@ else ifeq ($(APP_ARCH),$(ARCH_LINUX_ARM))
 else ifeq ($(APP_ARCH),$(ARCH_LINUX_386))
   DEB_ARCH = $(LINUX_ARCH_386_VALUE)
 endif
+
+
+ifdef GPG_KEY
+	GPG_KEY_FLAG := -k$(GPG_KEY)
+endif
