@@ -1,6 +1,6 @@
 module parsdevkit.net/providers
 
-go 1.21.0
+go 1.22
 
 replace parsdevkit.net/models => ../models
 

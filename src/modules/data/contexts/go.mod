@@ -1,6 +1,6 @@
 module parsdevkit.net/persistence/contexts
 
-go 1.21.0
+go 1.22
 
 require (
 	github.com/glebarez/sqlite v1.10.0

@@ -19,7 +19,7 @@ source/snapcraft.yaml:
 	echo "" >> $(SNAP_SNAPCRAFT_FILE_PATH)
 	echo "base: $(SNAP-BASE)" >> $(SNAP_SNAPCRAFT_FILE_PATH)
 	echo "grade: stable" >> $(SNAP_SNAPCRAFT_FILE_PATH)
-	echo "confinement: classic" >> $(SNAP_SNAPCRAFT_FILE_PATH)
+	echo "confinement: strict" >> $(SNAP_SNAPCRAFT_FILE_PATH)
 	echo "" >> $(SNAP_SNAPCRAFT_FILE_PATH)
 	# echo "architectures:" >> $(SNAP_SNAPCRAFT_FILE_PATH)
 	# echo "  - build-on: [amd64]" >> $(SNAP_SNAPCRAFT_FILE_PATH)
@@ -33,19 +33,20 @@ source/snapcraft.yaml:
 	echo "" >> $(SNAP_SNAPCRAFT_FILE_PATH)
 	echo "apps:" >> $(SNAP_SNAPCRAFT_FILE_PATH)
 	echo "  $(APPLICATION_NAME):" >> $(SNAP_SNAPCRAFT_FILE_PATH)
-	echo "    command: $(APPLICATION_NAME)" >> $(SNAP_SNAPCRAFT_FILE_PATH)
+	echo "    command: bin/$(APPLICATION_NAME)" >> $(SNAP_SNAPCRAFT_FILE_PATH)
 	echo "" >> $(SNAP_SNAPCRAFT_FILE_PATH)
 	echo "parts:" >> $(SNAP_SNAPCRAFT_FILE_PATH)
-	echo "  $(APPLICATION_NAME)-part:" >> $(SNAP_SNAPCRAFT_FILE_PATH)
+	echo "  $(APPLICATION_NAME):" >> $(SNAP_SNAPCRAFT_FILE_PATH)
 	echo "    source: ." >> $(SNAP_SNAPCRAFT_FILE_PATH)
-	echo "    plugin: dump" >> $(SNAP_SNAPCRAFT_FILE_PATH)
+	echo "    plugin: go" >> $(SNAP_SNAPCRAFT_FILE_PATH)
+	echo "    build-snaps: [go/latest/stable]" >> $(SNAP_SNAPCRAFT_FILE_PATH)
 	echo "    source-type: local" >> $(SNAP_SNAPCRAFT_FILE_PATH)
+	# echo "    build-packages:" >> $(SNAP_SNAPCRAFT_FILE_PATH)
+	# echo "      - golang-go" >> $(SNAP_SNAPCRAFT_FILE_PATH)
 	echo "    override-build: |" >> $(SNAP_SNAPCRAFT_FILE_PATH)
-	echo "      $(MAKE) package.snap.move-binary-to-package-source TAG=$(APP_TAG) OS=$(OS_LINUX) ARCH=$(ARCH_LINUX_AMD64)" >> $(SNAP_SNAPCRAFT_FILE_PATH)
-	echo "" >> $(SNAP_SNAPCRAFT_FILE_PATH)
-	echo "" >> $(SNAP_SNAPCRAFT_FILE_PATH)
-	echo "" >> $(SNAP_SNAPCRAFT_FILE_PATH)
-	echo "" >> $(SNAP_SNAPCRAFT_FILE_PATH)
+	echo "      $(MAKE) package.snap.move-binary-to-package-source2 TAG=$(APP_TAG) OS=$(OS_LINUX) ARCH=$(ARCH_LINUX_AMD64)" >> $(SNAP_SNAPCRAFT_FILE_PATH)
+	echo "      mkdir -p \$$SNAPCRAFT_PART_INSTALL/bin" >> $(SNAP_SNAPCRAFT_FILE_PATH)
+	echo "      cp -r $(BIN_ARTIFACTS_DIR)/$(APP) \$$SNAPCRAFT_PART_INSTALL/bin" >> $(SNAP_SNAPCRAFT_FILE_PATH)
 	echo "" >> $(SNAP_SNAPCRAFT_FILE_PATH)
 
 
@@ -69,4 +70,10 @@ package.snap.move-source-code-to-package-source:
 	cp -r $(MAKEFILES_ROOT_DIR) $(SNAP_BASE_DIR)
 	cp -r $(DOCS_ROOT_DIR) $(SNAP_BASE_DIR)
 	cp $(MAKEFILE_PATH) $(SNAP_BASE_DIR)/Makefile
+	# cd $(SNAP_BASE_DIR)/src && go mod vendor
 	chmod +x $(SNAP_BASE_DIR)
+
+package.snap.move-binary-to-package-source2:
+	@mkdir -p $(SNAP_BASE_DIR)/bin/$(SNAP_ARCH)
+	$(MAKE) build.binary.linux TAG=$(APP_TAG) OS=$(OS_LINUX) ARCH=$(ARCH_LINUX_AMD64)
+	cp -r $(BIN_ARTIFACTS_DIR)/$(APP) $(SNAP_BASE_DIR)/bin/$(SNAP_ARCH)

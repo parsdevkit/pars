@@ -1,0 +1,18 @@
+linters:
+  enable:
+    - govet
+    - golint
+    - staticcheck
+    - errcheck
+
+issues:
+  exclude:
+    - "Error return value is not checked.*(errcheck|govet)"
+
+run:
+  skip-dirs:
+    - "vendor"
+
+  # src altındaki tüm dizinlerdeki dosyaları kontrol et
+  include:
+    - "src/**/*.go"

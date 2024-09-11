@@ -35,12 +35,8 @@ var StageTypes = struct {
 func getDefaultPlatformApplicationDir() string {
 	switch runtime.GOOS {
 	case "windows":
-		if runtime.GOARCH == "amd64" {
-			return "C:\\Program Files\\Pars\\bin"
-		} else if runtime.GOARCH == "386" {
-			return "C:\\Program Files (x86)\\Pars\\bin"
-		}
-		return "C:\\Program Files\\Pars\\bin"
+		programFiles := os.Getenv("PROGRAMFILES")
+		return filepath.Join(programFiles, "Pars/bin")
 	case "darwin":
 		return "/usr/bin"
 	case "linux":
@@ -59,12 +55,8 @@ func getDefaultPlatformApplicationDir() string {
 func getDefaultPlatformLibraryDir() string {
 	switch runtime.GOOS {
 	case "windows":
-		if runtime.GOARCH == "amd64" {
-			return "C:\\Program Files\\Pars\\lib"
-		} else if runtime.GOARCH == "386" {
-			return "C:\\Program Files (x86)\\Pars\\lib"
-		}
-		return "C:\\Program Files\\Pars\\lib"
+		programFiles := os.Getenv("PROGRAMFILES")
+		return filepath.Join(programFiles, "Pars/lib")
 	case "darwin":
 		return "/usr/lib/pars"
 	case "linux":
@@ -83,12 +75,8 @@ func getDefaultPlatformLibraryDir() string {
 func getDefaultPlatformPluginDir() string {
 	switch runtime.GOOS {
 	case "windows":
-		if runtime.GOARCH == "amd64" {
-			return "C:\\Program Files\\Pars\\plugins"
-		} else if runtime.GOARCH == "386" {
-			return "C:\\Program Files (x86)\\Pars\\plugins"
-		}
-		return "C:\\Program Files\\Pars\\plugins"
+		programFiles := os.Getenv("PROGRAMFILES")
+		return filepath.Join(programFiles, "Pars/plugins")
 	case "darwin":
 		return "/usr/share/pars/plugins"
 	case "linux":
@@ -107,12 +95,8 @@ func getDefaultPlatformPluginDir() string {
 func getDefaultPlatformDocumentDir() string {
 	switch runtime.GOOS {
 	case "windows":
-		if runtime.GOARCH == "amd64" {
-			return "C:\\Program Files\\Pars\\doc"
-		} else if runtime.GOARCH == "386" {
-			return "C:\\Program Files (x86)\\Pars\\doc"
-		}
-		return "C:\\Program Files\\Pars\\doc"
+		programFiles := os.Getenv("PROGRAMFILES")
+		return filepath.Join(programFiles, "Pars/doc")
 	case "darwin":
 		return "/usr/share/doc/pars"
 	case "linux":
@@ -131,7 +115,8 @@ func getDefaultPlatformDocumentDir() string {
 func getDefaultPlatformConfigDir() string {
 	switch runtime.GOOS {
 	case "windows":
-		return "C:\\ProgramData\\Pars\\config"
+		programData := os.Getenv("PROGRAMDATA")
+		return filepath.Join(programData, "Pars/config")
 	case "darwin":
 		return "/etc/pars"
 	case "linux":
@@ -150,7 +135,8 @@ func getDefaultPlatformConfigDir() string {
 func getDefaultPlatformDataDir() string {
 	switch runtime.GOOS {
 	case "windows":
-		return "C:\\ProgramData\\Pars\\data"
+		programData := os.Getenv("PROGRAMDATA")
+		return filepath.Join(programData, "Pars/data")
 	case "darwin":
 		return "/var/lib/pars/data"
 	case "linux":
@@ -169,7 +155,8 @@ func getDefaultPlatformDataDir() string {
 func getDefaultPlatformLogDir() string {
 	switch runtime.GOOS {
 	case "windows":
-		return "C:\\ProgramData\\Pars\\logs"
+		programData := os.Getenv("PROGRAMDATA")
+		return filepath.Join(programData, "Pars/logs")
 	case "darwin":
 		return "/var/log/pars"
 	case "linux":
@@ -188,7 +175,8 @@ func getDefaultPlatformLogDir() string {
 func getDefaultPlatformCacheDir() string {
 	switch runtime.GOOS {
 	case "windows":
-		return "C:\\ProgramData\\Pars\\cache"
+		programData := os.Getenv("PROGRAMDATA")
+		return filepath.Join(programData, "Pars/cache")
 	case "darwin":
 		return "/var/cache/pars"
 	case "linux":

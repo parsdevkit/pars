@@ -18,10 +18,11 @@ var InfoCmd = &cobra.Command{
 }
 
 func executeFunc(cmd *cobra.Command, args []string) {
-	fmt.Printf("Codebase Path: %v\n", utils.GetCodeBaseLocation())
-	fmt.Printf("Executable Path: %v\n", utils.GetExecutableLocation())
-
 	fmt.Println("New generation SDK")
+	if utils.IsEmpty(utils.GetStage()) || utils.GetStage() == string(utils.StageTypes.None) {
+		fmt.Printf("Codebase Path: %v\n", utils.GetCodeBaseLocation())
+	}
+	fmt.Printf("Executable Path: %v\n", utils.GetExecutableLocation())
 	fmt.Printf("Stage: %v\n", utils.GetStage())
 	fmt.Printf("Version: %v\n", utils.GetVersion())
 	fmt.Printf("OS: %v\n", runtime.GOOS)
