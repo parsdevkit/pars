@@ -43,6 +43,10 @@ ifeq ($(MAKECMDGOALS), package.snap.move-source-code-to-package-source)
 include ./makefiles/modules/package/snap/source-pack.mk
 endif
 
+ifeq ($(MAKECMDGOALS), package.snap.move-binary-to-package-source2)
+include ./makefiles/modules/package/snap/source-pack.mk
+endif
+
 
 ### BUILD
 ifeq ($(MAKECMDGOALS), build.binary)
@@ -107,3 +111,6 @@ ifeq ($(MAKECMDGOALS), changelog.clear)
 include ./makefiles/modules/release/changelog.mk
 endif
 
+
+lint:
+	@golangci-lint run ./src

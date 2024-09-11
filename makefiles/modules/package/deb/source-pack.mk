@@ -28,7 +28,7 @@ source/debian/control:
 	echo "Section: utils" >> $(DEB_CONTROL_FILE_PATH)
 	echo "Priority: optional" >> $(DEB_CONTROL_FILE_PATH)
 	echo "Maintainer: $(MAINTANER)" >> $(DEB_CONTROL_FILE_PATH)
-	echo "Build-Depends: debhelper (>= 12), golang-go" >> $(DEB_CONTROL_FILE_PATH)
+	echo "Build-Depends: debhelper (>= 12), dh-golang, golang-any" >> $(DEB_CONTROL_FILE_PATH)
 	echo "Standards-Version: 4.5.0" >> $(DEB_CONTROL_FILE_PATH)
 	echo "Homepage: $(HOMEPAGE)" >> $(DEB_CONTROL_FILE_PATH)
 
@@ -194,6 +194,7 @@ source/debian-files: binary/debian-init source/debian/control source/debian/chan
 
 package.deb.build.source: source/debian-files
 	$(MAKE) package.move-source-code-to-package-source TAG=$(APP_TAG) OS=$(OS_LINUX) ARCH=$(APP_ARCH)
+	cd $(DEB_BASE_DIR)/src && go mod tidy
 	cd $(DEB_BASE_DIR)/src && go mod vendor
 	cd $(DEB_BASE_DIR) && dpkg-buildpackage -S $(GPG_KEY_FLAG)
 	@echo "Package has been created with version $(APP_TAG)"
