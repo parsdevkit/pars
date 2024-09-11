@@ -121,6 +121,7 @@ binary/debian/postinst:
 	echo "" >> $(DEB_POSTINT_FILE_PATH)
 	echo 'echo "Running post-installation tasks..."' >> $(DEB_POSTINT_FILE_PATH)
 	echo "" >> $(DEB_POSTINT_FILE_PATH)
+	echo "mkdir -p /$(DEB_DATA_DATABASE_DIR)" >> $(DEB_POSTINT_FILE_PATH)
 	echo "chown -R \$$(whoami):\$$(whoami) /$(DEB_DATA_DATABASE_DIR)" >> $(DEB_POSTINT_FILE_PATH)
 	echo "chmod -R u+rw /$(DEB_DATA_DATABASE_DIR)" >> $(DEB_POSTINT_FILE_PATH)
 	echo "" >> $(DEB_POSTINT_FILE_PATH)
