@@ -101,7 +101,7 @@ binary/debian/compat:
 	echo "12" > $(DEB_COMPAT_FILE_PATH)
 
 binary/debian/install:
-	# echo "$(APPLICATION_NAME) /$(DEB_BINARY_DIR)/" > $(DEB_INSTALL_FILE_PATH)
+	echo "$(DEB_BASE_DIR)/$(DEB_BINARY_DIR)/$(APP) /$(DEB_BINARY_DIR)/" > $(DEB_INSTALL_FILE_PATH)
 
 binary/debian/preinst:
 	echo "#!/bin/sh" > $(DEB_PREINST_FILE_PATH)
