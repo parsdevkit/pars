@@ -67,25 +67,25 @@ source/debian/rules:
 	echo "" >> $(DEB_RULES_FILE_PATH)
 	echo "override_dh_auto_build:" >> $(DEB_RULES_FILE_PATH)
 	
-	echo 'ifeq ($$(DEB_HOST_ARCH), $$(LINUX_ARCH_386_VALUE))' >> $(DEB_RULES_FILE_PATH)
+	echo 'ifeq ($$(DEB_HOST_ARCH), $(LINUX_ARCH_386_VALUE))' >> $(DEB_RULES_FILE_PATH)
 # Burda debian-binary-package kullanıbilir?
 	echo '	$(MAKE) build.binary.linux.vendor TAG=$(APP_TAG) ARCH=$(ARCH_LINUX_386)' >> $(DEB_RULES_FILE_PATH)
 	echo '	$(MAKE) package.move-binary-to-package-source TAG=$(APP_TAG) OS=$(OS_LINUX) ARCH=$(ARCH_LINUX_386)' >> $(DEB_RULES_FILE_PATH)
 	echo "endif" >> $(DEB_RULES_FILE_PATH)
 	
-	echo 'ifeq ($$(DEB_HOST_ARCH), $$(LINUX_ARCH_AMD64_VALUE))' >> $(DEB_RULES_FILE_PATH)
+	echo 'ifeq ($$(DEB_HOST_ARCH), $(LINUX_ARCH_AMD64_VALUE))' >> $(DEB_RULES_FILE_PATH)
 # Burda debian-binary-package kullanıbilir?
 	echo '	$(MAKE) build.binary.linux.vendor TAG=$(APP_TAG) ARCH=$(ARCH_LINUX_AMD64)' >> $(DEB_RULES_FILE_PATH)
 	echo '	$(MAKE) package.move-binary-to-package-source TAG=$(APP_TAG) OS=$(OS_LINUX) ARCH=$(ARCH_LINUX_AMD64)' >> $(DEB_RULES_FILE_PATH)
 	echo "endif" >> $(DEB_RULES_FILE_PATH)
 	
-	echo 'ifeq ($$(DEB_HOST_ARCH), $$(LINUX_ARCH_ARM_VALUE))' >> $(DEB_RULES_FILE_PATH)
+	echo 'ifeq ($$(DEB_HOST_ARCH), $(LINUX_ARCH_ARM_VALUE))' >> $(DEB_RULES_FILE_PATH)
 # Burda debian-binary-package kullanıbilir?
 	echo '	$(MAKE) build.binary.linux.vendor TAG=$(APP_TAG) ARCH=$(ARCH_LINUX_ARM)' >> $(DEB_RULES_FILE_PATH)
 	echo '	$(MAKE) package.move-binary-to-package-source TAG=$(APP_TAG) OS=$(OS_LINUX) ARCH=$(ARCH_LINUX_ARM)' >> $(DEB_RULES_FILE_PATH)
 	echo "endif" >> $(DEB_RULES_FILE_PATH)
 	
-	echo 'ifeq ($$(DEB_HOST_ARCH), $$(LINUX_ARCH_ARM64_VALUE))' >> $(DEB_RULES_FILE_PATH)
+	echo 'ifeq ($$(DEB_HOST_ARCH), $(LINUX_ARCH_ARM64_VALUE))' >> $(DEB_RULES_FILE_PATH)
 # Burda debian-binary-package kullanıbilir?
 	echo '	$(MAKE) build.binary.linux.vendor TAG=$(APP_TAG) ARCH=$(ARCH_LINUX_ARM64)' >> $(DEB_RULES_FILE_PATH)
 	echo '	$(MAKE) package.move-binary-to-package-source TAG=$(APP_TAG) OS=$(OS_LINUX) ARCH=$(ARCH_LINUX_ARM64)' >> $(DEB_RULES_FILE_PATH)
