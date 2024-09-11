@@ -36,9 +36,10 @@ OWNER := Ahmet Soner <ahmettsoner@gmail.com>
 HOMEPAGE := https://parsdevkit.net
 GIT := https://github.com/parsdevkit/pars
 LICENCE_TYPE := Apache-2.0
+SUMMARY := $(APPLICATION_NAME) is a simple utility.
 DESCRIPTION := $(APPLICATION_NAME) is a simple utility.
 
-STAGE ?= prod
+STAGE ?= final
 HOST_OS =
 HOST_ARCH =
 
