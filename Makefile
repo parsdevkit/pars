@@ -23,6 +23,26 @@ ifeq ($(MAKECMDGOALS), package.move-binary-to-package-source)
 include ./makefiles/modules/package/deb/source-pack.mk
 endif
 
+ifeq ($(MAKECMDGOALS), package.snap.build.binary)
+include ./makefiles/modules/package/snap/binary-pack.mk
+endif
+
+ifeq ($(MAKECMDGOALS), package.snap.move-binary-to-package-source)
+include ./makefiles/modules/package/snap/binary-pack.mk
+endif
+
+ifeq ($(MAKECMDGOALS), package.snap.build.source)
+include ./makefiles/modules/package/snap/source-pack.mk
+endif
+
+ifeq ($(MAKECMDGOALS), package.snap.move-source-to-package-source)
+include ./makefiles/modules/package/snap/source-pack.mk
+endif
+
+ifeq ($(MAKECMDGOALS), package.snap.move-source-code-to-package-source)
+include ./makefiles/modules/package/snap/source-pack.mk
+endif
+
 
 ### BUILD
 ifeq ($(MAKECMDGOALS), build.binary)
