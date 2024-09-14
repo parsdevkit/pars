@@ -2,6 +2,7 @@ package utils
 
 import (
 	"fmt"
+	"log"
 	"os"
 	"path/filepath"
 	"runtime"
@@ -33,13 +34,21 @@ var StageTypes = struct {
 }
 
 func getDefaultPlatformApplicationDir() string {
+	snap := os.Getenv("SNAP")
+
 	switch runtime.GOOS {
 	case "windows":
 		programFiles := os.Getenv("PROGRAMFILES")
 		return filepath.Join(programFiles, "Pars/bin")
 	case "darwin":
+		if !IsEmpty(snap) {
+			return filepath.Join(snap, "bin")
+		}
 		return "/usr/bin"
 	case "linux":
+		if !IsEmpty(snap) {
+			return filepath.Join(snap, "bin")
+		}
 		return "/usr/bin"
 	case "freebsd":
 		return "/usr/bin"
@@ -53,13 +62,22 @@ func getDefaultPlatformApplicationDir() string {
 }
 
 func getDefaultPlatformLibraryDir() string {
+	snap := os.Getenv("SNAP")
+	snapCommon := os.Getenv("SNAP_USER_COMMON")
+
 	switch runtime.GOOS {
 	case "windows":
 		programFiles := os.Getenv("PROGRAMFILES")
 		return filepath.Join(programFiles, "Pars/lib")
 	case "darwin":
+		if !IsEmpty(snap) {
+			return filepath.Join(snapCommon, "lib")
+		}
 		return "/usr/lib/pars"
 	case "linux":
+		if !IsEmpty(snap) {
+			return filepath.Join(snapCommon, "lib")
+		}
 		return "/usr/lib/pars"
 	case "freebsd":
 		return "/usr/lib/pars"
@@ -73,13 +91,22 @@ func getDefaultPlatformLibraryDir() string {
 }
 
 func getDefaultPlatformPluginDir() string {
+	snap := os.Getenv("SNAP")
+	snapCommon := os.Getenv("SNAP_USER_COMMON")
+
 	switch runtime.GOOS {
 	case "windows":
 		programFiles := os.Getenv("PROGRAMFILES")
 		return filepath.Join(programFiles, "Pars/plugins")
 	case "darwin":
+		if !IsEmpty(snap) {
+			return filepath.Join(snapCommon, "plugins")
+		}
 		return "/usr/share/pars/plugins"
 	case "linux":
+		if !IsEmpty(snap) {
+			return filepath.Join(snapCommon, "plugins")
+		}
 		return "/usr/share/pars/plugins"
 	case "freebsd":
 		return "/usr/share/pars/plugins"
@@ -93,13 +120,22 @@ func getDefaultPlatformPluginDir() string {
 }
 
 func getDefaultPlatformDocumentDir() string {
+	snap := os.Getenv("SNAP")
+	snapCommon := os.Getenv("SNAP_USER_COMMON")
+
 	switch runtime.GOOS {
 	case "windows":
 		programFiles := os.Getenv("PROGRAMFILES")
 		return filepath.Join(programFiles, "Pars/doc")
 	case "darwin":
+		if !IsEmpty(snap) {
+			return filepath.Join(snapCommon, "doc")
+		}
 		return "/usr/share/doc/pars"
 	case "linux":
+		if !IsEmpty(snap) {
+			return filepath.Join(snapCommon, "doc")
+		}
 		return "/usr/share/doc/pars"
 	case "freebsd":
 		return "/usr/share/doc/pars"
@@ -113,13 +149,22 @@ func getDefaultPlatformDocumentDir() string {
 }
 
 func getDefaultPlatformConfigDir() string {
+	snap := os.Getenv("SNAP")
+	snapCommon := os.Getenv("SNAP_USER_COMMON")
+
 	switch runtime.GOOS {
 	case "windows":
 		programData := os.Getenv("PROGRAMDATA")
 		return filepath.Join(programData, "Pars/config")
 	case "darwin":
+		if !IsEmpty(snap) {
+			return filepath.Join(snapCommon, "config")
+		}
 		return "/etc/pars"
 	case "linux":
+		if !IsEmpty(snap) {
+			return filepath.Join(snapCommon, "config")
+		}
 		return "/etc/pars"
 	case "freebsd":
 		return "/etc/pars"
@@ -133,13 +178,22 @@ func getDefaultPlatformConfigDir() string {
 }
 
 func getDefaultPlatformDataDir() string {
+	snap := os.Getenv("SNAP")
+	snapCommon := os.Getenv("SNAP_USER_COMMON")
+
 	switch runtime.GOOS {
 	case "windows":
 		programData := os.Getenv("PROGRAMDATA")
 		return filepath.Join(programData, "Pars/data")
 	case "darwin":
+		if !IsEmpty(snap) {
+			return filepath.Join(snapCommon, "data")
+		}
 		return "/var/lib/pars/data"
 	case "linux":
+		if !IsEmpty(snap) {
+			return filepath.Join(snapCommon, "data")
+		}
 		return "/var/lib/pars/data"
 	case "freebsd":
 		return "/var/lib/pars/data"
@@ -153,13 +207,22 @@ func getDefaultPlatformDataDir() string {
 }
 
 func getDefaultPlatformLogDir() string {
+	snap := os.Getenv("SNAP")
+	snapCommon := os.Getenv("SNAP_USER_COMMON")
+
 	switch runtime.GOOS {
 	case "windows":
 		programData := os.Getenv("PROGRAMDATA")
 		return filepath.Join(programData, "Pars/logs")
 	case "darwin":
+		if !IsEmpty(snap) {
+			return filepath.Join(snapCommon, "logs")
+		}
 		return "/var/log/pars"
 	case "linux":
+		if !IsEmpty(snap) {
+			return filepath.Join(snapCommon, "logs")
+		}
 		return "/var/log/pars"
 	case "freebsd":
 		return "/var/log/pars"
@@ -173,13 +236,22 @@ func getDefaultPlatformLogDir() string {
 }
 
 func getDefaultPlatformCacheDir() string {
+	snap := os.Getenv("SNAP")
+	snapCommon := os.Getenv("SNAP_USER_COMMON")
+
 	switch runtime.GOOS {
 	case "windows":
 		programData := os.Getenv("PROGRAMDATA")
 		return filepath.Join(programData, "Pars/cache")
 	case "darwin":
+		if !IsEmpty(snap) {
+			return filepath.Join(snapCommon, "cache")
+		}
 		return "/var/cache/pars"
 	case "linux":
+		if !IsEmpty(snap) {
+			return filepath.Join(snapCommon, "cache")
+		}
 		return "/var/cache/pars"
 	case "freebsd":
 		return "/var/cache/pars"
@@ -377,7 +449,21 @@ func GetDataLocation() string {
 	} else if stage == string(StageTypes.Test) {
 		return filepath.Join(GetExecutableLocation(), "data")
 	}
-	return getDefaultPlatformDataDir()
+
+	dataDir := getDefaultPlatformDataDir()
+
+	if _, err := os.Stat(dataDir); os.IsNotExist(err) {
+		err := os.MkdirAll(dataDir, 0755)
+		if err != nil {
+			log.Fatalf("Error creating data directory: %v", err)
+		}
+	}
+
+	err := os.Chmod(dataDir, 0755)
+	if err != nil {
+		log.Fatalf("Error setting permissions for data directory: %v", err)
+	}
+	return dataDir
 }
 func PrepareDataLocation() error {
 	path := GetDataLocation()

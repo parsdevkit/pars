@@ -1,7 +1,7 @@
 include ./makefiles/modules/release/common.mk
 
 changelog.init:
-	@mkdir -p $(RELEASE_ROOT_DIR)
+	@mkdir -p $(DIST_RELEASE_ROOT_DIR)
 
 changelog.entry.add: changelog.init
 ifeq ($(strip $(message)),)

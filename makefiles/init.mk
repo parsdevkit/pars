@@ -58,6 +58,7 @@ ifeq ($(APP_OS),)
 else ifeq ($(APP_OS), Windows_NT)
 	APP_OS = $(HOST_OS)
 endif
+
 ifeq ($(APP_ARCH),)
 	APP_ARCH = $(HOST_ARCH)
 endif
@@ -87,6 +88,72 @@ ifeq ($(APP_TAG), )
 endif
 
 RAW_VERSION := $(shell echo $(APP_TAG) | sed 's/^v//')
+
+
+
+ifeq ($(APP_OS),$(OS_LINUX))
+	ifeq ($(APP_ARCH),$(ARCH_AMD64))
+		BUILD_ARCH = $(LINUX_ARCH_AMD64_VALUE)
+	else ifeq ($(APP_ARCH),$(ARCH_ARM64))
+		BUILD_ARCH = $(LINUX_ARCH_ARM64_VALUE)
+	else ifeq ($(APP_ARCH),$(ARCH_ARM))
+		BUILD_ARCH = $(LINUX_ARCH_ARM_VALUE)
+	else ifeq ($(APP_ARCH),$(ARCH_386))
+		BUILD_ARCH = $(LINUX_ARCH_386_VALUE)
+	endif
+else ifeq ($(APP_OS),$(OS_WINDOWS))
+	ifeq ($(APP_ARCH),$(ARCH_AMD64))
+		BUILD_ARCH = $(WINDOWS_ARCH_AMD64_VALUE)
+	else ifeq ($(APP_ARCH),$(ARCH_ARM64))
+		BUILD_ARCH = $(WINDOWS_ARCH_ARM64_VALUE)
+	else ifeq ($(APP_ARCH),$(ARCH_ARM))
+		BUILD_ARCH = $(WINDOWS_ARCH_ARM_VALUE)
+	else ifeq ($(APP_ARCH),$(ARCH_386))
+		BUILD_ARCH = $(WINDOWS_ARCH_386_VALUE)
+	endif
+else ifeq ($(APP_OS),$(OS_MACOS))
+	ifeq ($(APP_ARCH),$(ARCH_AMD64))
+		BUILD_ARCH = $(MAC_ARCH_AMD64_VALUE)
+	else ifeq ($(APP_ARCH),$(ARCH_ARM64))
+		BUILD_ARCH = $(MAC_ARCH_ARM64_VALUE)
+	else ifeq ($(APP_ARCH),$(ARCH_ARM))
+		BUILD_ARCH = $(MAC_ARCH_ARM_VALUE)
+	else ifeq ($(APP_ARCH),$(ARCH_386))
+		BUILD_ARCH = $(MAC_ARCH_386_VALUE)
+	endif
+else ifeq ($(APP_OS),$(OS_FREEBSD))
+	ifeq ($(APP_ARCH),$(ARCH_AMD64))
+		BUILD_ARCH = $(BSD_ARCH_AMD64_VALUE)
+	else ifeq ($(APP_ARCH),$(ARCH_ARM64))
+		BUILD_ARCH = $(BSD_ARCH_ARM64_VALUE)
+	else ifeq ($(APP_ARCH),$(ARCH_ARM))
+		BUILD_ARCH = $(BSD_ARCH_ARM_VALUE)
+	else ifeq ($(APP_ARCH),$(ARCH_386))
+		BUILD_ARCH = $(BSD_ARCH_386_VALUE)
+	endif
+else ifeq ($(APP_OS),$(OS_NETBSD))
+	ifeq ($(APP_ARCH),$(ARCH_AMD64))
+		BUILD_ARCH = $(BSD_ARCH_AMD64_VALUE)
+	else ifeq ($(APP_ARCH),$(ARCH_ARM64))
+		BUILD_ARCH = $(BSD_ARCH_ARM64_VALUE)
+	else ifeq ($(APP_ARCH),$(ARCH_ARM))
+		BUILD_ARCH = $(BSD_ARCH_ARM_VALUE)
+	else ifeq ($(APP_ARCH),$(ARCH_386))
+		BUILD_ARCH = $(BSD_ARCH_386_VALUE)
+	endif
+else ifeq ($(APP_OS),$(OS_OPENBSD))
+	ifeq ($(APP_ARCH),$(ARCH_AMD64))
+		BUILD_ARCH = $(BSD_ARCH_AMD64_VALUE)
+	else ifeq ($(APP_ARCH),$(ARCH_ARM64))
+		BUILD_ARCH = $(BSD_ARCH_ARM64_VALUE)
+	else ifeq ($(APP_ARCH),$(ARCH_ARM))
+		BUILD_ARCH = $(BSD_ARCH_ARM_VALUE)
+	else ifeq ($(APP_ARCH),$(ARCH_386))
+		BUILD_ARCH = $(BSD_ARCH_386_VALUE)
+	endif
+endif
+
+
 
 
 # increment_channel_number:
