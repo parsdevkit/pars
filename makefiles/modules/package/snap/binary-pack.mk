@@ -1,12 +1,6 @@
 include ./makefiles/modules/package/snap/common.mk
 
-SNAP_BINARY_ROOT_DIR = $(SNAP_ROOT_DIR)/binary
-SNAP_BINARY_ROOT_PACKAGE_DIR = $(SNAP_BINARY_ROOT_DIR)/package
-SNAP_BINARY_ROOT_SOURCE_DIR = $(SNAP_BINARY_ROOT_DIR)/source
-
-SNAP_BASE_DIR = $(SNAP_BINARY_ROOT_DIR)/$(APPLICATION_NAME)
-SNAP_SNAP_DIR = $(SNAP_BASE_DIR)/snap
-SNAP_SNAPCRAFT_FILE_PATH = $(SNAP_SNAP_DIR)/snapcraft.yaml
+SNAP_BUILD_ROOT_DIR = $(SNAP_ROOT_DIR)/binary/$(APP_ARCH)
 
 binary/snap-init:
 	@mkdir -p $(SNAP_SNAP_DIR)
@@ -50,14 +44,14 @@ binary/snap-files: binary/snap-init binary/snapcraft.yaml
 package.snap.build.binary: binary/snap-files
 	@mkdir -p $(SNAP_SNAP_DIR)
 
-	# $(MAKE) package.snap.move-binary-to-package-source TAG=$(APP_TAG) OS=$(OS_LINUX) ARCH=$(ARCH_LINUX_386)
-	# $(MAKE) package.snap.move-binary-to-package-source TAG=$(APP_TAG) OS=$(OS_LINUX) ARCH=$(ARCH_LINUX_AMD64)
-	# $(MAKE) package.snap.move-binary-to-package-source TAG=$(APP_TAG) OS=$(OS_LINUX) ARCH=$(ARCH_LINUX_ARM)
-	# $(MAKE) package.snap.move-binary-to-package-source TAG=$(APP_TAG) OS=$(OS_LINUX) ARCH=$(ARCH_LINUX_ARM64)
+	# $(MAKE) package.snap.move-binary-to-package-source TAG=$(APP_TAG) OS=$(OS_LINUX) ARCH=$(ARCH_386)
+	# $(MAKE) package.snap.move-binary-to-package-source TAG=$(APP_TAG) OS=$(OS_LINUX) ARCH=$(ARCH_AMD64)
+	# $(MAKE) package.snap.move-binary-to-package-source TAG=$(APP_TAG) OS=$(OS_LINUX) ARCH=$(ARCH_ARM)
+	# $(MAKE) package.snap.move-binary-to-package-source TAG=$(APP_TAG) OS=$(OS_LINUX) ARCH=$(ARCH_ARM64)
 	cd $(SNAP_BASE_DIR) && snapcraft
 	@echo "Package has been created with version $(APP_TAG)"
 
 package.snap.move-binary-to-package-source:
-	@mkdir -p $(SNAP_BASE_DIR)/bin/$(SNAP_ARCH)
+	@mkdir -p $(SNAP_BASE_DIR)/bin/$(BUILD_ARCH)
 	# $(MAKE) build.binary.linux TAG=$(APP_TAG) ARCH=$(APP_ARCH)
-	cp -r $(BIN_ARTIFACTS_DIR)/$(APP) $(SNAP_BASE_DIR)/bin/$(SNAP_ARCH)
+	cp -r $(BIN_ROOT_DIR)/$(APP) $(SNAP_BASE_DIR)/bin/$(BUILD_ARCH)

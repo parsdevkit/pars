@@ -1,12 +1,14 @@
 export OS_LINUX = linux
 export OS_WINDOWS = windows
 export OS_MACOS = darwin
-export OS_BSD = bsd
+export OS_FREEBSD = freebsd
+export OS_NETBSD = netbsd
+export OS_OPENBSD = openbsd
 
-export ARCH_LINUX_386 = 386
-export ARCH_LINUX_AMD64 = amd64
-export ARCH_LINUX_ARM = arm
-export ARCH_LINUX_ARM64 = arm64
+export ARCH_386 = 386
+export ARCH_AMD64 = amd64
+export ARCH_ARM = arm
+export ARCH_ARM64 = arm64
 
 export LINUX_ARCH_386_VALUE = i386
 export LINUX_ARCH_AMD64_VALUE = amd64
@@ -28,6 +30,7 @@ export WINDOWS_ARCH_ARM64_VALUE="arm64"
 
 
 
+
 APPLICATION_FULL_NAME := Pars
 APPLICATION_NAME := pars
 ORGANIZATION := Pars Community
@@ -36,8 +39,8 @@ OWNER := Ahmet Soner <ahmettsoner@gmail.com>
 HOMEPAGE := https://parsdevkit.net
 GIT := https://github.com/parsdevkit/pars
 LICENCE_TYPE := Apache-2.0
-SUMMARY := $(APPLICATION_NAME) is a simple utility.
-DESCRIPTION := $(APPLICATION_NAME) is a simple utility.
+SUMMARY := $(APPLICATION_FULL_NAME) is a simple utility.
+DESCRIPTION := $(APPLICATION_FULL_NAME) is a simple utility.
 
 STAGE ?= final
 HOST_OS =
@@ -48,6 +51,7 @@ APP_OS ?= $(OS)
 APP_ARCH ?= $(ARCH)
 APP_TAG ?=
 APP_STAGE ?= $(STAGE)
+
 
 RELEASE_DATE = Tue, 24 Aug 2024 00:00:00 +0000
 
@@ -60,10 +64,11 @@ DIST_ROOT_DIR = ./dist
 DOCS_ROOT_DIR = ./docs
 TMP_ROOT_DIR := ./tmp
 DOCS_USER_DOCS_DIR = $(DOCS_ROOT_DIR)/user_docs
-BIN_ROOT_DIR = $(DIST_ROOT_DIR)/$(APP_TAG)/$(APP_OS)/bin/$(APP_ARCH)
-BIN_ARTIFACTS_DIR = $(BIN_ROOT_DIR)/artifacts
-PACKAGE_ROOT_DIR = $(DIST_ROOT_DIR)/$(APP_TAG)/$(APP_OS)/pkg
-RELEASE_ROOT_DIR = $(DIST_ROOT_DIR)/$(APP_TAG)/release
-CHANGELOG_PATH = $(RELEASE_ROOT_DIR)/release-notes.md
+DIST_CURRENT_DIR = $(DIST_ROOT_DIR)/$(APP_TAG)
+BIN_ROOT_DIR = $(DIST_CURRENT_DIR)/build/$(APP_OS)/bin/$(APP_ARCH)
+PACKAGE_ROOT_DIR = $(DIST_CURRENT_DIR)/build/$(APP_OS)/pkg
+DIST_ARTIFACTS_DIR = $(DIST_CURRENT_DIR)/artifacts
+DIST_RELEASE_ROOT_DIR = $(DIST_CURRENT_DIR)/release
+CHANGELOG_PATH = $(DIST_RELEASE_ROOT_DIR)/release-notes.md
 
 LINUX_TMP_ROOT_DIR := /tmp

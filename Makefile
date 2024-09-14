@@ -1,21 +1,41 @@
 include makefiles/common.mk
 
 
-ifeq ($(MAKECMDGOALS), package.deb.build.binary)
+
+ifeq ($(MAKECMDGOALS), package.deb.prepare.config)
+include ./makefiles/modules/package/deb/common.mk
+endif
+
+ifeq ($(MAKECMDGOALS), package.deb.binary.prepare)
+include ./makefiles/modules/package/deb/binary-pack.mk
+endif
+
+ifeq ($(MAKECMDGOALS), package.deb.binary.build)
 include ./makefiles/modules/package/deb/binary-pack.mk
 endif
 
 
-ifeq ($(MAKECMDGOALS), package.deb.build.source)
+ifeq ($(MAKECMDGOALS), package.deb.source.prepare.config)
+include ./makefiles/modules/package/deb/source-pack.mk
+endif
+
+ifeq ($(MAKECMDGOALS), package.deb.source.prepare.payload)
+include ./makefiles/modules/package/deb/source-pack.mk
+endif
+
+ifeq ($(MAKECMDGOALS), package.deb.source.prepare.output)
+include ./makefiles/modules/package/deb/source-pack.mk
+endif
+
+ifeq ($(MAKECMDGOALS), package.deb.source.build)
+include ./makefiles/modules/package/deb/source-pack.mk
+endif
+
+ifeq ($(MAKECMDGOALS), package.deb.source.copy-to-artifacts)
 include ./makefiles/modules/package/deb/source-pack.mk
 endif
 
 ifeq ($(MAKECMDGOALS), package.deb.push-ppa)
-include ./makefiles/modules/package/deb/source-pack.mk
-endif
-
-
-ifeq ($(MAKECMDGOALS), package.move-source-code-to-package-source)
 include ./makefiles/modules/package/deb/source-pack.mk
 endif
 
@@ -48,12 +68,21 @@ include ./makefiles/modules/package/snap/source-pack.mk
 endif
 
 
+
 ### BUILD
+ifeq ($(MAKECMDGOALS), build.binary.all)
+include ./makefiles/modules/build/bin/common.mk
+endif
+
 ifeq ($(MAKECMDGOALS), build.binary)
 include ./makefiles/modules/build/bin/common.mk
 endif
 
 ifeq ($(MAKECMDGOALS), build.binary.vendor)
+include ./makefiles/modules/build/bin/common.mk
+endif
+
+ifeq ($(MAKECMDGOALS), build.binary.copy-to-artifacts)
 include ./makefiles/modules/build/bin/common.mk
 endif
 
@@ -109,6 +138,11 @@ endif
 
 ifeq ($(MAKECMDGOALS), changelog.clear)
 include ./makefiles/modules/release/changelog.mk
+endif
+
+
+ifeq ($(MAKECMDGOALS), artifacts.checksums)
+include ./makefiles/modules/release/checksums.mk
 endif
 
 

@@ -1,12 +1,6 @@
 include ./makefiles/modules/package/snap/common.mk
 
-SNAP_SOURCE_ROOT_DIR = $(SNAP_ROOT_DIR)/source
-SNAP_SOURCE_ROOT_PACKAGE_DIR = $(SNAP_SOURCE_ROOT_DIR)/package
-SNAP_SOURCE_ROOT_SOURCE_DIR = $(SNAP_SOURCE_ROOT_DIR)/source
-
-SNAP_BASE_DIR = $(SNAP_SOURCE_ROOT_DIR)/$(APPLICATION_NAME)
-SNAP_SNAP_DIR = $(SNAP_BASE_DIR)/snap
-SNAP_SNAPCRAFT_FILE_PATH = $(SNAP_SNAP_DIR)/snapcraft.yaml
+SNAP_BUILD_ROOT_DIR = $(SNAP_ROOT_DIR)/source
 
 source/snap-init:
 	@mkdir -p $(SNAP_SNAP_DIR)
@@ -44,9 +38,9 @@ source/snapcraft.yaml:
 	# echo "    build-packages:" >> $(SNAP_SNAPCRAFT_FILE_PATH)
 	# echo "      - golang-go" >> $(SNAP_SNAPCRAFT_FILE_PATH)
 	echo "    override-build: |" >> $(SNAP_SNAPCRAFT_FILE_PATH)
-	echo "      $(MAKE) package.snap.move-binary-to-package-source2 TAG=$(APP_TAG) OS=$(OS_LINUX) ARCH=$(ARCH_LINUX_AMD64)" >> $(SNAP_SNAPCRAFT_FILE_PATH)
+	echo "      $(MAKE) package.snap.move-binary-to-package-source2 TAG=$(APP_TAG) OS=$(OS_LINUX) ARCH=$(ARCH_AMD64)" >> $(SNAP_SNAPCRAFT_FILE_PATH)
 	echo "      mkdir -p \$$SNAPCRAFT_PART_INSTALL/bin" >> $(SNAP_SNAPCRAFT_FILE_PATH)
-	echo "      cp -r $(BIN_ARTIFACTS_DIR)/$(APP) \$$SNAPCRAFT_PART_INSTALL/bin" >> $(SNAP_SNAPCRAFT_FILE_PATH)
+	echo "      cp -r $(BIN_ROOT_DIR)/$(APP) \$$SNAPCRAFT_PART_INSTALL/bin" >> $(SNAP_SNAPCRAFT_FILE_PATH)
 	echo "" >> $(SNAP_SNAPCRAFT_FILE_PATH)
 
 
@@ -61,9 +55,9 @@ package.snap.build.source: source/snap-files
 	@echo "Package has been created with version $(APP_TAG)"
 
 package.snap.move-source-to-package-source:
-	@mkdir -p $(SNAP_BASE_DIR)/bin/$(SNAP_ARCH)
+	@mkdir -p $(SNAP_BASE_DIR)/bin/$(BUILD_ARCH)
 	$(MAKE) build.binary.linux TAG=$(APP_TAG) ARCH=$(APP_ARCH)
-	cp -r $(BIN_ARTIFACTS_DIR)/$(APP) $(SNAP_BASE_DIR)/bin/$(SNAP_ARCH)
+	cp -r $(BIN_ROOT_DIR)/$(APP) $(SNAP_BASE_DIR)/bin/$(BUILD_ARCH)
 
 package.snap.move-source-code-to-package-source:
 	cp -r $(SOURCE_ROOT_DIR) $(SNAP_BASE_DIR)
@@ -74,6 +68,6 @@ package.snap.move-source-code-to-package-source:
 	chmod +x $(SNAP_BASE_DIR)
 
 package.snap.move-binary-to-package-source2:
-	@mkdir -p $(SNAP_BASE_DIR)/bin/$(SNAP_ARCH)
-	$(MAKE) build.binary.linux TAG=$(APP_TAG) OS=$(OS_LINUX) ARCH=$(ARCH_LINUX_AMD64)
-	cp -r $(BIN_ARTIFACTS_DIR)/$(APP) $(SNAP_BASE_DIR)/bin/$(SNAP_ARCH)
+	@mkdir -p $(SNAP_BASE_DIR)/bin/$(BUILD_ARCH)
+	$(MAKE) build.binary.linux TAG=$(APP_TAG) OS=$(OS_LINUX) ARCH=$(ARCH_AMD64)
+	cp -r $(BIN_ROOT_DIR)/$(APP) $(SNAP_BASE_DIR)/bin/$(BUILD_ARCH)
