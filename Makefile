@@ -31,7 +31,7 @@ ifeq ($(MAKECMDGOALS), package.deb.source.build)
 include ./makefiles/modules/package/deb/source-pack.mk
 endif
 
-ifeq ($(MAKECMDGOALS), package.deb.source.copy-to-artifacts)
+ifeq ($(MAKECMDGOALS), package.deb.source.create-artifacts)
 include ./makefiles/modules/package/deb/source-pack.mk
 endif
 
@@ -43,12 +43,32 @@ ifeq ($(MAKECMDGOALS), package.move-binary-to-package-source)
 include ./makefiles/modules/package/deb/source-pack.mk
 endif
 
+ifeq ($(MAKECMDGOALS), package.snap.prepare.config)
+include ./makefiles/modules/package/snap/common.mk
+endif
+
 ifeq ($(MAKECMDGOALS), package.snap.build.binary)
 include ./makefiles/modules/package/snap/binary-pack.mk
 endif
 
 ifeq ($(MAKECMDGOALS), package.snap.move-binary-to-package-source)
 include ./makefiles/modules/package/snap/binary-pack.mk
+endif
+
+ifeq ($(MAKECMDGOALS), package.snap.source.prepare.config)
+include ./makefiles/modules/package/snap/source-pack.mk
+endif
+
+ifeq ($(MAKECMDGOALS), package.snap.source.prepare.payload)
+include ./makefiles/modules/package/snap/source-pack.mk
+endif
+
+ifeq ($(MAKECMDGOALS), package.snap.source.build)
+include ./makefiles/modules/package/snap/source-pack.mk
+endif
+
+ifeq ($(MAKECMDGOALS), package.snap.source.create-artifacts)
+include ./makefiles/modules/package/snap/source-pack.mk
 endif
 
 ifeq ($(MAKECMDGOALS), package.snap.build.source)
@@ -63,13 +83,13 @@ ifeq ($(MAKECMDGOALS), package.snap.move-source-code-to-package-source)
 include ./makefiles/modules/package/snap/source-pack.mk
 endif
 
-ifeq ($(MAKECMDGOALS), package.snap.move-binary-to-package-source2)
-include ./makefiles/modules/package/snap/source-pack.mk
-endif
-
 
 
 ### BUILD
+ifeq ($(MAKECMDGOALS), build.binary.prepare.config)
+include ./makefiles/modules/build/bin/common.mk
+endif
+
 ifeq ($(MAKECMDGOALS), build.binary.all)
 include ./makefiles/modules/build/bin/common.mk
 endif
@@ -82,7 +102,7 @@ ifeq ($(MAKECMDGOALS), build.binary.vendor)
 include ./makefiles/modules/build/bin/common.mk
 endif
 
-ifeq ($(MAKECMDGOALS), build.binary.copy-to-artifacts)
+ifeq ($(MAKECMDGOALS), build.binary.create-artifacts)
 include ./makefiles/modules/build/bin/common.mk
 endif
 
