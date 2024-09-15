@@ -13,7 +13,7 @@ copy-source-to-payload:
 	cp -r $(SOURCE_ROOT_DIR) $(DEB_BUILD_PAYLOAD_DIR)
 	cp -r $(MAKEFILES_ROOT_DIR) $(DEB_BUILD_PAYLOAD_DIR)
 	cp -r $(DOCS_ROOT_DIR) $(DEB_BUILD_PAYLOAD_DIR)
-	cp $(MAKEFILE_PATH) $(DEB_BUILD_PAYLOAD_DIR)/Makefile
+	cp $(MAKEFILE_PATH) $(DEB_BUILD_PAYLOAD_DIR)
 	chmod +x $(DEB_BUILD_PAYLOAD_DIR)
 
 install-source-on-payload:
@@ -21,13 +21,13 @@ install-source-on-payload:
 	cd $(DEB_BUILD_PAYLOAD_DIR)/src && go mod vendor
 
 
-package.deb.source.build: package.deb.source/prepare-output build-package package.deb.source/move-outputs
-
 build-package:
 #	cd $(DEB_BUILD_PAYLOAD_DIR) && dpkg-buildpackage -S $(GPG_KEY_FLAG)
 	echo "build başarılı" > $(DEB_BUILD_ROOT_DIR)/$(APP).txt
 	@echo "Package has been created with version $(APP_TAG)"
 
+
+package.deb.source.build: package.deb.source/prepare-output build-package package.deb.source/move-outputs
 
 
 package.deb.source/prepare-output:
@@ -61,11 +61,34 @@ package.move-binary-to-package-source:
 
 
 
-package.deb.source.copy-to-artifacts:
-ifeq ($(APP_OS),$(OS_LINUX))
-	tar -czvf $(DIST_ARTIFACTS_DIR)/$(APPLICATION_NAME)-$(APP_OS)-$(APP_TAG)-$(BUILD_ARCH).deb-src.tar.gz $(DEB_BUILD_OUTPUT_DIR)
-	tar -cjvf $(DIST_ARTIFACTS_DIR)/$(APPLICATION_NAME)-$(APP_OS)-$(APP_TAG)-$(BUILD_ARCH).deb-src.tar.bz2 $(DEB_BUILD_OUTPUT_DIR)
-	zip $(DIST_ARTIFACTS_DIR)/$(APPLICATION_NAME)-$(APP_OS)-$(APP_TAG)-$(BUILD_ARCH).deb-src.zip $(DEB_BUILD_OUTPUT_DIR)
-endif
 
+
+define compress
+	@mkdir -p $(DIST_ARTIFACTS_DIR)
+	@echo "Processing $< for $1 format..."
+	@bash -c ' \
+	FILENAME=$$(basename $<) ; \
+	BASENAME=$${FILENAME%_*} ; \
+	MATCH_ARCH=$${FILENAME##*_} ; \
+	MATCH_ARCH_NO_EXT=$${MATCH_ARCH%$(DEB_PACKAGE_EXT)} ; \
+	OUTPUT_NAME=$(DIST_ARTIFACTS_DIR)/$(APPLICATION_NAME)-$(APP_OS)-$(APP_TAG)-$$MATCH_ARCH_NO_EXT$(DEB_PACKAGE_EXT).$1 ; \
+	if [ "$1" = "zip" ]; then \
+		echo "Compressing $< to $$OUTPUT_NAME..." ; \
+		zip $$OUTPUT_NAME $< ; \
+	else \
+		echo "Compressing $< to $$OUTPUT_NAME..." ; \
+		$2 $$OUTPUT_NAME -C $(DEB_BUILD_OUTPUT_DIR) $$(basename $<) ; \
+	fi'
+endef
+
+package.deb.source.create-artifacts: $(addprefix $(DIST_ARTIFACTS_DIR)/, $(notdir $(DEB_FILES:$(DEB_PACKAGE_EXT)=.tar.gz)) $(notdir $(DEB_FILES:$(DEB_PACKAGE_EXT)=.tar.bz2)) $(notdir $(DEB_FILES:$(DEB_PACKAGE_EXT)=.zip)))
+
+$(DIST_ARTIFACTS_DIR)/%.tar.gz: $(DEB_BUILD_OUTPUT_DIR)/%$(DEB_PACKAGE_EXT)
+	$(call compress,tar.gz,tar -czf)
+
+$(DIST_ARTIFACTS_DIR)/%.tar.bz2: $(DEB_BUILD_OUTPUT_DIR)/%$(DEB_PACKAGE_EXT)
+	$(call compress,tar.bz2,tar -cjvf)
+
+$(DIST_ARTIFACTS_DIR)/%.zip: $(DEB_BUILD_OUTPUT_DIR)/%$(DEB_PACKAGE_EXT)
+	$(call compress,zip)
 

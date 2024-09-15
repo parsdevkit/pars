@@ -1,73 +1,66 @@
 include ./makefiles/modules/package/snap/common.mk
 
-SNAP_BUILD_ROOT_DIR = $(SNAP_ROOT_DIR)/source
 
-source/snap-init:
-	@mkdir -p $(SNAP_SNAP_DIR)
+package.snap.source.prepare.config: SNAP_PACK_TYPE = source
+package.snap.source.prepare.config:
+	$(MAKE) package.snap.prepare.config SNAP_PACK_TYPE=$(SNAP_PACK_TYPE)
 
-source/snapcraft.yaml:
-	echo "name: $(APPLICATION_NAME)" > $(SNAP_SNAPCRAFT_FILE_PATH)
-	echo "version: '$(RAW_VERSION)'" >> $(SNAP_SNAPCRAFT_FILE_PATH)
-	echo "summary: $(SUMMARY)" >> $(SNAP_SNAPCRAFT_FILE_PATH)
-	echo "description: $(DESCRIPTION)" >> $(SNAP_SNAPCRAFT_FILE_PATH)
-	echo "" >> $(SNAP_SNAPCRAFT_FILE_PATH)
-	echo "base: $(SNAP-BASE)" >> $(SNAP_SNAPCRAFT_FILE_PATH)
-	echo "grade: stable" >> $(SNAP_SNAPCRAFT_FILE_PATH)
-	echo "confinement: strict" >> $(SNAP_SNAPCRAFT_FILE_PATH)
-	echo "" >> $(SNAP_SNAPCRAFT_FILE_PATH)
-	# echo "architectures:" >> $(SNAP_SNAPCRAFT_FILE_PATH)
-	# echo "  - build-on: [amd64]" >> $(SNAP_SNAPCRAFT_FILE_PATH)
-	# echo "    build-for: [amd64]" >> $(SNAP_SNAPCRAFT_FILE_PATH)
-	# echo "  - build-on: [arm64]" >> $(SNAP_SNAPCRAFT_FILE_PATH)
-	# echo "    build-for: [arm64]" >> $(SNAP_SNAPCRAFT_FILE_PATH)
-	# echo "  - build-on: [i386]" >> $(SNAP_SNAPCRAFT_FILE_PATH)
-	# echo "    build-for: [i386]" >> $(SNAP_SNAPCRAFT_FILE_PATH)
-	# echo "  - build-on: [armhf]" >> $(SNAP_SNAPCRAFT_FILE_PATH)
-	# echo "    build-for: [armhf]" >> $(SNAP_SNAPCRAFT_FILE_PATH)
-	echo "" >> $(SNAP_SNAPCRAFT_FILE_PATH)
-	echo "apps:" >> $(SNAP_SNAPCRAFT_FILE_PATH)
-	echo "  $(APPLICATION_NAME):" >> $(SNAP_SNAPCRAFT_FILE_PATH)
-	echo "    command: bin/$(APPLICATION_NAME)" >> $(SNAP_SNAPCRAFT_FILE_PATH)
-	echo "" >> $(SNAP_SNAPCRAFT_FILE_PATH)
-	echo "parts:" >> $(SNAP_SNAPCRAFT_FILE_PATH)
-	echo "  $(APPLICATION_NAME):" >> $(SNAP_SNAPCRAFT_FILE_PATH)
-	echo "    source: ." >> $(SNAP_SNAPCRAFT_FILE_PATH)
-	echo "    plugin: go" >> $(SNAP_SNAPCRAFT_FILE_PATH)
-	echo "    build-snaps: [go/latest/stable]" >> $(SNAP_SNAPCRAFT_FILE_PATH)
-	echo "    source-type: local" >> $(SNAP_SNAPCRAFT_FILE_PATH)
-	# echo "    build-packages:" >> $(SNAP_SNAPCRAFT_FILE_PATH)
-	# echo "      - golang-go" >> $(SNAP_SNAPCRAFT_FILE_PATH)
-	echo "    override-build: |" >> $(SNAP_SNAPCRAFT_FILE_PATH)
-	echo "      $(MAKE) package.snap.move-binary-to-package-source2 TAG=$(APP_TAG) OS=$(OS_LINUX) ARCH=$(ARCH_AMD64)" >> $(SNAP_SNAPCRAFT_FILE_PATH)
-	echo "      mkdir -p \$$SNAPCRAFT_PART_INSTALL/bin" >> $(SNAP_SNAPCRAFT_FILE_PATH)
-	echo "      cp -r $(BIN_ROOT_DIR)/$(APP) \$$SNAPCRAFT_PART_INSTALL/bin" >> $(SNAP_SNAPCRAFT_FILE_PATH)
-	echo "" >> $(SNAP_SNAPCRAFT_FILE_PATH)
+
+package.snap.source.prepare.payload: SNAP_PACK_TYPE = source
+package.snap.source.prepare.payload: copy-source-to-payload
+# package.snap.source.prepare.payload: install-source-on-payload
+# package.snap.source.prepare.payload: copy-source-to-payload install-source-on-payload
+
+copy-source-to-payload:
+	cp -r $(SOURCE_ROOT_DIR) $(SNAP_BUILD_PAYLOAD_DIR)
+	cp -r $(MAKEFILES_ROOT_DIR) $(SNAP_BUILD_PAYLOAD_DIR)
+	cp -r $(DOCS_ROOT_DIR) $(SNAP_BUILD_PAYLOAD_DIR)
+	cp $(MAKEFILE_PATH) $(SNAP_BUILD_PAYLOAD_DIR)
+	chmod +x $(SNAP_BUILD_PAYLOAD_DIR)
+
+install-source-on-payload:
+	cd $(SNAP_BUILD_PAYLOAD_DIR)/src && go mod tidy
+	cd $(SNAP_BUILD_PAYLOAD_DIR)/src && go mod vendor
 
 
 
 
-source/snap-files: source/snap-init source/snapcraft.yaml
+package.snap.source/move-outputs:
+	mv $(SNAP_BUILD_CONFIG_DIR)/$(APP)*.snap $(SNAP_BUILD_OUTPUT_DIR)
 
-package.snap.build.source: source/snap-files
-	@mkdir -p $(SNAP_SNAP_DIR)
-	$(MAKE) package.snap.move-source-code-to-package-source TAG=$(APP_TAG) OS=$(OS_LINUX) ARCH=$(APP_ARCH)
-	cd $(SNAP_BASE_DIR) && snapcraft
-	@echo "Package has been created with version $(APP_TAG)"
+define compress
+	@mkdir -p $(DIST_ARTIFACTS_DIR)
+	@echo "Processing $< for $1 format..."
+	@bash -c ' \
+	FILENAME=$$(basename $<) ; \
+	BASENAME=$${FILENAME%_*} ; \
+	MATCH_ARCH=$${FILENAME##*_} ; \
+	MATCH_ARCH_NO_EXT=$${MATCH_ARCH%$(SNAP_PACKAGE_EXT)} ; \
+	OUTPUT_NAME=$(DIST_ARTIFACTS_DIR)/$(APPLICATION_NAME)-$(APP_OS)-$(APP_TAG)-$$MATCH_ARCH_NO_EXT$(SNAP_PACKAGE_EXT).$1 ; \
+	if [ "$1" = "zip" ]; then \
+		echo "Compressing $< to $$OUTPUT_NAME..." ; \
+		zip $$OUTPUT_NAME $< ; \
+	else \
+		echo "Compressing $< to $$OUTPUT_NAME..." ; \
+		$2 $$OUTPUT_NAME -C $(SNAP_BUILD_OUTPUT_DIR) $$(basename $<) ; \
+	fi'
+endef
 
-package.snap.move-source-to-package-source:
-	@mkdir -p $(SNAP_BASE_DIR)/bin/$(BUILD_ARCH)
-	$(MAKE) build.binary.linux TAG=$(APP_TAG) ARCH=$(APP_ARCH)
-	cp -r $(BIN_ROOT_DIR)/$(APP) $(SNAP_BASE_DIR)/bin/$(BUILD_ARCH)
+package.snap.source.create-artifacts: $(addprefix $(DIST_ARTIFACTS_DIR)/, $(notdir $(SNAP_FILES:$(SNAP_PACKAGE_EXT)=.tar.gz)) $(notdir $(SNAP_FILES:$(SNAP_PACKAGE_EXT)=.tar.bz2)) $(notdir $(SNAP_FILES:$(SNAP_PACKAGE_EXT)=.zip)))
 
-package.snap.move-source-code-to-package-source:
-	cp -r $(SOURCE_ROOT_DIR) $(SNAP_BASE_DIR)
-	cp -r $(MAKEFILES_ROOT_DIR) $(SNAP_BASE_DIR)
-	cp -r $(DOCS_ROOT_DIR) $(SNAP_BASE_DIR)
-	cp $(MAKEFILE_PATH) $(SNAP_BASE_DIR)/Makefile
-	# cd $(SNAP_BASE_DIR)/src && go mod vendor
-	chmod +x $(SNAP_BASE_DIR)
+$(DIST_ARTIFACTS_DIR)/%.tar.gz: $(SNAP_BUILD_OUTPUT_DIR)/%$(SNAP_PACKAGE_EXT)
+	$(call compress,tar.gz,tar -czf)
 
-package.snap.move-binary-to-package-source2:
-	@mkdir -p $(SNAP_BASE_DIR)/bin/$(BUILD_ARCH)
-	$(MAKE) build.binary.linux TAG=$(APP_TAG) OS=$(OS_LINUX) ARCH=$(ARCH_AMD64)
-	cp -r $(BIN_ROOT_DIR)/$(APP) $(SNAP_BASE_DIR)/bin/$(BUILD_ARCH)
+$(DIST_ARTIFACTS_DIR)/%.tar.bz2: $(SNAP_BUILD_OUTPUT_DIR)/%$(SNAP_PACKAGE_EXT)
+	$(call compress,tar.bz2,tar -cjvf)
+
+$(DIST_ARTIFACTS_DIR)/%.zip: $(SNAP_BUILD_OUTPUT_DIR)/%$(SNAP_PACKAGE_EXT)
+	$(call compress,zip)
+
+
+
+
+
+# package.snap.source.build: package.snap.source/move-outputs
+# package.snap.source.build: build-package package.snap.source/move-outputs
+

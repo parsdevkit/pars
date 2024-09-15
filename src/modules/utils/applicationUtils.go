@@ -1,6 +1,7 @@
 package utils
 
 import (
+	"bufio"
 	"fmt"
 	"log"
 	"os"
@@ -27,7 +28,7 @@ var StageTypes = struct {
 	Test  StageType
 	Final StageType
 }{
-	None:  "",
+	None:  "none",
 	Dev:   "dev",
 	Test:  "test",
 	Final: "final",
@@ -272,6 +273,9 @@ func SetStage(stage string) {
 	stage = stage
 }
 func GetStage() string {
+	if IsEmpty(stage) {
+		return string(StageTypes.None)
+	}
 	return stage
 }
 
@@ -279,6 +283,10 @@ func SetVersion(version string) {
 	version = version
 }
 func GetVersion() string {
+	if IsEmpty(version) {
+		ver, _ := getWorkingVersion(filepath.Join(GetCodeBaseLocation(), "VERSION"))
+		return ver
+	}
 	return version
 }
 
@@ -289,6 +297,18 @@ func GetEnvironment() string {
 	return environment
 }
 
+func GetPlatform() string {
+	snap := os.Getenv("SNAP")
+
+	if !IsEmpty(snap) {
+		return "snap"
+	} else if isRunningInDocker() {
+		return "docker"
+	}
+
+	return "native"
+}
+
 func SetLogLevel(LogLevel core.LogLevel) {
 	logLevel = LogLevel
 }
@@ -297,7 +317,7 @@ func GetLogLevel() core.LogLevel {
 }
 
 func GetCodeBaseLocation() string {
-	if IsEmpty(stage) || stage == string(StageTypes.None) {
+	if GetStage() == string(StageTypes.None) {
 		_, file, _, ok := runtime.Caller(0)
 		if !ok {
 			fmt.Println("Error getting caller")
@@ -307,7 +327,7 @@ func GetCodeBaseLocation() string {
 			fmt.Println("Error:", err)
 		}
 		return project_root
-	} else if stage == string(StageTypes.Dev) {
+	} else if GetStage() == string(StageTypes.Dev) {
 		project_root := os.Getenv("PARS_PROJECT_ROOT")
 
 		return project_root
@@ -367,11 +387,11 @@ func PrepareLocations() error {
 }
 
 func GetConfigLocation() string {
-	if IsEmpty(stage) || stage == string(StageTypes.None) {
+	if GetStage() == string(StageTypes.None) {
 		return filepath.Join(GetCodeBaseLocation(), "bin")
-	} else if stage == string(StageTypes.Dev) {
+	} else if GetStage() == string(StageTypes.Dev) {
 		return filepath.Join(GetCodeBaseLocation(), "config")
-	} else if stage == string(StageTypes.Test) {
+	} else if GetStage() == string(StageTypes.Test) {
 		return filepath.Join(GetExecutableLocation(), "config")
 	}
 	return getDefaultPlatformConfigDir()
@@ -392,11 +412,11 @@ func PrepareConfigLocation() error {
 }
 
 func GetLogLocation() string {
-	if IsEmpty(stage) || stage == string(StageTypes.None) {
+	if GetStage() == string(StageTypes.None) {
 		return filepath.Join(GetCodeBaseLocation(), "log")
-	} else if stage == string(StageTypes.Dev) {
+	} else if GetStage() == string(StageTypes.Dev) {
 		return filepath.Join(GetCodeBaseLocation(), "log")
-	} else if stage == string(StageTypes.Test) {
+	} else if GetStage() == string(StageTypes.Test) {
 		return filepath.Join(GetExecutableLocation(), "log")
 	}
 	return getDefaultPlatformLogDir()
@@ -417,11 +437,11 @@ func PrepareLogLocation() error {
 }
 
 func GetDocumentLocation() string {
-	if IsEmpty(stage) || stage == string(StageTypes.None) {
+	if GetStage() == string(StageTypes.None) {
 		return filepath.Join(GetCodeBaseLocation(), "docs")
-	} else if stage == string(StageTypes.Dev) {
+	} else if GetStage() == string(StageTypes.Dev) {
 		return filepath.Join(GetCodeBaseLocation(), "docs")
-	} else if stage == string(StageTypes.Test) {
+	} else if GetStage() == string(StageTypes.Test) {
 		return filepath.Join(GetExecutableLocation(), "docs")
 	}
 	return getDefaultPlatformDocumentDir()
@@ -442,11 +462,11 @@ func PrepareDocumentLocation() error {
 }
 
 func GetDataLocation() string {
-	if IsEmpty(stage) || stage == string(StageTypes.None) {
+	if GetStage() == string(StageTypes.None) {
 		return filepath.Join(GetCodeBaseLocation(), "data")
-	} else if stage == string(StageTypes.Dev) {
+	} else if GetStage() == string(StageTypes.Dev) {
 		return filepath.Join(GetCodeBaseLocation(), "data")
-	} else if stage == string(StageTypes.Test) {
+	} else if GetStage() == string(StageTypes.Test) {
 		return filepath.Join(GetExecutableLocation(), "data")
 	}
 
@@ -491,11 +511,11 @@ func GetDBLocation(environment string) string {
 }
 
 func GetCacheLocation() string {
-	if IsEmpty(stage) || stage == string(StageTypes.None) {
+	if GetStage() == string(StageTypes.None) {
 		return filepath.Join(GetCodeBaseLocation(), "cache")
-	} else if stage == string(StageTypes.Dev) {
+	} else if GetStage() == string(StageTypes.Dev) {
 		return filepath.Join(GetCodeBaseLocation(), "cache")
-	} else if stage == string(StageTypes.Test) {
+	} else if GetStage() == string(StageTypes.Test) {
 		return filepath.Join(GetExecutableLocation(), "cache")
 	}
 	return getDefaultPlatformCacheDir()
@@ -515,11 +535,11 @@ func PrepareCacheLocation() error {
 	return nil
 }
 func GetBinariesLocation() string {
-	if IsEmpty(stage) || stage == string(StageTypes.None) {
+	if GetStage() == string(StageTypes.None) {
 		return filepath.Join(GetCodeBaseLocation(), "bin")
-	} else if stage == string(StageTypes.Dev) {
+	} else if GetStage() == string(StageTypes.Dev) {
 		return filepath.Join(GetCodeBaseLocation(), "bin")
-	} else if stage == string(StageTypes.Test) {
+	} else if GetStage() == string(StageTypes.Test) {
 		return filepath.Join(GetExecutableLocation(), "bin")
 	}
 	return getDefaultPlatformLibraryDir()
@@ -543,11 +563,11 @@ func GetBinaryLocation(name, version string) string {
 }
 
 func GetPluginsLocation() string {
-	if IsEmpty(stage) || stage == string(StageTypes.None) {
+	if GetStage() == string(StageTypes.None) {
 		return filepath.Join(GetCodeBaseLocation(), "plugins")
-	} else if stage == string(StageTypes.Dev) {
+	} else if GetStage() == string(StageTypes.Dev) {
 		return filepath.Join(GetCodeBaseLocation(), "plugins")
-	} else if stage == string(StageTypes.Test) {
+	} else if GetStage() == string(StageTypes.Test) {
 		return filepath.Join(GetExecutableLocation(), "plugins")
 	}
 	return getDefaultPlatformPluginDir()
@@ -581,11 +601,11 @@ func GetSourceLocation() string {
 
 // TODO: Gözden geçirilerek değerlendirilecek
 func GetTempsLocation() string {
-	if IsEmpty(stage) || stage == string(StageTypes.None) {
+	if GetStage() == string(StageTypes.None) {
 		return filepath.Join(GetCodeBaseLocation(), "temp")
-	} else if stage == string(StageTypes.Dev) {
+	} else if GetStage() == string(StageTypes.Dev) {
 		return filepath.Join(GetCodeBaseLocation(), "temp")
-	} else if stage == string(StageTypes.Test) {
+	} else if GetStage() == string(StageTypes.Test) {
 		return filepath.Join(GetExecutableLocation(), "temp")
 	}
 	return getDefaultPlatformTempDir()
@@ -593,9 +613,9 @@ func GetTempsLocation() string {
 
 // TODO: Gözden geçirilerek değerlendirilecek
 func GetTestsLocation() string {
-	if IsEmpty(stage) || stage == string(StageTypes.None) {
+	if GetStage() == string(StageTypes.None) {
 		return filepath.Join(GetCodeBaseLocation(), "tests")
-	} else if stage == string(StageTypes.Dev) {
+	} else if GetStage() == string(StageTypes.Dev) {
 		return filepath.Join(GetCodeBaseLocation(), "tests")
 	}
 	return ""
@@ -665,4 +685,46 @@ func GetBenchmarkTestsLocation() string {
 }
 func GetBenchmarkTestFileLocation(file string) string {
 	return filepath.Join(GetBenchmarkTestsLocation(), file)
+}
+
+func isRunningInDocker() bool {
+	file, err := os.Open("/proc/1/cgroup")
+	if err != nil {
+		return false
+	}
+	defer file.Close()
+
+	scanner := bufio.NewScanner(file)
+	for scanner.Scan() {
+		line := scanner.Text()
+		if strings.Contains(line, "docker") || strings.Contains(line, "kubepods") {
+			return true
+		}
+	}
+	return false
+}
+
+func getWorkingVersion(filePath string) (string, error) {
+	file, err := os.Open(filePath)
+	if err != nil {
+		return "", err
+	}
+	defer file.Close()
+
+	scanner := bufio.NewScanner(file)
+	for scanner.Scan() {
+		line := scanner.Text()
+		if strings.HasPrefix(line, "WORKING_VERSION=") {
+			parts := strings.SplitN(line, "=", 2)
+			if len(parts) == 2 {
+				return parts[1], nil
+			}
+		}
+	}
+
+	if err := scanner.Err(); err != nil {
+		return "", err
+	}
+
+	return "", fmt.Errorf("WORKING_VERSION not found")
 }

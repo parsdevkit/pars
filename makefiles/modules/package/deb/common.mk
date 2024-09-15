@@ -1,18 +1,60 @@
 include ./makefiles/variables.mk
 include ./makefiles/init.mk
 
+
+ifeq ($(DEB_HOST_ARCH),$(LINUX_ARCH_AMD64_VALUE))
+	BUILD_DEB_HOST_ARCH = $(ARCH_AMD64)
+else ifeq ($(DEB_HOST_ARCH),$(LINUX_ARCH_ARM64_VALUE))
+	BUILD_DEB_HOST_ARCH = $(ARCH_ARM64)
+else ifeq ($(DEB_HOST_ARCH),$(LINUX_ARCH_ARM_VALUE))
+	BUILD_DEB_HOST_ARCH = $(ARCH_ARM)
+else ifeq ($(DEB_HOST_ARCH),$(LINUX_ARCH_386_VALUE))
+	BUILD_DEB_HOST_ARCH = $(ARCH_386)
+endif
+
 DEB_PACK_TYPE ?= source
 
-
-ifeq ($(DEB_PACK_TYPE),binary)
-  DEB_PACK_DIR = binary/$(ARCH_FOLDER)
-else ifeq ($(DEB_PACK_TYPE),source)
-  DEB_PACK_DIR = source/$(ARCH_FOLDER)
+ifdef ARCH
+	ARCH_FLAG_VALUE := $(APP_ARCH)
+	ARCH_FOLDER := $(APP_ARCH)
+else
+	ARCH_FLAG_VALUE := $$(BUILD_DEB_HOST_ARCH)
+	ifeq ($(DEB_PACK_TYPE),binary)
+		ARCH_FOLDER := $(APP_ARCH)
+	else  
+		ARCH_FOLDER := all
+	endif
 endif
 
 
+ifeq ($(DEB_PACK_TYPE),binary)
+	DEB_PACK_DIR = binary/$(ARCH_FOLDER)
+else ifeq ($(DEB_PACK_TYPE),source)
+	DEB_PACK_DIR = source/$(ARCH_FOLDER)
+endif
+
+
+ifdef GPG_KEY
+	GPG_KEY_FLAG := -k$(GPG_KEY)
+endif
+
+
+
+
+ifdef ARCH
+	DEB_PACK_ARCH := $(BUILD_ARCH)
+else
+	ifeq ($(DEB_PACK_TYPE),binary)
+		DEB_PACK_ARCH := $(APP_ARCH)
+	else ifeq ($(DEB_PACK_TYPE),source)
+		DEB_PACK_ARCH := any
+	endif
+endif
+
 GPG_KEY ?= 
 DEB-SERIES ?= "noble"
+DEB_PACKAGE_EXT = .deb
+DEB_FILES = $(wildcard $(DEB_BUILD_OUTPUT_DIR)/*$(DEB_PACKAGE_EXT))
 
 DEB_BINARY_DIR = usr/bin
 DEB_CONFIG_DIR = etc/$(APPLICATION_NAME)
@@ -30,51 +72,18 @@ DEB_ROOT_DIR = $(PACKAGE_ROOT_DIR)/deb
 DEB_BUILD_ROOT_DIR = $(DEB_ROOT_DIR)/$(DEB_PACK_DIR)
 DEB_BUILD_CONFIG_DIR = $(DEB_BUILD_ROOT_DIR)/$(APPLICATION_NAME)
 DEB_BUILD_PAYLOAD_DIR = $(DEB_BUILD_ROOT_DIR)/$(APPLICATION_NAME)
+DEB_BUILD_TEMP_DIR = $(DEB_BUILD_ROOT_DIR)/$(APPLICATION_NAME)
 DEB_BUILD_OUTPUT_DIR = $(DEB_BUILD_ROOT_DIR)/output
 DEB_BUILD_CONFIG_DEBIAN_DIR = $(DEB_BUILD_CONFIG_DIR)/debian
 
 
-ifdef GPG_KEY
-	GPG_KEY_FLAG := -k$(GPG_KEY)
-endif
-
-ifdef ARCH
-	ARCH_FLAG_VALUE := $(APP_ARCH)
-  ARCH_FOLDER := $(APP_ARCH)
-else
-  ARCH_FLAG_VALUE := $$(BUILD_DEB_HOST_ARCH)
-  ifeq ($(DEB_PACK_TYPE),binary)
-  ARCH_FOLDER := $(APP_ARCH)
-  else  
-  ARCH_FOLDER := all
-  endif
-endif
-
-
-
-ifeq ($(DEB_HOST_ARCH),$(LINUX_ARCH_AMD64_VALUE))
-	BUILD_DEB_HOST_ARCH = $(ARCH_AMD64)
-else ifeq ($(DEB_HOST_ARCH),$(LINUX_ARCH_ARM64_VALUE))
-	BUILD_DEB_HOST_ARCH = $(ARCH_ARM64)
-else ifeq ($(DEB_HOST_ARCH),$(LINUX_ARCH_ARM_VALUE))
-	BUILD_DEB_HOST_ARCH = $(ARCH_ARM)
-else ifeq ($(DEB_HOST_ARCH),$(LINUX_ARCH_386_VALUE))
-	BUILD_DEB_HOST_ARCH = $(ARCH_386)
-endif
-
-
-ifdef ARCH
-	DEB_PACK_ARCH := $(BUILD_ARCH)
-else
-  ifeq ($(DEB_PACK_TYPE),binary)
-	DEB_PACK_ARCH := $(APP_ARCH)
-  else ifeq ($(DEB_PACK_TYPE),source)
-	DEB_PACK_ARCH := any
-  endif
-endif
-
 debian-init:
 	@mkdir -p $(DIST_ARTIFACTS_DIR)
+	@mkdir -p $(DEB_BUILD_ROOT_DIR)
+	@mkdir -p $(DEB_BUILD_CONFIG_DIR)
+	@mkdir -p $(DEB_BUILD_PAYLOAD_DIR)
+	@mkdir -p $(DEB_BUILD_TEMP_DIR)
+	@mkdir -p $(DEB_BUILD_OUTPUT_DIR)
 	@mkdir -p $(DEB_BUILD_CONFIG_DEBIAN_DIR)
 	@mkdir -p $(DEB_BUILD_CONFIG_DEBIAN_DIR)/source
 
@@ -131,7 +140,7 @@ else ifeq ($(DEB_PACK_TYPE),source)
 	echo "	true" >> $(DEB_BUILD_CONFIG_DIR)/$@
 	echo "" >> $(DEB_BUILD_CONFIG_DIR)/$@
 	echo "override_dh_auto_build:" >> $(DEB_BUILD_CONFIG_DIR)/$@
-	echo '	$(MAKE) build.binary.linux.vendor TAG=$(APP_TAG) ARCH=$(ARCH_FLAG_VALUE)' >> $(DEB_BUILD_CONFIG_DIR)/$@
+	echo '	$(MAKE) build.binary.linux.vendor TAG=$(APP_TAG)' >> $(DEB_BUILD_CONFIG_DIR)/$@
 	echo '	$(MAKE) package.move-binary-to-package-source TAG=$(APP_TAG) OS=$(OS_LINUX) ARCH=$(ARCH_FLAG_VALUE)' >> $(DEB_BUILD_CONFIG_DIR)/$@
 
 endif

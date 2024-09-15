@@ -5,7 +5,6 @@ import (
 	"runtime"
 
 	"github.com/spf13/cobra"
-	"github.com/spf13/viper"
 	"parsdevkit.net/core/utils"
 )
 
@@ -19,16 +18,24 @@ var InfoCmd = &cobra.Command{
 
 func executeFunc(cmd *cobra.Command, args []string) {
 	fmt.Println("New generation SDK")
-	if utils.IsEmpty(utils.GetStage()) || utils.GetStage() == string(utils.StageTypes.None) {
-		fmt.Printf("Codebase Path: %v\n", utils.GetCodeBaseLocation())
+	fmt.Printf("%-20s: %v\n", "Stage", utils.GetStage())
+	fmt.Printf("%-20s: %v\n", "Version", utils.GetVersion())
+	fmt.Printf("%-20s: %v\n", "Platform", utils.GetPlatform())
+	fmt.Printf("%-20s: %v\n", "OS", runtime.GOOS)
+	fmt.Printf("%-20s: %v\n", "Architecture", runtime.GOARCH)
+
+	environment := utils.GetEnvironment()
+	if utils.IsEmpty(environment) {
+		environment = "default"
 	}
-	fmt.Printf("Executable Path: %v\n", utils.GetExecutableLocation())
-	fmt.Printf("Stage: %v\n", utils.GetStage())
-	fmt.Printf("Version: %v\n", utils.GetVersion())
-	fmt.Printf("OS: %v\n", runtime.GOOS)
-	fmt.Printf("Architecture: %v\n", runtime.GOARCH)
-	fmt.Printf("Data Directory: %v\n", utils.GetDataLocation())
-	fmt.Printf("VIPER-TEST: %v\n", viper.GetString("app.name"))
+	fmt.Printf("%-20s: %v\n", "Environment", environment)
+
+	if utils.GetStage() == string(utils.StageTypes.None) {
+		fmt.Printf("%-20s: %v\n", "Codebase Path", utils.GetCodeBaseLocation())
+	}
+	fmt.Printf("%-20s: %v\n", "Executable Path", utils.GetExecutableLocation())
+	fmt.Printf("%-20s: %v\n", "Config Directory", utils.GetConfigLocation())
+	fmt.Printf("%-20s: %v\n", "Data Directory", utils.GetDataLocation())
 }
 
 func init() {
