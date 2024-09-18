@@ -128,6 +128,12 @@ rpmbuild/SPECS/$(APPLICATION_NAME).spec:
 	echo "%install" >> $(RPM_BUILD_CONFIG_DIR)/$@
 #	echo "$(MAKE) package.rpm.move-binary-to-package-source TAG=$(APP_TAG) OS=$(OS_LINUX) ARCH=$(ARCH_FLAG_VALUE)" >> $(RPM_BUILD_CONFIG_DIR)/$@
 	echo "mkdir -p %{buildroot}/$(RPM_BINARY_DIR)" >> $(RPM_BUILD_CONFIG_DIR)/$@
+	echo "mkdir -p %{buildroot}/$(RPM_CONFIG_DIR)" >> $(RPM_BUILD_CONFIG_DIR)/$@
+	echo "mkdir -p %{buildroot}/$(RPM_LOG_DIR)" >> $(RPM_BUILD_CONFIG_DIR)/$@
+	echo "mkdir -p %{buildroot}/$(RPM_DATA_DATABASE_DIR)" >> $(RPM_BUILD_CONFIG_DIR)/$@
+	echo "mkdir -p %{buildroot}/$(RPM_CACHE_DIR)" >> $(RPM_BUILD_CONFIG_DIR)/$@
+	echo "mkdir -p %{buildroot}/$(RPM_LIB_DIR)" >> $(RPM_BUILD_CONFIG_DIR)/$@
+	echo "mkdir -p %{buildroot}/$(RPM_SHARE_DIR)" >> $(RPM_BUILD_CONFIG_DIR)/$@
 	echo "mkdir -p %{buildroot}/$(RPM_DOCS_DIR)" >> $(RPM_BUILD_CONFIG_DIR)/$@
 	echo "cp -r $(BIN_ROOT_DIR)/output/$(APP) %{buildroot}/$(RPM_BINARY_DIR)" >> $(RPM_BUILD_CONFIG_DIR)/$@
 	echo "cp -r $(DOCS_USER_DOCS_DIR) %{buildroot}/$(RPM_DOCS_DIR)" >> $(RPM_BUILD_CONFIG_DIR)/$@

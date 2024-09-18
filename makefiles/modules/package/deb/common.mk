@@ -155,7 +155,18 @@ else ifeq ($(DEB_PACK_TYPE),source)
 	echo "" >> $(DEB_BUILD_CONFIG_DIR)/$@
 	echo "override_dh_auto_build:" >> $(DEB_BUILD_CONFIG_DIR)/$@
 	echo '	$(MAKE) build.binary.linux.vendor TAG=$(APP_TAG)' >> $(DEB_BUILD_CONFIG_DIR)/$@
-	echo '	$(MAKE) package.move-binary-to-package-source TAG=$(APP_TAG) OS=$(OS_LINUX) ARCH=$(ARCH_FLAG_VALUE)' >> $(DEB_BUILD_CONFIG_DIR)/$@
+#	echo '	$(MAKE) package.move-binary-to-package-source TAG=$(APP_TAG) OS=$(OS_LINUX) ARCH=$(ARCH_FLAG_VALUE)' >> $(DEB_BUILD_CONFIG_DIR)/$@
+	echo "	mkdir -p $(DEB_BUILD_CONFIG_DIR)/$(DEB_BINARY_DIR)" >> $(DEB_BUILD_CONFIG_DIR)/$@
+	echo "	mkdir -p $(DEB_BUILD_CONFIG_DIR)/$(DEB_CONFIG_DIR)" >> $(DEB_BUILD_CONFIG_DIR)/$@
+	echo "	mkdir -p $(DEB_BUILD_CONFIG_DIR)/$(DEB_LOG_DIR)" >> $(DEB_BUILD_CONFIG_DIR)/$@
+	echo "	mkdir -p $(DEB_BUILD_CONFIG_DIR)/$(DEB_DATA_DATABASE_DIR)" >> $(DEB_BUILD_CONFIG_DIR)/$@
+	echo "	mkdir -p $(DEB_BUILD_CONFIG_DIR)/$(DEB_CACHE_DIR)" >> $(DEB_BUILD_CONFIG_DIR)/$@
+	echo "	mkdir -p $(DEB_BUILD_CONFIG_DIR)/$(DEB_LIB_DIR)" >> $(DEB_BUILD_CONFIG_DIR)/$@
+	echo "	mkdir -p $(DEB_BUILD_CONFIG_DIR)/$(DEB_SHARE_DIR)" >> $(DEB_BUILD_CONFIG_DIR)/$@
+	echo "	mkdir -p $(DEB_BUILD_CONFIG_DIR)/$(DEB_DOCS_DIR)" >> $(DEB_BUILD_CONFIG_DIR)/$@
+	echo "	cp -r $(BIN_ROOT_DIR)/$(APP) $(DEB_BUILD_CONFIG_DIR)/$(DEB_BINARY_DIR)" >> $(DEB_BUILD_CONFIG_DIR)/$@
+	echo "	cp -r $(DOCS_USER_DOCS_DIR) $(DEB_BUILD_CONFIG_DIR)/$(DEB_DOCS_DIR)" >> $(DEB_BUILD_CONFIG_DIR)/$@
+	echo "" >> $(DEB_BUILD_CONFIG_DIR)/$@
 endif
 
 

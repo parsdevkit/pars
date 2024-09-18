@@ -38,9 +38,6 @@ ifeq ($(MAKECMDGOALS), package.rpm.push-ppa)
 include ./makefiles/modules/package/rpm/source-pack.mk
 endif
 
-ifeq ($(MAKECMDGOALS), package.rpm.move-binary-to-package-source)
-include ./makefiles/modules/package/rpm/source-pack.mk
-endif
 
 ifeq ($(MAKECMDGOALS), package.deb.prepare.config)
 include ./makefiles/modules/package/deb/common.mk
@@ -78,20 +75,11 @@ endif
 ifeq ($(MAKECMDGOALS), package.deb.push-ppa)
 include ./makefiles/modules/package/deb/source-pack.mk
 endif
-
-ifeq ($(MAKECMDGOALS), package.move-binary-to-package-source)
-include ./makefiles/modules/package/deb/source-pack.mk
-endif
-
 ifeq ($(MAKECMDGOALS), package.snap.prepare.config)
 include ./makefiles/modules/package/snap/common.mk
 endif
 
 ifeq ($(MAKECMDGOALS), package.snap.build.binary)
-include ./makefiles/modules/package/snap/binary-pack.mk
-endif
-
-ifeq ($(MAKECMDGOALS), package.snap.move-binary-to-package-source)
 include ./makefiles/modules/package/snap/binary-pack.mk
 endif
 
