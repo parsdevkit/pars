@@ -20,6 +20,10 @@ package.snap.source.prepare.payload:
 
 
 
+
+package.snap.source.build:
+	mv $(SNAP_BUILD_CONFIG_DIR)/$(APP)*.snap $(SNAP_BUILD_OUTPUT_DIR)
+
 define compress
 	@mkdir -p $(DIST_ARTIFACTS_DIR)
 	@echo "Processing $< for $1 format..."
@@ -50,8 +54,3 @@ $(DIST_ARTIFACTS_DIR)/%$(ZIP_EXT): $(SNAP_BUILD_OUTPUT_DIR)/%$(SNAP_PACKAGE_EXT)
 	$(call compress,zip)
 
 
-
-
-
-package.snap.source.build:
-	mv $(SNAP_BUILD_CONFIG_DIR)/$(APP)*.snap $(SNAP_BUILD_OUTPUT_DIR)
