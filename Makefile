@@ -1,6 +1,46 @@
 include makefiles/common.mk
 
 
+ifeq ($(MAKECMDGOALS), package.rpm.prepare.config)
+include ./makefiles/modules/package/rpm/common.mk
+endif
+
+ifeq ($(MAKECMDGOALS), package.rpm.binary.prepare)
+include ./makefiles/modules/package/rpm/binary-pack.mk
+endif
+
+ifeq ($(MAKECMDGOALS), package.rpm.binary.build)
+include ./makefiles/modules/package/rpm/binary-pack.mk
+endif
+
+
+ifeq ($(MAKECMDGOALS), package.rpm.source.prepare.config)
+include ./makefiles/modules/package/rpm/source-pack.mk
+endif
+
+ifeq ($(MAKECMDGOALS), package.rpm.source.prepare.payload)
+include ./makefiles/modules/package/rpm/source-pack.mk
+endif
+
+ifeq ($(MAKECMDGOALS), package.rpm.source.prepare.output)
+include ./makefiles/modules/package/rpm/source-pack.mk
+endif
+
+ifeq ($(MAKECMDGOALS), package.rpm.source.build)
+include ./makefiles/modules/package/rpm/source-pack.mk
+endif
+
+ifeq ($(MAKECMDGOALS), package.rpm.source.create-artifacts)
+include ./makefiles/modules/package/rpm/source-pack.mk
+endif
+
+ifeq ($(MAKECMDGOALS), package.rpm.push-ppa)
+include ./makefiles/modules/package/rpm/source-pack.mk
+endif
+
+ifeq ($(MAKECMDGOALS), package.rpm.move-binary-to-package-source)
+include ./makefiles/modules/package/rpm/source-pack.mk
+endif
 
 ifeq ($(MAKECMDGOALS), package.deb.prepare.config)
 include ./makefiles/modules/package/deb/common.mk

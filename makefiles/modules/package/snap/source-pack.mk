@@ -46,15 +46,15 @@ define compress
 	fi'
 endef
 
-package.snap.source.create-artifacts: $(addprefix $(DIST_ARTIFACTS_DIR)/, $(notdir $(SNAP_FILES:$(SNAP_PACKAGE_EXT)=.tar.gz)) $(notdir $(SNAP_FILES:$(SNAP_PACKAGE_EXT)=.tar.bz2)) $(notdir $(SNAP_FILES:$(SNAP_PACKAGE_EXT)=.zip)))
+package.snap.source.create-artifacts: $(addprefix $(DIST_ARTIFACTS_DIR)/, $(notdir $(SNAP_FILES:$(SNAP_PACKAGE_EXT)=$(TAR_GZ_EXT))) $(notdir $(SNAP_FILES:$(SNAP_PACKAGE_EXT)=$(TAR_BZ2_EXT))) $(notdir $(SNAP_FILES:$(SNAP_PACKAGE_EXT)=$(ZIP_EXT))))
 
-$(DIST_ARTIFACTS_DIR)/%.tar.gz: $(SNAP_BUILD_OUTPUT_DIR)/%$(SNAP_PACKAGE_EXT)
+$(DIST_ARTIFACTS_DIR)/%$(TAR_GZ_EXT): $(SNAP_BUILD_OUTPUT_DIR)/%$(SNAP_PACKAGE_EXT)
 	$(call compress,tar.gz,tar -czf)
 
-$(DIST_ARTIFACTS_DIR)/%.tar.bz2: $(SNAP_BUILD_OUTPUT_DIR)/%$(SNAP_PACKAGE_EXT)
+$(DIST_ARTIFACTS_DIR)/%$(TAR_BZ2_EXT): $(SNAP_BUILD_OUTPUT_DIR)/%$(SNAP_PACKAGE_EXT)
 	$(call compress,tar.bz2,tar -cjvf)
 
-$(DIST_ARTIFACTS_DIR)/%.zip: $(SNAP_BUILD_OUTPUT_DIR)/%$(SNAP_PACKAGE_EXT)
+$(DIST_ARTIFACTS_DIR)/%$(ZIP_EXT): $(SNAP_BUILD_OUTPUT_DIR)/%$(SNAP_PACKAGE_EXT)
 	$(call compress,zip)
 
 

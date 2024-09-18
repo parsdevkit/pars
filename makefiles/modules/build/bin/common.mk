@@ -8,7 +8,7 @@ ifdef APP_STAGE
 endif
 
 
-BIN_BUILD_ROOT_DIR = $(BIN_ROOT_DIR)/bin
+BIN_BUILD_ROOT_DIR = $(BIN_ROOT_DIR)
 BIN_BUILD_CONFIG_DIR = $(BIN_BUILD_ROOT_DIR)
 BIN_BUILD_PAYLOAD_DIR = $(BIN_BUILD_ROOT_DIR)
 BIN_BUILD_TEMP_DIR = $(BIN_BUILD_ROOT_DIR)
@@ -42,50 +42,8 @@ build.binary.all : build.binary build.binary.create-artifacts
 
 
 build.binary.prepare.config : binary-init
-# Define the extension and command for each compression format
-TAR_GZ_EXT = .tar.gz
-TAR_BZ2_EXT = .tar.bz2
-ZIP_EXT = .zip
-TAR_XZ_EXT = .tar.xz
-SEVEN_Z_EXT = .7z
-RAR_EXT = .rar
-LZ_EXT = .lz
-ZST_EXT = .zst
 
-# Define the list of formats based on OS
-ifeq ($(APP_OS),$(OS_LINUX))
-	FORMATS = $(TAR_GZ_EXT) $(TAR_BZ2_EXT) $(ZIP_EXT) $(TAR_XZ_EXT) $(ZST_EXT)
-else ifeq ($(APP_OS),$(OS_WINDOWS))
-	FORMATS = $(ZIP_EXT) $(SEVEN_Z_EXT) $(RAR_EXT)
-else ifeq ($(APP_OS),$(OS_MACOS))
-	FORMATS = $(TAR_GZ_EXT) $(TAR_BZ2_EXT) $(ZIP_EXT) $(ZST_EXT)
-else ifeq ($(APP_OS),$(OS_FREEBSD))
-	FORMATS = $(TAR_GZ_EXT) $(TAR_XZ_EXT) $(ZIP_EXT) $(LZ_EXT)
-else ifeq ($(APP_OS),$(OS_NETBSD))
-	FORMATS = $(TAR_GZ_EXT) $(TAR_XZ_EXT) $(ZIP_EXT) $(LZ_EXT)
-else ifeq ($(APP_OS),$(OS_OPENBSD))
-	FORMATS = $(TAR_GZ_EXT) $(TAR_XZ_EXT) $(ZIP_EXT) $(LZ_EXT)
-endif
 
-# Define the extension variables
-TAR_GZ_EXT = .tar.gz
-TAR_BZ2_EXT = .tar.bz2
-ZIP_EXT = .zip
-TAR_XZ_EXT = .tar.xz
-SEVEN_Z_EXT = .7z
-RAR_EXT = .rar
-LZ_EXT = .lz
-ZST_EXT = .zst
-
-# Define the extension variables
-TAR_GZ_EXT = .tar.gz
-TAR_BZ2_EXT = .tar.bz2
-ZIP_EXT = .zip
-TAR_XZ_EXT = .tar.xz
-SEVEN_Z_EXT = .7z
-RAR_EXT = .rar
-LZ_EXT = .lz
-ZST_EXT = .zst
 
 define compress
 	@mkdir -p $(DIST_ARTIFACTS_DIR)
@@ -104,38 +62,59 @@ define compress
 	esac
 endef
 
+define compress
+	@mkdir -p $(DIST_ARTIFACTS_DIR)
+	@echo "Compressing $< to $@..."
+	@EXT=$(1); \
+	FILENAME=$$(basename $<); \
+	BASENAME=$${FILENAME%_*}; \
+	MATCH_ARCH=$${FILENAME##*_}; \
+	MATCH_ARCH_NO_EXT=$${MATCH_ARCH%$(BIN_BUILD_OUTPUT_EXT)}; \
+	OUTPUT_NAME=$(DIST_ARTIFACTS_DIR)/$(APPLICATION_NAME)-$(APP_OS)-$(APP_TAG)-$$MATCH_ARCH_NO_EXT.$(1); \
+	case $$EXT in \
+		$(ZIP_EXT)) zip -r $$OUTPUT_NAME $<;; \
+		$(TAR_GZ_EXT)) tar -czf $$OUTPUT_NAME -C $< .;; \
+		$(TAR_BZ2_EXT)) tar -cjf $$OUTPUT_NAME -C $< .;; \
+		$(TAR_XZ_EXT)) tar -cJf $$OUTPUT_NAME -C $< .;; \
+		$(SEVEN_Z_EXT)) tar -cf - $< | 7z a $$OUTPUT_NAME -;; \
+		$(RAR_EXT)) tar -cf - $< | rar a $$OUTPUT_NAME -;; \
+		$(LZ_EXT)) tar --lzma -cf $$OUTPUT_NAME -C $< .;; \
+		$(ZST_EXT)) tar -cf - $< | zstd -z -o $$OUTPUT_NAME;; \
+		*) echo "Unsupported format: $$EXT" >&2; exit 1;; \
+	esac
+endef
+
 
 
 # Define compression rules
 $(DIST_ARTIFACTS_DIR)/%$(TAR_GZ_EXT): $(BIN_BUILD_OUTPUT_DIR)
 	$(call compress,$(TAR_GZ_EXT))
 
-$(DIST_ARTIFACTS_DIR)/%$(TAR_BZ2_EXT): $(BIN_BUILD_OUTPUT_DIR)
-	$(call compress,$(TAR_BZ2_EXT))
+$(DIST_ARTIFACTS_DIR)/%$(TAR_GZ_EXT): $(DEB_BUILD_OUTPUT_DIR)/%$(DEB_PACKAGE_EXT)
+	$(call compress_file,$(DEB_PACKAGE_EXT))
 
-$(DIST_ARTIFACTS_DIR)/%$(ZIP_EXT): $(BIN_BUILD_OUTPUT_DIR)
-	$(call compress,$(ZIP_EXT))
+$(DIST_ARTIFACTS_DIR)/%$(TAR_XZ_EXT): $(DEB_BUILD_OUTPUT_DIR)/%$(DEB_PACKAGE_EXT)
+	$(call compress_file,$(DEB_PACKAGE_EXT))
 
-$(DIST_ARTIFACTS_DIR)/%$(TAR_XZ_EXT): $(BIN_BUILD_OUTPUT_DIR)
-	$(call compress,$(TAR_XZ_EXT))
+$(DIST_ARTIFACTS_DIR)/%$(TAR_BZ2_EXT): $(DEB_BUILD_OUTPUT_DIR)/%$(DEB_PACKAGE_EXT)
+	$(call compress_file,$(DEB_PACKAGE_EXT))
 
-$(DIST_ARTIFACTS_DIR)/%$(SEVEN_Z_EXT): $(BIN_BUILD_OUTPUT_DIR)
-	$(call compress,$(SEVEN_Z_EXT))
+$(DIST_ARTIFACTS_DIR)/%$(ZIP_EXT): $(DEB_BUILD_OUTPUT_DIR)/%$(DEB_PACKAGE_EXT)
+	$(call compress_file,$(DEB_PACKAGE_EXT))
+	
+$(DIST_ARTIFACTS_DIR)/%$(RAR_EXT): $(DEB_BUILD_OUTPUT_DIR)/%$(DEB_PACKAGE_EXT)
+	$(call compress_file,$(DEB_PACKAGE_EXT))
 
-$(DIST_ARTIFACTS_DIR)/%$(RAR_EXT): $(BIN_BUILD_OUTPUT_DIR)
-	$(call compress,$(RAR_EXT))
+$(DIST_ARTIFACTS_DIR)/%$(SEVEN_Z_EXT): $(DEB_BUILD_OUTPUT_DIR)/%$(DEB_PACKAGE_EXT)
+	$(call compress_file,$(DEB_PACKAGE_EXT))
 
-$(DIST_ARTIFACTS_DIR)/%$(LZ_EXT): $(BIN_BUILD_OUTPUT_DIR)
-	$(call compress,$(LZ_EXT))
+$(DIST_ARTIFACTS_DIR)/%$(ZST_EXT): $(DEB_BUILD_OUTPUT_DIR)/%$(DEB_PACKAGE_EXT)
+	$(call compress_file,$(DEB_PACKAGE_EXT))
 
-$(DIST_ARTIFACTS_DIR)/%$(ZST_EXT): $(BIN_BUILD_OUTPUT_DIR)
-	$(call compress,$(ZST_EXT))
-
-
+$(DIST_ARTIFACTS_DIR)/%$(LZ_EXT): $(DEB_BUILD_OUTPUT_DIR)/%$(DEB_PACKAGE_EXT)
+	$(call compress_file,$(DEB_PACKAGE_EXT))
 
 
+# $(foreach format,$(FORMATS),$(eval $(DIST_ARTIFACTS_DIR)/%$(format): $(DEB_BUILD_OUTPUT_DIR)/%$(DEB_PACKAGE_EXT) ; $(call compress_file,$(DEB_PACKAGE_EXT)) ))
+package.deb.source.create-artifacts: $(addprefix $(DIST_ARTIFACTS_DIR)/, $(foreach format,$(FORMATS),$(notdir $(DEB_FILES:$(DEB_PACKAGE_EXT)=$(format)))))
 
-
-# Create artifacts target
-
-build.binary.create-artifacts: $(addprefix $(DIST_ARTIFACTS_DIR)/, $(foreach format,$(FORMATS),$(APPLICATION_NAME)-$(APP_OS)-$(APP_TAG)-$(BUILD_ARCH)$(format)))

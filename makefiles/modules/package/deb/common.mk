@@ -41,20 +41,34 @@ endif
 
 
 
-ifdef ARCH
-	DEB_PACK_ARCH := $(BUILD_ARCH)
-else
-	ifeq ($(DEB_PACK_TYPE),binary)
-		DEB_PACK_ARCH := $(APP_ARCH)
-	else ifeq ($(DEB_PACK_TYPE),source)
-		DEB_PACK_ARCH := any
-	endif
-endif
+
+
+define arch_to_deb
+  $(if $(strip $(1)),\
+    $(if $(filter $(ARCH_386),$(1)),i386,\
+    $(if $(filter $(ARCH_AMD64),$(1)),amd64,\
+    $(if $(filter $(ARCH_ARM64),$(1)),arm64,\
+    $(if $(filter $(ARCH_ARM),$(1)),armhf,\
+    $(error Unsupported architecture: $(1)))))))
+endef
+endef
+
+define determine_deb_arch
+  $(if $(strip $(ARCH)),\
+    $(call arch_to_deb,$(ARCH)),\
+    $(if $(filter binary,$(DEB_PACK_TYPE)),\
+      $(call arch_to_deb,$(APP_ARCH)),\
+      any))
+endef
+
+DEB_PACK_ARCH := $(strip $(call determine_deb_arch))
+
 
 GPG_KEY ?= 
 DEB-SERIES ?= "noble"
 DEB_PACKAGE_EXT = .deb
 DEB_FILES = $(wildcard $(DEB_BUILD_OUTPUT_DIR)/*$(DEB_PACKAGE_EXT))
+DEB_RELEASE_DATE_FORMAT := $(shell date -d $(RELEASE_DATE_STD) +"%a, %d %b %Y 00:00:00 +0000")
 
 DEB_BINARY_DIR = usr/bin
 DEB_CONFIG_DIR = etc/$(APPLICATION_NAME)
@@ -114,7 +128,7 @@ debian/changelog:
 		echo "  * Not specified any changes" >> $(DEB_BUILD_CONFIG_DIR)/$@; \
 	fi
 	echo "" >> $(DEB_BUILD_CONFIG_DIR)/$@
-	echo " -- $(MAINTANER)  $(RELEASE_DATE)" >> $(DEB_BUILD_CONFIG_DIR)/$@
+	echo " -- $(MAINTANER)  $(DEB_RELEASE_DATE_FORMAT)" >> $(DEB_BUILD_CONFIG_DIR)/$@
 
 
 debian/rules:
@@ -142,7 +156,6 @@ else ifeq ($(DEB_PACK_TYPE),source)
 	echo "override_dh_auto_build:" >> $(DEB_BUILD_CONFIG_DIR)/$@
 	echo '	$(MAKE) build.binary.linux.vendor TAG=$(APP_TAG)' >> $(DEB_BUILD_CONFIG_DIR)/$@
 	echo '	$(MAKE) package.move-binary-to-package-source TAG=$(APP_TAG) OS=$(OS_LINUX) ARCH=$(ARCH_FLAG_VALUE)' >> $(DEB_BUILD_CONFIG_DIR)/$@
-
 endif
 
 

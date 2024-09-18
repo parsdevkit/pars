@@ -11,6 +11,24 @@ else ifeq ($(SNAP_ARCH),$(LINUX_ARCH_386_VALUE))
 	BUILD_SNAP_HOST_ARCH = $(ARCH_386)
 endif
 
+define arch_to_snap
+  $(if $(strip $(1)),\
+    $(if $(filter $(ARCH_386),$(1)),i386,\
+    $(if $(filter $(ARCH_AMD64),$(1)),amd64,\
+    $(if $(filter $(ARCH_ARM64),$(1)),arm64,\
+    $(if $(filter $(ARCH_ARM),$(1)),armhf,\
+    $(error Unsupported architecture: $(1)))))))
+endef
+
+define determine_snap_arch
+  $(if $(strip $(ARCH)),\
+    $(call arch_to_snap,$(ARCH)),\
+    $(if $(filter binary,$(SNAP_PACK_TYPE)),\
+      $(call arch_to_snap,$(APP_ARCH)),\
+      all))
+endef
+
+SNAP_PACK_ARCH := $(strip $(call determine_snap_arch))
 
 SNAP_PACK_TYPE ?= source
 
