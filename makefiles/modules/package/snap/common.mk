@@ -1,15 +1,11 @@
 include ./makefiles/variables.mk
 include ./makefiles/init.mk
 
-ifeq ($(SNAP_ARCH),$(LINUX_ARCH_AMD64_VALUE))
-	BUILD_SNAP_HOST_ARCH = $(ARCH_AMD64)
-else ifeq ($(SNAP_ARCH),$(LINUX_ARCH_ARM64_VALUE))
-	BUILD_SNAP_HOST_ARCH = $(ARCH_ARM64)
-else ifeq ($(SNAP_ARCH),$(LINUX_ARCH_ARM_VALUE))
-	BUILD_SNAP_HOST_ARCH = $(ARCH_ARM)
-else ifeq ($(SNAP_ARCH),$(LINUX_ARCH_386_VALUE))
-	BUILD_SNAP_HOST_ARCH = $(ARCH_386)
-endif
+
+SNAP_PACK_TYPE ?= source
+ARCH_FLAG_VALUE := $(strip $(call determine_arch_flag_value))
+ARCH_FOLDER := $(strip $(call determine_arch_folder,$(SNAP_PACK_TYPE)))
+PACK_ROOT_DIR := $(strip $(call determine_pack_dir,$(SNAP_PACK_TYPE)))
 
 define arch_to_snap
   $(if $(strip $(1)),\
@@ -23,47 +19,22 @@ endef
 define determine_snap_arch
   $(if $(strip $(ARCH)),\
     $(call arch_to_snap,$(ARCH)),\
-    $(if $(filter binary,$(SNAP_PACK_TYPE)),\
+    $(if $(filter binary,$(1)),\
       $(call arch_to_snap,$(APP_ARCH)),\
       all))
 endef
-
-SNAP_PACK_ARCH := $(strip $(call determine_snap_arch))
-
-SNAP_PACK_TYPE ?= source
-
-ifdef ARCH
-	ARCH_FLAG_VALUE := $(APP_ARCH)
-	ARCH_FOLDER := $(APP_ARCH)
-else
-	ARCH_FLAG_VALUE := $$(BUILD_SNAP_HOST_ARCH)
-	ifeq ($(SNAP_PACK_TYPE),binary)
-		ARCH_FOLDER := $(APP_ARCH)
-	else  
-		ARCH_FOLDER := all
-	endif
-endif
-
-
-ifeq ($(SNAP_PACK_TYPE),binary)
-	SNAP_PACK_DIR = binary/$(ARCH_FOLDER)
-else ifeq ($(SNAP_PACK_TYPE),source)
-	SNAP_PACK_DIR = source/$(ARCH_FOLDER)
-endif
-
-
+SNAP_PACK_ARCH := $(strip $(call determine_snap_arch,$(SNAP_PACK_TYPE)))
 
 
 SNAP-BASE ?= "core22"
 SNAP_PACKAGE_EXT = .snap
-SNAP_FILES = $(wildcard $(SNAP_BUILD_OUTPUT_DIR)/*$(SNAP_PACKAGE_EXT))
-
 SNAP_ROOT_DIR = $(PACKAGE_ROOT_DIR)/snap
-SNAP_BUILD_ROOT_DIR = $(SNAP_ROOT_DIR)/$(SNAP_PACK_DIR)
+SNAP_BUILD_ROOT_DIR = $(SNAP_ROOT_DIR)/$(PACK_ROOT_DIR)
 SNAP_BUILD_CONFIG_DIR = $(SNAP_BUILD_ROOT_DIR)/$(APPLICATION_NAME)
 SNAP_BUILD_PAYLOAD_DIR = $(SNAP_BUILD_ROOT_DIR)/$(APPLICATION_NAME)
-SNAP_BUILD_TEMP_DIR = $(SNAP_BUILD_ROOT_DIR)/$(APPLICATION_NAME)
 SNAP_BUILD_OUTPUT_DIR = $(SNAP_BUILD_ROOT_DIR)/output
+SNAP_BUILD_TEMP_DIR = $(SNAP_BUILD_ROOT_DIR)/tmp
+SNAP_BUILD_OUTPUT_SNAP_FILES = $(wildcard $(SNAP_BUILD_OUTPUT_DIR)/*$(SNAP_PACKAGE_EXT))
 
 
 snap-init:

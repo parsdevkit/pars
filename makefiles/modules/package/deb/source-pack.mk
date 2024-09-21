@@ -20,7 +20,7 @@ package.deb.source.build:
 	@mkdir -p $(DEB_BUILD_OUTPUT_DIR)
 	cd $(DEB_BUILD_PAYLOAD_DIR) && dpkg-buildpackage -S $(GPG_KEY_FLAG)
 	@echo "Package has been created with version $(APP_TAG)"
-#	mv $(DEB_BUILD_ROOT_DIR)/$(APP).txt $(DEB_BUILD_OUTPUT_DIR)
+	cp -r $(DEB_BUILD_ROOT_DIR)/$(APP)_* $(DEB_BUILD_OUTPUT_DIR)
 
 
 package.deb.push-ppa:

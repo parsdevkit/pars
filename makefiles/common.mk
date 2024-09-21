@@ -7,23 +7,59 @@ help:
 	@echo "  build.binary.windows:		Build"
 
 
-update_channel_number:
+update_channel_number.$(OS_LINUX):
 	@CURRENT_NUMBER=$(CHANNEL_NUMBER); \
 	NEW_NUMBER=$$((CURRENT_NUMBER + 1)); \
 	echo $$NEW_NUMBER > $(CHANNEL_NUMBER_FILE);
 	@echo "Channel number updated to $$(cat $(CHANNEL_NUMBER_FILE))"
 
+update_channel_number.$(OS_WINDOWS):
+	@powershell -ExecutionPolicy Bypass -Command \
+	"$$current_number = $(CHANNEL_NUMBER); \
+	 $$new_number = $$($$current_number + 1); \
+	 Set-Content -Path '$(CHANNEL_NUMBER_FILE)' -Value $$new_number; \
+	 Write-Host 'Channel number updated to ' $$new_number;"
+
+
+update_channel_number: update_channel_number.$(HOST_OS)
+
 print:
-	@echo "Detected OS: $(HOST_OS)"
-	@echo "Detected Architecture: $(HOST_ARCH)"
-	@echo "Application OS: $(APP_OS), ARCH: $(APP_ARCH)"
-	@echo "Application: $(APP)", TAG: $(APP_TAG)
+#	@echo "Detected OS: $(HOST_OS)"
+#	@echo "Detected Architecture: $(HOST_ARCH)"
+#	@echo "Application OS: $(APP_OS), ARCH: $(APP_ARCH)"
+#	@echo "Application: $(APP)", TAG: $(APP_TAG)
+	
+	@echo "OS: $(HOST_OS)"
+	@echo "RAW_VERSION: $(RAW_VERSION)"
+	@echo "APP_TAG: $(APP_TAG)"
+	@echo "APP_TAG_VERSION: $(APP_TAG_VERSION)"
+	@echo "APP_TAG_RELEASE: $(APP_TAG_RELEASE)"
+	@echo "RELEASE_DATE: $(RELEASE_DATE)"
+	@echo "RELEASE_DATE_STD: $(RELEASE_DATE_STD)"
+	@echo "CHANNEL_NUMBER: $(CHANNEL_NUMBER)"
 
 
 # increment_channel_number:
 # 	@echo "Incrementing channel number..."
 # 	@echo $$(($(CHANNEL_NUMBER) + 1)) > $(CHANNEL_NUMBER_FILE)
 
+
+
+define determine_arch_flag_value
+  $(if $(strip $(ARCH)),$(APP_ARCH),)
+endef
+
+define determine_arch_folder
+  $(if $(strip $(ARCH)),$(APP_ARCH),\
+    $(if $(filter binary,$(1)),$(APP_ARCH),all))
+endef
+define determine_pack_dir
+  $(if $(filter binary,$(1)),\
+    binary/$(ARCH_FOLDER),\
+    $(if $(filter source,$(1)),\
+      source/$(ARCH_FOLDER),\
+      $(error Unsupported RPM_PACK_TYPE: $(1))))
+endef
 
 
 
@@ -186,3 +222,5 @@ define compress_file
 			;; \
 	esac'
 endef
+
+

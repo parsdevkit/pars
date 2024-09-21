@@ -14,7 +14,7 @@ package.rpm.source.prepare.payload:
 	chmod +x $(RPM_BUILD_TEMP_DIR)/csp
 	cd $(RPM_BUILD_TEMP_DIR)/csp/src && go mod tidy
 	cd $(RPM_BUILD_TEMP_DIR)/csp/src && go mod vendor
-	tar -czf $(RPM_BUILD_PAYLOAD_DIR)/$(APPLICATION_NAME)-$(RPM_VERSION)$(TAR_GZ_EXT) -C $(RPM_BUILD_TEMP_DIR)/csp ./
+	tar -czf $(RPM_BUILD_PAYLOAD_DIR)/$(APPLICATION_NAME)-$(APP_TAG_VERSION)$(TAR_GZ_EXT) -C $(RPM_BUILD_TEMP_DIR)/csp ./
 	rm -rf $(RPM_BUILD_TEMP_DIR)/csp
 
 
@@ -53,5 +53,5 @@ $(DIST_ARTIFACTS_DIR)/%$(LZ_EXT): $(RPM_BUILD_OUTPUT_DIR)/%$(RPM_PACKAGE_EXT)
 
 
 # $(foreach format,$(FORMATS),$(eval $(DIST_ARTIFACTS_DIR)/%$(format): $(RPM_BUILD_OUTPUT_DIR)/%$(RPM_PACKAGE_EXT) ; $(call compress_file,$(RPM_PACKAGE_EXT)) ))
-package.rpm.source.create-artifacts: $(addprefix $(DIST_ARTIFACTS_DIR)/, $(foreach format,$(FORMATS),$(notdir $(RPM_FILES:$(RPM_PACKAGE_EXT)=$(format)))))
+package.rpm.source.create-artifacts: $(addprefix $(DIST_ARTIFACTS_DIR)/, $(foreach format,$(FORMATS),$(notdir $(RPM_BUILD_OUTPUT_RPM_FILES:$(RPM_PACKAGE_EXT)=$(format)))))
 

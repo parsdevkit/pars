@@ -30,7 +30,6 @@ binary-init:
 
 build.binary: $(SOURCE_ROOT_DIR)/pars.go $(SOURCE_ROOT_DIR)/go.mod
 	@echo "Building binaries for $(APP_OS) $(APP_ARCH) on $(SOURCE_ROOT_DIR)"
-	# cd $(SOURCE_ROOT_DIR) && go mod tidy
 	cd $(SOURCE_ROOT_DIR) && GOOS=$(APP_OS) GOARCH=$(APP_ARCH) go build -ldflags="-X 'parsdevkit.net/core/utils.version=$(APP_TAG)' $(BINARY_BUILD_STAGE_FLAG) -buildid=$(APPLICATION_NAME)" -o $(OUTPUT_FLAG_VALUE)/$(APP) pars.go
 
 build.binary.vendor: $(SOURCE_ROOT_DIR)/pars.go $(SOURCE_ROOT_DIR)/go.mod

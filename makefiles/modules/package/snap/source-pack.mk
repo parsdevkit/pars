@@ -1,10 +1,8 @@
 include ./makefiles/modules/package/snap/common.mk
 
-
 package.snap.source.prepare.config: SNAP_PACK_TYPE = source
 package.snap.source.prepare.config:
 	$(MAKE) package.snap.prepare.config SNAP_PACK_TYPE=$(SNAP_PACK_TYPE)
-
 
 package.snap.source.prepare.payload: SNAP_PACK_TYPE = source
 package.snap.source.prepare.payload: 
@@ -18,11 +16,12 @@ package.snap.source.prepare.payload:
 
 
 
-
-
-
 package.snap.source.build:
-	mv $(SNAP_BUILD_CONFIG_DIR)/$(APP)*.snap $(SNAP_BUILD_OUTPUT_DIR)
+	cd $(SNAP_BUILD_CONFIG_DIR) && snapcraft
+	@echo "Package has been created with version $(APP_TAG)"
+	cp -r $(SNAP_BUILD_CONFIG_DIR)/$(APP)*.snap $(SNAP_BUILD_OUTPUT_DIR)
+
+
 
 define compress
 	@mkdir -p $(DIST_ARTIFACTS_DIR)
@@ -42,7 +41,7 @@ define compress
 	fi'
 endef
 
-package.snap.source.create-artifacts: $(addprefix $(DIST_ARTIFACTS_DIR)/, $(notdir $(SNAP_FILES:$(SNAP_PACKAGE_EXT)=$(TAR_GZ_EXT))) $(notdir $(SNAP_FILES:$(SNAP_PACKAGE_EXT)=$(TAR_BZ2_EXT))) $(notdir $(SNAP_FILES:$(SNAP_PACKAGE_EXT)=$(ZIP_EXT))))
+package.snap.source.create-artifacts: $(addprefix $(DIST_ARTIFACTS_DIR)/, $(notdir $(SNAP_BUILD_OUTPUT_SNAP_FILES:$(SNAP_PACKAGE_EXT)=$(TAR_GZ_EXT))) $(notdir $(SNAP_BUILD_OUTPUT_SNAP_FILES:$(SNAP_PACKAGE_EXT)=$(TAR_BZ2_EXT))) $(notdir $(SNAP_BUILD_OUTPUT_SNAP_FILES:$(SNAP_PACKAGE_EXT)=$(ZIP_EXT))))
 
 $(DIST_ARTIFACTS_DIR)/%$(TAR_GZ_EXT): $(SNAP_BUILD_OUTPUT_DIR)/%$(SNAP_PACKAGE_EXT)
 	$(call compress,tar.gz,tar -czf)

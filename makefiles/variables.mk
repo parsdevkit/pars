@@ -4,6 +4,8 @@ export OS_MACOS = darwin
 export OS_FREEBSD = freebsd
 export OS_NETBSD = netbsd
 export OS_OPENBSD = openbsd
+export OS_DRAGONFLYBSD = dragonflybsd
+export OS_SOLARIS = solaris
 
 export ARCH_386 = 386
 export ARCH_AMD64 = amd64
@@ -59,31 +61,6 @@ else ifeq ($(APP_OS),$(OS_OPENBSD))
 endif
 
 
-APPLICATION_FULL_NAME := Pars
-APPLICATION_NAME := pars
-ORGANIZATION := Pars Community
-MAINTANER := Pars Dev Kit <parsdevkit@gmail.com>
-OWNER := Ahmet Soner <ahmettsoner@gmail.com>
-HOMEPAGE := https://parsdevkit.net
-GIT := https://github.com/parsdevkit/pars
-LICENCE_TYPE := Apache-2.0
-SUMMARY := $(APPLICATION_FULL_NAME) is a simple utility.
-DESCRIPTION := $(APPLICATION_FULL_NAME) is a simple utility.
-# https://chatgpt.com/c/66ea726e-144c-8004-8646-e740d553f106
-
-STAGE ?= final
-HOST_OS =
-HOST_ARCH =
-
-APP = $(APPLICATION_NAME)
-APP_OS ?= $(OS)
-APP_ARCH ?= $(ARCH)
-APP_TAG ?=
-APP_STAGE ?= $(STAGE)
-
-
-RELEASE_DATE = 25.8.2024
-RELEASE_DATE_STD := $(shell echo $(RELEASE_DATE) | awk -F. '{printf "%04d-%02d-%02d\n", $$3, $$2, $$1}')
 
 
 ROOT_DIR = .
@@ -102,3 +79,47 @@ DIST_RELEASE_ROOT_DIR = $(DIST_CURRENT_DIR)/release
 CHANGELOG_PATH = $(DIST_RELEASE_ROOT_DIR)/release-notes.md
 
 LINUX_TMP_ROOT_DIR := /tmp
+
+
+LINUX_APP_BINARY_DIR = usr/bin
+LINUX_APP_CONFIG_DIR = etc/$(APPLICATION_NAME)
+LINUX_APP_LOG_DIR = var/log/$(APPLICATION_NAME)
+LINUX_APP_DATA_DIR = var/lib/$(APPLICATION_NAME)
+LINUX_APP_DATA_DATABASE_DIR = $(RPM_DATA_DIR)/data
+LINUX_APP_CACHE_DIR = var/cache/$(APPLICATION_NAME)
+LINUX_APP_TMP_DIR = var/tmp/$(APPLICATION_NAME)
+LINUX_APP_LIB_DIR = usr/lib/$(APPLICATION_NAME)
+LINUX_APP_SHARE_DIR = usr/share/$(APPLICATION_NAME)
+LINUX_APP_DOCS_DIR = usr/share/doc/$(APPLICATION_NAME)
+
+
+
+APPLICATION_FULL_NAME := Pars
+APPLICATION_NAME := pars
+ORGANIZATION := Pars Dev Kit
+MAINTANER := Pars Dev Kit <parsdevkit@gmail.com>
+OWNER := Ahmet Soner <ahmettsoner@gmail.com>
+HOMEPAGE := https://parsdevkit.net
+GIT := https://github.com/parsdevkit/pars
+LICENCE_TYPE := Apache-2.0
+SUMMARY := $(APPLICATION_FULL_NAME) is a simple utility.
+DESCRIPTION := $(APPLICATION_FULL_NAME) is a simple utility.
+# https://chatgpt.com/c/66ea726e-144c-8004-8646-e740d553f106
+
+STAGE ?= final
+HOST_OS =
+HOST_ARCH =
+
+APP = $(APPLICATION_NAME)
+APP_OS ?= $(OS)
+APP_ARCH ?= $(ARCH)
+APP_TAG ?=
+APP_STAGE ?= $(STAGE)
+APP_TAG_CLEAN=${APP_TAG#v}
+RELEASE_DATE = 25.8.2024
+
+
+
+
+CHANNEL_NUMBER_FILE := .channel_number
+
