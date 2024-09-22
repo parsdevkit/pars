@@ -1,8 +1,0 @@
-D:/AS/W/Pars/pars/build/CMakeFiles/pars_linux.dir
-D:/AS/W/Pars/pars/build/CMakeFiles/pars_darwin.dir
-D:/AS/W/Pars/pars/build/CMakeFiles/pars_windows.dir
-D:/AS/W/Pars/pars/build/CMakeFiles/pars_freebsd.dir
-D:/AS/W/Pars/pars/build/CMakeFiles/build_all.dir
-D:/AS/W/Pars/pars/build/CMakeFiles/hello.dir
-D:/AS/W/Pars/pars/build/CMakeFiles/edit_cache.dir
-D:/AS/W/Pars/pars/build/CMakeFiles/rebuild_cache.dir

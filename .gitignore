@@ -6,6 +6,7 @@
 /data/**
 /dist/**
 /temp/**
+/build/**
 /config/**
 /workspace**/**
 /src/vendor/**
