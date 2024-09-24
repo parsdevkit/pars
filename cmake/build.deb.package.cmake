@@ -1,0 +1,121 @@
+
+# Değişkenler
+set(APPLICATION_NAME "my-app")
+set(APP_TAG "1.0.0")
+set(MAINTANER "johndoe@example.com")
+set(HOMEPAGE "https://example.com")
+set(DESCRIPTION "My sample application")
+set(DEB_PACK_ARCH "amd64")
+
+set(PACKAGE_ROOT_DIR "${CMAKE_BINARY_DIR}/linux/pkg/deb/${GOARCH}/${APP_NAME}/deb")
+set(DEB_ROOT_DIR "${CMAKE_BINARY_DIR}/debian")
+set(DEB_BUILD_CONFIG_DIR "${CMAKE_BINARY_DIR}/debian")
+
+
+function(generate_debian_control_file)
+    file(WRITE ${DEB_BUILD_CONFIG_DIR}/control "Source: ${APPLICATION_NAME}\n")
+    file(APPEND ${DEB_BUILD_CONFIG_DIR}/control "Section: utils\n")
+    file(APPEND ${DEB_BUILD_CONFIG_DIR}/control "Priority: optional\n")
+    file(APPEND ${DEB_BUILD_CONFIG_DIR}/control "Maintainer: ${MAINTANER}\n")
+    file(APPEND ${DEB_BUILD_CONFIG_DIR}/control "Build-Depends: debhelper (>= 12), dh-golang, golang-any\n")
+    file(APPEND ${DEB_BUILD_CONFIG_DIR}/control "Standards-Version: 4.5.0\n")
+    file(APPEND ${DEB_BUILD_CONFIG_DIR}/control "Homepage: ${HOMEPAGE}\n")
+    
+    file(APPEND ${DEB_BUILD_CONFIG_DIR}/control "\n")
+    file(APPEND ${DEB_BUILD_CONFIG_DIR}/control "Package: ${APPLICATION_NAME}\n")
+    file(APPEND ${DEB_BUILD_CONFIG_DIR}/control "Architecture: ${DEB_PACK_ARCH}\n")
+    file(APPEND ${DEB_BUILD_CONFIG_DIR}/control "Depends: \${shlibs:Depends}, \${misc:Depends}, libc6, ca-certificates\n")
+    file(APPEND ${DEB_BUILD_CONFIG_DIR}/control "Description: ${DESCRIPTION}\n")
+endfunction()
+
+function(generate_debian_changelog_file)
+    file(WRITE ${DEB_BUILD_CONFIG_DIR}/changelog "${APPLICATION_NAME} (${RAW_VERSION}) ${DEB_SERIES}; urgency=medium\n\n")
+    if(EXISTS ${CHANGELOG_PATH})
+        file(STRINGS ${CHANGELOG_PATH} changelog_contents)
+        foreach(line IN LISTS changelog_contents)
+            file(APPEND ${DEB_BUILD_CONFIG_DIR}/changelog "  ${line}\n")
+        endforeach()
+    else()
+        file(APPEND ${DEB_BUILD_CONFIG_DIR}/changelog "  * Not specified any changes\n")
+    endif()
+    file(APPEND ${DEB_BUILD_CONFIG_DIR}/changelog "\n -- ${MAINTANER}  ${DEB_RELEASE_DATE_FORMAT}\n")
+endfunction()
+
+function(generate_debian_rules_file)
+    if(DEB_PACK_TYPE STREQUAL "binary")
+        file(WRITE ${DEB_BUILD_CONFIG_DIR}/rules "#!/usr/bin/make -f\n\n%:\n\tdh $@\n\n")
+        file(APPEND ${DEB_BUILD_CONFIG_DIR}/rules "override_dh_dwz:\n\ttrue\n")
+    elseif(DEB_PACK_TYPE STREQUAL "source")
+        file(WRITE ${DEB_BUILD_CONFIG_DIR}/rules "#!/usr/bin/make -f\n\n%:\n")
+        file(APPEND ${DEB_BUILD_CONFIG_DIR}/rules "if [ -z \"\$(filter \$(MY_TARGETS), \$@)\" ]; then \\\n")
+        file(APPEND ${DEB_BUILD_CONFIG_DIR}/rules "    dh \$@; \\\n")
+        file(APPEND ${DEB_BUILD_CONFIG_DIR}/rules "else \\\n")
+        file(APPEND ${DEB_BUILD_CONFIG_DIR}/rules "    \$(MAKE) \$@; \\\n")
+        file(APPEND ${DEB_BUILD_CONFIG_DIR}/rules "fi\n\n")
+        file(APPEND ${DEB_BUILD_CONFIG_DIR}/rules "override_dh_dwz:\n\ttrue\n")
+        file(APPEND ${DEB_BUILD_CONFIG_DIR}/rules "override_dh_auto_build:\n")
+        file(APPEND ${DEB_BUILD_CONFIG_DIR}/rules "\t\$(MAKE) build.binary.linux.vendor TAG=${APP_TAG}\n")
+        file(APPEND ${DEB_BUILD_CONFIG_DIR}/rules "\tmkdir -p ${LINUX_APP_BINARY_DIR}\n")
+        file(APPEND ${DEB_BUILD_CONFIG_DIR}/rules "\tcp -r ${BIN_ROOT_DIR}/${APP} ${DEB_BUILD_CONFIG_DIR}/${LINUX_APP_BINARY_DIR}\n")
+    endif()
+endfunction()
+
+function(generate_debian_source_format_file)
+    file(WRITE ${DEB_BUILD_CONFIG_DIR}/source/format "3.0 (native)\n")
+endfunction()
+
+function(generate_debian_copyright_file)
+    file(WRITE ${DEB_BUILD_CONFIG_DIR}/copyright "Format: http://www.debian.org/doc/packaging-manuals/copyright-format/1.0/\n")
+    file(APPEND ${DEB_BUILD_CONFIG_DIR}/copyright "Upstream-Name: ${APPLICATION_FULL_NAME}\n")
+    file(APPEND ${DEB_BUILD_CONFIG_DIR}/copyright "Source: ${GIT}\n\n")
+    file(APPEND ${DEB_BUILD_CONFIG_DIR}/copyright "Files: *\nCopyright: 2024, ${MAINTANER}\nLicense: Apache-2.0\n")
+endfunction()
+
+function(generate_debian_install_file)
+    file(WRITE ${DEB_BUILD_CONFIG_DIR}/install "${LINUX_APP_BINARY_DIR}/${APP} /${LINUX_APP_BINARY_DIR}/\n")
+endfunction()
+
+function(generate_debian_preinst_file)
+    file(WRITE ${DEB_BUILD_CONFIG_DIR}/preinst "#!/bin/sh\nset -e\n")
+    file(APPEND ${DEB_BUILD_CONFIG_DIR}/preinst "echo 'Running pre-installation tasks...'\n")
+    file(APPEND ${DEB_BUILD_CONFIG_DIR}/preinst "echo 'Pre-installation tasks completed.'\n")
+endfunction()
+
+function(generate_debian_postinst_file)
+    file(WRITE ${DEB_BUILD_CONFIG_DIR}/postinst "#!/bin/sh\nset -e\n")
+    file(APPEND ${DEB_BUILD_CONFIG_DIR}/postinst "echo 'Running post-installation tasks...'\n")
+    file(APPEND ${DEB_BUILD_CONFIG_DIR}/postinst "mkdir -p /${LINUX_APP_DATA_DATABASE_DIR}\n")
+    file(APPEND ${DEB_BUILD_CONFIG_DIR}/postinst "chmod -R a+rw /${LINUX_APP_DATA_DATABASE_DIR}\n")
+    file(APPEND ${DEB_BUILD_CONFIG_DIR}/postinst "echo 'Post-installation tasks completed.'\n")
+endfunction()
+
+function(generate_debian_prerm_file)
+    file(WRITE ${DEB_BUILD_CONFIG_DIR}/prerm "#!/bin/sh\nset -e\n")
+    file(APPEND ${DEB_BUILD_CONFIG_DIR}/prerm "echo 'Running pre-removal tasks...'\n")
+    file(APPEND ${DEB_BUILD_CONFIG_DIR}/prerm "echo 'Pre-removal tasks completed.'\n")
+endfunction()
+
+function(generate_debian_postrm_file)
+    file(WRITE ${DEB_BUILD_CONFIG_DIR}/postrm "#!/bin/sh\nset -e\n")
+    file(APPEND ${DEB_BUILD_CONFIG_DIR}/postrm "echo 'Running post-removal tasks...'\n")
+    file(APPEND ${DEB_BUILD_CONFIG_DIR}/postrm "echo 'Post-removal tasks completed.'\n")
+endfunction()
+
+
+generate_debian_control_file()
+generate_debian_changelog_file()
+generate_debian_rules_file()
+generate_debian_source_format_file()
+generate_debian_copyright_file()
+generate_debian_install_file()
+generate_debian_preinst_file()
+generate_debian_postinst_file()
+generate_debian_prerm_file()
+generate_debian_postrm_file()
+
+add_custom_target(build.deb.package ALL
+    COMMAND ${CMAKE_COMMAND} -E make_directory ${DEB_BUILD_CONFIG_DIR}
+    COMMAND ${CMAKE_COMMAND} -E echo "Building Debian package for ${APPLICATION_NAME}..."
+    COMMAND ${CMAKE_COMMAND} -E echo "Generating debian/control file..."
+    COMMAND ${CMAKE_COMMAND} -E cmake_echo_color --green "Generating control file in ${DEB_BUILD_CONFIG_DIR}..."
+)

@@ -1,20 +1,19 @@
-
-if(NOT GO_EXEC)
-    message(FATAL_ERROR "Go executable not found!")
-endif()
+set(BUILD_OUTPUT_PATH ${CMAKE_SOURCE_DIR}/${DIST_ROOT_DIR}/${APP_TAG}/${GOOS}/bin/${GOARCH}/${APP_NAME})
 
 function(set_go_env_and_build GOOS GOARCH EXT)
     if(WIN32)
         set(GO_BUILD_ENV_COMMAND "$$env:GOOS='${GOOS}'\; $$env:GOARCH='${GOARCH}'\;")
+        set(GO_BUILD_COMMAND powershell.exe -ExecutionPolicy Bypass -Command "${GO_BUILD_ENV_COMMAND} go build -ldflags='-X parsdevkit.net/core/utils.version=${APP_TAG} -X parsdevkit.net/core/utils.stage=final -buildid=${APP_NAME}' -o ${CMAKE_SOURCE_DIR}/${DIST_ROOT_DIR}/${APP_TAG}/${GOOS}/bin/${GOARCH}/${APP_NAME}${EXT} ./pars.go")
+        set(GO_BUILD_EXEC "${GO_BUILD_COMMAND}")
     else()
-        set(GO_BUILD_ENV_COMMAND "GOOS=${GOOS} GOARCH=${GOARCH}")
+        set(GO_BUILD_ENV_COMMAND GOOS=${GOOS} GOARCH=${GOARCH})
+        set(GO_BUILD_COMMAND ${GO_BUILD_ENV_COMMAND} go build -ldflags='-X parsdevkit.net/core/utils.version=${APP_TAG} -X parsdevkit.net/core/utils.stage=final -buildid=${APP_NAME}' -o ${CMAKE_SOURCE_DIR}/${DIST_ROOT_DIR}/${APP_TAG}/${GOOS}/bin/${GOARCH}/${APP_NAME}${EXT} ./pars.go)
+        set(GO_BUILD_EXEC ${GO_BUILD_COMMAND})
     endif()
 
-    set(GO_BUILD_COMMAND "go build -ldflags='-X parsdevkit.net/core/utils.version=${APP_TAG} -X parsdevkit.net/core/utils.stage=final -buildid=${APP_NAME}' -o ${CMAKE_SOURCE_DIR}/${DIST_ROOT_DIR}/${APP_TAG}/${GOOS}/bin/${GOARCH}/${APP_NAME}${EXT} ./pars.go")
-
     add_custom_command(
-        OUTPUT ${CMAKE_BINARY_DIR}/${GOOS}/${GOARCH}/${APP_NAME}${EXT}
-        COMMAND powershell.exe -ExecutionPolicy Bypass -Command \"${GO_BUILD_ENV_COMMAND} ${GO_BUILD_COMMAND}\"
+        OUTPUT ${CMAKE_SOURCE_DIR}/${DIST_ROOT_DIR}/${APP_TAG}/${GOOS}/bin/${GOARCH}/${APP_NAME}${EXT}
+        COMMAND ${GO_BUILD_EXEC}
         WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/src
         COMMENT "Building for ${GOOS} ${GOARCH} with tag ${APP_TAG}..."
     )
@@ -80,34 +79,29 @@ function(set_goos_arch_lists GOOS)
     endif()
 endfunction()
 
-set(target_name_list "")
+
+set(ALL_TARGETS "")
 foreach(GOOS ${GOOS_LIST})
 
     set_goos_ext(${GOOS})
     set_goos_arch_lists(${GOOS})
 
+    set(OS_ALL_TARGETS "")
     foreach(GOARCH ${ARCH_LIST})
         set_go_env_and_build("${GOOS}" "${GOARCH}" "${EXT}")
 
         add_custom_target(build.binary.${GOOS}.${GOARCH}
-            DEPENDS ${CMAKE_BINARY_DIR}/${GOOS}/${GOARCH}/${APP_NAME}${EXT}
+            DEPENDS ${CMAKE_SOURCE_DIR}/${DIST_ROOT_DIR}/${APP_TAG}/${GOOS}/bin/${GOARCH}/${APP_NAME}${EXT}
         )
-        list(APPEND target_name_list "build.binary.${GOOS}.${GOARCH}")
+        list(APPEND OS_ALL_TARGETS "build.binary.${GOOS}.${GOARCH}")
+        list(APPEND ALL_TARGETS "build.binary.${GOOS}.${GOARCH}")
     endforeach()
         add_custom_target(build.binary.${GOOS}-all
-            DEPENDS ${target_name_list}
+            DEPENDS ${OS_ALL_TARGETS}
         )
-
-        set_host_goarch()
-        set_go_env_and_build("${GOOS}" "${GOARCH}" "${EXT}")
-
-        add_custom_target(build.binary.${GOOS}
-            DEPENDS ${CMAKE_BINARY_DIR}/${GOOS}/${GOARCH}/${APP_NAME}${EXT}
-        )
-        list(APPEND target_name_list "build.binary.${GOOS}")
 endforeach()
 add_custom_target(build.binary-all
-    DEPENDS ${target_name_list}
+    DEPENDS ${ALL_TARGETS}
 )
 
 
@@ -118,7 +112,7 @@ set_goos_ext(${GOOS})
 set_go_env_and_build("${GOOS}" "${GOARCH}" "${EXT}")
 
 add_custom_target(build.binary
-    DEPENDS ${CMAKE_BINARY_DIR}/${GOOS}/${GOARCH}/${APP_NAME}${EXT}
+    DEPENDS ${CMAKE_SOURCE_DIR}/${DIST_ROOT_DIR}/${APP_TAG}/${GOOS}/bin/${GOARCH}/${APP_NAME}${EXT}
 )
 
 set_goos_arch_lists(${GOOS})
@@ -127,6 +121,6 @@ foreach(GOARCH ${ARCH_LIST})
     set_go_env_and_build("${GOOS}" "${GOARCH}" "${EXT}")
 
     add_custom_target(build.binary.${GOARCH}
-        DEPENDS ${CMAKE_BINARY_DIR}/${GOOS}/${GOARCH}/${APP_NAME}${EXT}
+        DEPENDS ${CMAKE_SOURCE_DIR}/${DIST_ROOT_DIR}/${APP_TAG}/${GOOS}/bin/${GOARCH}/${APP_NAME}${EXT}
     )
 endforeach()

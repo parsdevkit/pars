@@ -1,5 +1,9 @@
 cmake_minimum_required(VERSION 3.10)
 find_program(GO_EXEC go)
+if(NOT GO_EXEC)
+    message(FATAL_ERROR "Go executable not found!")
+endif()
+
 
 project(Pars)
 
@@ -18,7 +22,7 @@ set(GOARCH_LIST_NETBSD "amd64")
 set(GOARCH_LIST_OPENBSD "amd64")
 
 set(DIST_ROOT_DIR "dist")
-set(TMP_ROOT_DIR "tmp")
 
-include(${CMAKE_SOURCE_DIR}/cmake/build.cmake)
+include(${CMAKE_SOURCE_DIR}/cmake/build.binary.cmake)
+include(${CMAKE_SOURCE_DIR}/cmake/build.deb.package.cmake)
 
