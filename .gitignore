@@ -6,11 +6,14 @@
 /data/**
 /dist/**
 /temp/**
+/build/**
+/config/**
 /workspace**/**
 /src/vendor/**
 /.venv/**
 /.VSCodeCounter/**
 pars*.db
+.channel_number
 
 *.exe
 *.exe~
