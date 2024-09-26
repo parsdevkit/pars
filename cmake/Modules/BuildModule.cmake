@@ -1,23 +1,53 @@
+
+
 set(BUILD_OUTPUT_PATH ${CMAKE_SOURCE_DIR}/${DIST_ROOT_DIR}/${APP_TAG}/${GOOS}/bin/${GOARCH}/${APP_NAME})
 
-function(set_go_env_and_build GOOS GOARCH EXT)
-    if(WIN32)
-        set(GO_BUILD_ENV_COMMAND "$$env:GOOS='${GOOS}'\; $$env:GOARCH='${GOARCH}'\;")
-        set(GO_BUILD_COMMAND powershell.exe -ExecutionPolicy Bypass -Command "${GO_BUILD_ENV_COMMAND} go build -ldflags='-X parsdevkit.net/core/utils.version=${APP_TAG} -X parsdevkit.net/core/utils.stage=final -buildid=${APP_NAME}' -o ${CMAKE_SOURCE_DIR}/${DIST_ROOT_DIR}/${APP_TAG}/${GOOS}/bin/${GOARCH}/${APP_NAME}${EXT} ./pars.go")
-        set(GO_BUILD_EXEC "${GO_BUILD_COMMAND}")
+
+
+function(command_for_shell command_to_run output_command)
+    get_filename_component(shell_name ${HOST_SHELL} NAME)
+
+    if(${shell_name} STREQUAL "cmd")
+        set(shell_command cmd /c \"${command_to_run}\")
+    elseif(${shell_name} STREQUAL "powershell")
+        set(shell_command powershell -ExecutionPolicy Bypass -Command \"${command_to_run}\")
+    elseif(${shell_name} STREQUAL "pwsh")
+        set(shell_command pwsh -Command \"${command_to_run}\")
+    elseif(${shell_name} STREQUAL "bash")
+        set(shell_command bash -c \"${command_to_run}\")
+    elseif(${shell_name} STREQUAL "zsh")
+        set(shell_command zsh -c \"${command_to_run}\")
+    elseif(${shell_name} STREQUAL "fish")
+        set(shell_command fish -c \"${command_to_run}\")
     else()
-        set(GO_BUILD_ENV_COMMAND GOOS=${GOOS} GOARCH=${GOARCH})
-        set(GO_BUILD_COMMAND ${GO_BUILD_ENV_COMMAND} go build -ldflags='-X parsdevkit.net/core/utils.version=${APP_TAG} -X parsdevkit.net/core/utils.stage=final -buildid=${APP_NAME}' -o ${CMAKE_SOURCE_DIR}/${DIST_ROOT_DIR}/${APP_TAG}/${GOOS}/bin/${GOARCH}/${APP_NAME}${EXT} ./pars.go)
-        set(GO_BUILD_EXEC ${GO_BUILD_COMMAND})
+        message(FATAL_ERROR "Unsupported shell: ${shell_name}")
     endif()
 
+    set(${output_command} ${shell_command} PARENT_SCOPE)
+
+endfunction()
+
+function(build GOOS GOARCH EXT)
+    if(${HOST_SHELL} STREQUAL "powershell")
+        set(GO_BUILD_ENV_COMMAND $$env:GOOS='${GOOS}' \\\\\\\\\; $$env:GOARCH='${GOARCH}' \\\\\\\\\;)
+    else()
+        set(GO_BUILD_ENV_COMMAND GOOS=${GOOS} GOARCH=${GOARCH})
+    endif()
+
+    set(GO_BUILD_COMMAND ${GO_BUILD_ENV_COMMAND} go build -ldflags='-X parsdevkit.net/core/utils.version=${APP_TAG} -X parsdevkit.net/core/utils.stage=final -buildid=${APP_NAME}' -o ${CMAKE_SOURCE_DIR}/${DIST_ROOT_DIR}/${APP_TAG}/${GOOS}/bin/${GOARCH}/${APP_NAME}${EXT} ./pars.go)
+
+    command_for_shell("${GO_BUILD_COMMAND}" SHELL_GO_BUILD_COMMAND)
+
+    
     add_custom_command(
         OUTPUT ${CMAKE_SOURCE_DIR}/${DIST_ROOT_DIR}/${APP_TAG}/${GOOS}/bin/${GOARCH}/${APP_NAME}${EXT}
-        COMMAND ${GO_BUILD_EXEC}
+        COMMAND ${SHELL_GO_BUILD_COMMAND}
         WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/src
         COMMENT "Building for ${GOOS} ${GOARCH} with tag ${APP_TAG}..."
     )
 endfunction()
+
+
 
 function(set_host_goos)    
     if(CMAKE_HOST_SYSTEM_NAME STREQUAL "Linux")
@@ -88,7 +118,7 @@ foreach(GOOS ${GOOS_LIST})
 
     set(OS_ALL_TARGETS "")
     foreach(GOARCH ${ARCH_LIST})
-        set_go_env_and_build("${GOOS}" "${GOARCH}" "${EXT}")
+        build("${GOOS}" "${GOARCH}" "${EXT}")
 
         add_custom_target(build.binary.${GOOS}.${GOARCH}
             DEPENDS ${CMAKE_SOURCE_DIR}/${DIST_ROOT_DIR}/${APP_TAG}/${GOOS}/bin/${GOARCH}/${APP_NAME}${EXT}
@@ -109,7 +139,7 @@ add_custom_target(build.binary-all
 set_host_goos()
 set_host_goarch()
 set_goos_ext(${GOOS})
-set_go_env_and_build("${GOOS}" "${GOARCH}" "${EXT}")
+build("${GOOS}" "${GOARCH}" "${EXT}")
 
 add_custom_target(build.binary
     DEPENDS ${CMAKE_SOURCE_DIR}/${DIST_ROOT_DIR}/${APP_TAG}/${GOOS}/bin/${GOARCH}/${APP_NAME}${EXT}
@@ -118,7 +148,7 @@ add_custom_target(build.binary
 set_goos_arch_lists(${GOOS})
 
 foreach(GOARCH ${ARCH_LIST})
-    set_go_env_and_build("${GOOS}" "${GOARCH}" "${EXT}")
+    build("${GOOS}" "${GOARCH}" "${EXT}")
 
     add_custom_target(build.binary.${GOARCH}
         DEPENDS ${CMAKE_SOURCE_DIR}/${DIST_ROOT_DIR}/${APP_TAG}/${GOOS}/bin/${GOARCH}/${APP_NAME}${EXT}
