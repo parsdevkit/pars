@@ -1,23 +1,28 @@
 cmake_minimum_required(VERSION 3.10)
-
-project(pars)
-
-if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
-    set(PLATFORM "linux")
-    set(EXTENSION "")
-    set(CMD "go build -o pars")
-elseif(CMAKE_SYSTEM_NAME STREQUAL "Windows")
-    set(PLATFORM "windows")
-    set(EXTENSION ".exe")
-    set(CMD "go build -o pars.exe")
-else()
-    message(FATAL_ERROR "Unsupported platform!")
+find_program(GO_EXEC go)
+if(NOT GO_EXEC)
+    message(FATAL_ERROR "Go executable not found!")
 endif()
 
 
-set(SRC_DIR ${CMAKE_SOURCE_DIR}/src)
+project(Pars)
 
-add_custom_target(build ALL
-    COMMAND ${CMAKE_COMMAND} -E chdir ${SRC_DIR} ${CMD}
-    COMMENT "Building Go project for ${PLATFORM}"
-)
+set(APP_NAME pars)
+set(APP_TAG v1.0.3-test.13)
+set(GOOS_LIST "linux" "darwin" "windows" "freebsd" "openbsd" "netbsd")
+# set(GOARCH_LIST_WINDOWS "386;amd64;arm;arm64")
+set(GOARCH_LIST_WINDOWS "amd64;arm64")
+set(GOARCH_LIST_LINUX "386;amd64;arm;arm64")
+set(GOARCH_LIST_DARWIN "amd64;arm64")
+# set(GOARCH_LIST_FREEBSD "386;amd64;arm;arm64")
+set(GOARCH_LIST_FREEBSD "amd64")
+# set(GOARCH_LIST_NETBSD "386;amd64;arm;arm64")
+set(GOARCH_LIST_NETBSD "amd64")
+# set(GOARCH_LIST_OPENBSD "386;amd64;arm;arm64")
+set(GOARCH_LIST_OPENBSD "amd64")
+
+set(DIST_ROOT_DIR "dist")
+
+include(${CMAKE_SOURCE_DIR}/cmake/build.binary.cmake)
+include(${CMAKE_SOURCE_DIR}/cmake/build.deb.package.cmake)
+

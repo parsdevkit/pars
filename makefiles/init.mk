@@ -1,34 +1,42 @@
 include ./makefiles/variables.mk
 
 ifeq ($(APP_OS),Windows_NT)
-	HOST_OS = windows
+	HOST_OS = $(OS_WINDOWS)
+else
+	UNAME_S := $(shell uname -s)
+	ifeq ($(UNAME_S),Darwin)
+		HOST_OS = $(OS_MACOS)
+	else ifeq ($(UNAME_S),Linux)
+		HOST_OS = $(OS_LINUX)
+	else ifeq ($(UNAME_S),FreeBSD)
+		HOST_OS = $(OS_FREEBSD)
+	else ifeq ($(UNAME_S),OpenBSD)
+		HOST_OS = $(OS_OPENBSD)
+	else ifeq ($(UNAME_S),NetBSD)
+		HOST_OS = $(OS_NETBSD)
+	else ifeq ($(UNAME_S),DragonFly)
+		HOST_OS = $(OS_DRAGONFLYBSD)
+	else ifeq ($(UNAME_S),SunOS)
+		HOST_OS = $(OS_SOLARIS)
+	else
+		HOST_OS = unknown
+	endif
+endif
+
+ifeq ($(APP_OS), Windows_NT)
+	APP_OS = $(HOST_OS)
+else ifeq ($(APP_OS),)
+	APP_OS = $(HOST_OS)
+endif
+
+ifeq ($(APP_OS), Windows_NT)
 	HOST_ARCH_RAW := $(Get-WmiObject Win32_OperatingSystem).OSArchitecture
 	ifeq ($(HOST_ARCH_RAW),64-bit)
 		HOST_ARCH = amd64
 	else
 		HOST_ARCH = amd
 	endif
-else
-	UNAME_S := $(shell uname -s)
-	ifeq ($(UNAME_S),Darwin)
-		HOST_OS = darwin
-	else ifeq ($(UNAME_S),Linux)
-		HOST_OS = linux
-	else ifeq ($(UNAME_S),FreeBSD)
-		HOST_OS = freebsd
-	else ifeq ($(UNAME_S),OpenBSD)
-		HOST_OS = openbsd
-	else ifeq ($(UNAME_S),NetBSD)
-		HOST_OS = netbsd
-	else ifeq ($(UNAME_S),DragonFly)
-		HOST_OS = dragonflybsd
-	else ifeq ($(UNAME_S),SunOS)
-		HOST_OS = solaris
-	else
-		HOST_OS = unknown
-	endif
-
-
+else ifeq ($(APP_OS),)
 	UNAME_M := $(shell uname -m)
 	ifeq ($(UNAME_M),x86_64)
 		HOST_ARCH = amd64
@@ -53,11 +61,6 @@ else
 	endif
 endif
 
-ifeq ($(APP_OS),)
-	APP_OS = $(HOST_OS)
-else ifeq ($(APP_OS), Windows_NT)
-	APP_OS = $(HOST_OS)
-endif
 
 ifeq ($(APP_ARCH),)
 	APP_ARCH = $(HOST_ARCH)
@@ -74,20 +77,10 @@ GIT_TAG := $(shell git describe --tags --abbrev=0)
 COMMITS_SINCE_TAG := $(shell git rev-list $(GIT_TAG)..HEAD --count)
 
 
-CHANNEL_NUMBER_FILE := .channel_number
-
-
-CHANNEL_NUMBER := $(shell cat $(CHANNEL_NUMBER_FILE) 2>/dev/null || echo 1)
-ifeq ($(CHANNEL_NUMBER), )
-	CHANNEL_NUMBER = 1
-endif
-
 APP_TAG := $(TAG)
 ifeq ($(APP_TAG), )
 	APP_TAG := $(GIT_TAG)-$(CHANNEL).$(CHANNEL_NUMBER)
 endif
-
-RAW_VERSION := $(shell echo $(APP_TAG) | sed 's/^v//')
 
 
 
@@ -154,7 +147,58 @@ else ifeq ($(APP_OS),$(OS_OPENBSD))
 endif
 
 
+ifeq ($(HOST_OS), $(OS_LINUX))
+    CHANNEL_NUMBER := $(shell cat $(CHANNEL_NUMBER_FILE) 2>/dev/null || echo 1)
+    RAW_VERSION := $(shell echo $(APP_TAG) | sed 's/^v//')
+    APP_TAG_VERSION := $(shell echo $(APP_TAG) | sed 's/^v//' | cut -d'-' -f1)
+    APP_TAG_RELEASE := $(shell echo $(APP_TAG) | sed 's/^v//' | cut -d'-' -f2-)
+    RELEASE_DATE_STD := $(shell echo $(RELEASE_DATE) | awk -F. '{printf "%04d-%02d-%02d\n", $$3, $$2, $$1}')
+endif
 
+ifeq ($(HOST_OS), $(OS_MACOS))
+    CHANNEL_NUMBER := $(shell cat $(CHANNEL_NUMBER_FILE) 2>/dev/null || echo 1)
+    RAW_VERSION := $(shell echo $(APP_TAG) | sed -E 's/^v//')
+    APP_TAG_VERSION := $(shell echo $(APP_TAG) | sed -E 's/^v//' | cut -d'-' -f1)
+    APP_TAG_RELEASE := $(shell echo $(APP_TAG) | sed -E 's/^v//' | cut -d'-' -f2-)
+    RELEASE_DATE_STD := $(shell echo $(RELEASE_DATE) | awk -F. '{printf "%04d-%02d-%02d\n", $$3, $$2, $$1}')
+endif
+
+ifeq ($(HOST_OS), $(OS_WINDOWS))
+	CHANNEL_NUMBER := $(shell powershell -ExecutionPolicy Bypass -NoProfile -Command "if (Test-Path '$(CHANNEL_NUMBER_FILE)') { Get-Content '$(CHANNEL_NUMBER_FILE)' } else { Write-Output 1 }")
+	RAW_VERSION := $(shell powershell -ExecutionPolicy Bypass -NoProfile -Command "'$(APP_TAG)' -replace 'v', ''")
+	APP_TAG_VERSION := $(shell powershell -ExecutionPolicy Bypass -NoProfile -Command "'$(RAW_VERSION)' -split '-' | Select-Object -First 1")
+	APP_TAG_RELEASE := $(shell powershell -ExecutionPolicy Bypass -NoProfile -Command "'$(RAW_VERSION)' -split '-' | Select-Object -Last 1")
+	RELEASE_DATE_STD := $(shell powershell -ExecutionPolicy Bypass -NoProfile -Command "[DateTime]::ParseExact('$(RELEASE_DATE)', 'd.M.yyyy', $$null).ToString('yyyy-MM-dd');")
+endif
+
+ifeq ($(HOST_OS), $(OS_FREEBSD))
+    CHANNEL_NUMBER := $(shell cat $(CHANNEL_NUMBER_FILE) 2>/dev/null || echo 1)
+    RAW_VERSION := $(shell echo $(APP_TAG) | sed 's/^v//')
+    APP_TAG_VERSION := $(shell echo $(APP_TAG) | sed 's/^v//' | cut -d'-' -f1)
+    APP_TAG_RELEASE := $(shell echo $(APP_TAG) | sed 's/^v//' | cut -d'-' -f2-)
+    RELEASE_DATE_STD := $(shell echo $(RELEASE_DATE) | awk -F. '{printf "%04d-%02d-%02d\n", $$3, $$2, $$1}')
+endif
+
+ifeq ($(HOST_OS), $(OS_OPENBSD))
+    CHANNEL_NUMBER := $(shell cat $(CHANNEL_NUMBER_FILE) 2>/dev/null || echo 1)
+    RAW_VERSION := $(shell echo $(APP_TAG) | sed 's/^v//')
+    APP_TAG_VERSION := $(shell echo $(APP_TAG) | sed 's/^v//' | cut -d'-' -f1)
+    APP_TAG_RELEASE := $(shell echo $(APP_TAG) | sed 's/^v//' | cut -d'-' -f2-)
+    RELEASE_DATE_STD := $(shell echo $(RELEASE_DATE) | awk -F. '{printf "%04d-%02d-%02d\n", $$3, $$2, $$1}')
+endif
+
+ifeq ($(HOST_OS), $(OS_NETBSD))
+    CHANNEL_NUMBER := $(shell cat $(CHANNEL_NUMBER_FILE) 2>/dev/null || echo 1)
+    RAW_VERSION := $(shell echo $(APP_TAG) | sed 's/^v//')
+    APP_TAG_VERSION := $(shell echo $(APP_TAG) | sed 's/^v//' | cut -d'-' -f1)
+    APP_TAG_RELEASE := $(shell echo $(APP_TAG) | sed 's/^v//' | cut -d'-' -f2-)
+    RELEASE_DATE_STD := $(shell echo $(RELEASE_DATE) | awk -F. '{printf "%04d-%02d-%02d\n", $$3, $$2, $$1}')
+endif
+
+
+ifeq ($(CHANNEL_NUMBER), )
+	CHANNEL_NUMBER = 1
+endif
 
 # increment_channel_number:
 # 	@echo "Incrementing channel number..."
