@@ -34,7 +34,6 @@ function(get_shell detected_shell)
                 endif()
             endif()
         else()
-            # For Unix-like systems, use a fallback method to determine the shell
             execute_process(
                 COMMAND bash -c "echo \$SHELL"
                 OUTPUT_VARIABLE DEFAULT_SHELL
@@ -62,3 +61,29 @@ function(get_shell detected_shell)
     endif()
 endfunction()
 get_shell(HOST_SHELL)
+
+
+
+
+function(command_for_shell shell command_to_run output_command)
+    get_filename_component(shell_name ${shell} NAME)
+
+    if(${shell_name} STREQUAL "cmd")
+        set(shell_command cmd /c \"${command_to_run}\")
+    elseif(${shell_name} STREQUAL "powershell")
+        set(shell_command powershell -ExecutionPolicy Bypass -Command \"${command_to_run}\")
+    elseif(${shell_name} STREQUAL "pwsh")
+        set(shell_command pwsh -Command \"${command_to_run}\")
+    elseif(${shell_name} STREQUAL "bash")
+        set(shell_command bash -c \"${command_to_run}\")
+    elseif(${shell_name} STREQUAL "zsh")
+        set(shell_command zsh -c \"${command_to_run}\")
+    elseif(${shell_name} STREQUAL "fish")
+        set(shell_command fish -c \"${command_to_run}\")
+    else()
+        message(FATAL_ERROR "Unsupported shell: ${shell_name}")
+    endif()
+
+    set(${output_command} ${shell_command} PARENT_SCOPE)
+
+endfunction()
