@@ -27,10 +27,12 @@ add_custom_target(build.binary.all
 
 
 
-set_host_goos()
-set_host_goarch()
+get_host_os(GOOS)
 set_goos_ext(${GOOS})
-map_goarch_to_arch(${GOARCH} APP_ARCH)
+
+get_host_arch(APP_ARCH)
+map_arch_to_goarch(${APP_ARCH} GOARCH)
+
 build("${GOOS}" "${GOARCH}" "${EXT}")
 
 add_custom_target(build.binary

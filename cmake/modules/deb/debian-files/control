@@ -1,0 +1,13 @@
+file(WRITE ${FILE_WRITE_PATH} "Source: ${PROJECT_NAME}\n")
+file(APPEND ${FILE_WRITE_PATH} "Section: utils\n")
+file(APPEND ${FILE_WRITE_PATH} "Priority: optional\n")
+file(APPEND ${FILE_WRITE_PATH} "Maintainer: ${PROJECT_MAINTANER}\n")
+file(APPEND ${FILE_WRITE_PATH} "Build-Depends: debhelper (>= 12), dh-golang, golang-any\n")
+file(APPEND ${FILE_WRITE_PATH} "Standards-Version: 4.5.0\n")
+file(APPEND ${FILE_WRITE_PATH} "Homepage: ${PROJECT_HOMEPAGE}\n")
+
+file(APPEND ${FILE_WRITE_PATH} "\n")
+file(APPEND ${FILE_WRITE_PATH} "Package: ${PROJECT_NAME}\n")
+file(APPEND ${FILE_WRITE_PATH} "Architecture: ${DEBARCH}\n")
+file(APPEND ${FILE_WRITE_PATH} "Depends: \${shlibs:Depends}, \${misc:Depends}, libc6, ca-certificates\n")
+file(APPEND ${FILE_WRITE_PATH} "Description: ${PROJECT_DESCRIPTION}\n")

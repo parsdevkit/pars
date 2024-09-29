@@ -1,0 +1,4 @@
+file(WRITE ${FILE_WRITE_PATH} "Format: http://www.debian.org/doc/packaging-manuals/copyright-format/1.0/\n")
+file(APPEND ${FILE_WRITE_PATH} "Upstream-Name: ${PROJECT_NAME}\n")
+file(APPEND ${FILE_WRITE_PATH} "Source: ${PROJECT_GIT}\n\n")
+file(APPEND ${FILE_WRITE_PATH} "Files: *\nCopyright: 2024, ${PROJECT_MAINTANER}\nLicense: Apache-2.0\n")

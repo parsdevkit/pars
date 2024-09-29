@@ -73,13 +73,6 @@ if(IS_WINDOWS)
         OUTPUT_VARIABLE APP_TAG_RELEASE
         OUTPUT_STRIP_TRAILING_WHITESPACE
     )
-    
-    # RELEASE_DATE_STD
-    execute_process(
-        COMMAND powershell -ExecutionPolicy Bypass -NoProfile -Command "[DateTime]::ParseExact('${RELEASE_DATE}', 'yyyy-MM-dd HH:mm:ss zzz', $null).ToString('yyyy-MM-dd')"
-        OUTPUT_VARIABLE RELEASE_DATE_STD
-        OUTPUT_STRIP_TRAILING_WHITESPACE
-    )
 elseif(IS_UNIX_BASED)
     # RAW_VERSION
     execute_process(
@@ -101,13 +94,6 @@ elseif(IS_UNIX_BASED)
         OUTPUT_VARIABLE APP_TAG_RELEASE
         OUTPUT_STRIP_TRAILING_WHITESPACE
     )
-
-    # RELEASE_DATE_STD
-    execute_process(
-        COMMAND bash -c "echo ${RELEASE_DATE} | awk '{print $1}'"
-        OUTPUT_VARIABLE RELEASE_DATE_STD
-        OUTPUT_STRIP_TRAILING_WHITESPACE
-    )
 endif()
 
 
@@ -117,5 +103,4 @@ message(STATUS "RAW_VERSION: ${RAW_VERSION}")
 message(STATUS "APP_TAG_VERSION: ${APP_TAG_VERSION}")
 message(STATUS "APP_TAG_RELEASE: ${APP_TAG_RELEASE}")
 message(STATUS "RELEASE_DATE: ${RELEASE_DATE}")
-message(STATUS "RELEASE_DATE_STD: ${RELEASE_DATE_STD}")
 message(STATUS "IS_WINDOWS: ${IS_WINDOWS}")
