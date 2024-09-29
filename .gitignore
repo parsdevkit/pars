@@ -6,6 +6,7 @@
 /data/**
 /dist/**
 /temp/**
+/drafts/**
 /build/**
 /config/**
 /workspace**/**

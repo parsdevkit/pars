@@ -1,0 +1,5 @@
+add_subdirectory(core)
+add_subdirectory(config)
+add_subdirectory(common)
+add_subdirectory(utils)
+add_subdirectory(modules)
