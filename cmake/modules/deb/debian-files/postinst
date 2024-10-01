@@ -1,5 +1,0 @@
-file(WRITE ${FILE_WRITE_PATH} "#!/bin/sh\nset -e\n")
-file(APPEND ${FILE_WRITE_PATH} "echo 'Running post-installation tasks...'\n")
-file(APPEND ${FILE_WRITE_PATH} "mkdir -p /${LINUX_APP_DATA_DATABASE_DIR}\n")
-file(APPEND ${FILE_WRITE_PATH} "chmod -R a+rw /${LINUX_APP_DATA_DATABASE_DIR}\n")
-file(APPEND ${FILE_WRITE_PATH} "echo 'Post-installation tasks completed.'\n")

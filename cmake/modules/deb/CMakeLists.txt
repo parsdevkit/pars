@@ -1,10 +1,7 @@
-include("${CMAKE_SOURCE_DIR}/cmake/core/shell.cmake")
-include("${CMAKE_SOURCE_DIR}/cmake/core/detect-os.cmake")
 include("${CMAKE_SOURCE_DIR}/cmake/common/consts-system.cmake")
 include("${CMAKE_SOURCE_DIR}/cmake/common/consts-project.cmake")
 include("${CMAKE_SOURCE_DIR}/cmake/common/consts-app.cmake")
 include("${CMAKE_SOURCE_DIR}/cmake/common/consts-os-linux.cmake")
 include("${CMAKE_SOURCE_DIR}/cmake/common/release.cmake")
-include("${CMAKE_SOURCE_DIR}/cmake/modules/deb/ModuleConsts.cmake")
-include("${CMAKE_SOURCE_DIR}/cmake/modules/deb/ModuleFunctions.cmake")
-include("${CMAKE_SOURCE_DIR}/cmake/modules/deb/Module.cmake")
+
+include_module_files()

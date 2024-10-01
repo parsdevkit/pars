@@ -1,8 +1,3 @@
-set(DEB_ARCH_X86 "i386")
-set(DEB_ARCH_X86_64 "amd64")
-set(DEB_ARCH_ARM "armhf")
-set(DEB_ARCH_ARM64 "arm64")
-
 
 
 function(map_arch_to_debarch input_arch output_debarch)
@@ -33,8 +28,33 @@ function(map_debarch_to_arch input_debarch output_arch)
     endif()
 endfunction()
 
-execute_process(
-    COMMAND bash -c "date -d '${RELEASE_DATE}' '+%a, %d %b %Y 00:00:00 +0000'"
-    OUTPUT_VARIABLE RELEASE_DATE_DEB
-    OUTPUT_STRIP_TRAILING_WHITESPACE
-)
+
+
+function(collect_vars result_var variable_list)
+    set(vars "")
+    set(added_vars "")
+
+    foreach(var ${variable_list})
+        if(NOT var IN_LIST added_vars)
+            list(APPEND vars "-D${var}=${${var}} ")
+            list(APPEND added_vars "${var}")
+        endif()
+    endforeach()
+    set(${result_var} "${vars}" PARENT_SCOPE)
+endfunction()
+
+
+function(determine_deb_arch package_type deb_arch output_arch)
+    if(NOT "${deb_arch}" STREQUAL "")
+        map_arch_to_debarch("${deb_arch}" result_arch)
+    else()
+        if("${package_type}" STREQUAL "binary")
+            map_arch_to_debarch("${APP_ARCH}" result_arch)
+        else()
+            set(result_arch "any")
+        endif()
+    endif()
+    set(${output_arch} ${result_arch} PARENT_SCOPE)
+endfunction()
+# determine_deb_arch("${DEB_PACK_TYPE}" DEB_PACK_ARCH)
+# message(WARNING "Debian Package Architecture: ${DEB_PACK_ARCH}")

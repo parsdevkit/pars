@@ -1,1 +1,0 @@
-file(WRITE ${FILE_WRITE_PATH} "3.0 (native)\n")

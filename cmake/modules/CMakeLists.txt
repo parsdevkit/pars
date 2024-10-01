@@ -1,3 +1,1 @@
-add_subdirectory(release)
-add_subdirectory(build)
-add_subdirectory(deb)
+add_modules_from_directory()
