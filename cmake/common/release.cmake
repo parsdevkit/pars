@@ -1,7 +1,7 @@
 include("${CMAKE_SOURCE_DIR}/cmake/core/detect-os.cmake")
 
 set(CHANNEL test)
-set(CHANNEL_NUMBER_FILE .channel_number)
+set(CHANNEL_NUMBER_FILE ${CMAKE_SOURCE_DIR}/.channel_number)
 
 execute_process(
     COMMAND git describe --tags --abbrev=0
@@ -51,7 +51,6 @@ endif()
 
 set(APP_TAG ${GIT_TAG}-${CHANNEL}.${CHANNEL_NUMBER})
 
-
 if(IS_WINDOWS)
     # RAW_VERSION
     execute_process(
@@ -98,9 +97,9 @@ endif()
 
 
 
-message(STATUS "CHANNEL_NUMBER: ${CHANNEL_NUMBER}")
-message(STATUS "RAW_VERSION: ${RAW_VERSION}")
-message(STATUS "APP_TAG_VERSION: ${APP_TAG_VERSION}")
-message(STATUS "APP_TAG_RELEASE: ${APP_TAG_RELEASE}")
-message(STATUS "RELEASE_DATE: ${RELEASE_DATE}")
-message(STATUS "IS_WINDOWS: ${IS_WINDOWS}")
+# message(STATUS "CHANNEL_NUMBER: ${CHANNEL_NUMBER}")
+# message(STATUS "RAW_VERSION: ${RAW_VERSION}")
+# message(STATUS "APP_TAG_VERSION: ${APP_TAG_VERSION}")
+# message(STATUS "APP_TAG_RELEASE: ${APP_TAG_RELEASE}")
+# message(STATUS "RELEASE_DATE: ${RELEASE_DATE}")
+# message(STATUS "IS_WINDOWS: ${IS_WINDOWS}")
