@@ -8,4 +8,4 @@ set(PROJECT_LICENCE_TYPE 'Apache-2.0')
 set(PROJECT_SUMMARY '${PROJECT_NAME} is a simple utility.')
 set(PROJECT_DESCRIPTION '${PROJECT_NAME} is a simple utility.')
 
-set(DIST_ROOT_DIR dist)
+set(DIST_ROOT_DIR home/ahmetsoner/pars-pro)

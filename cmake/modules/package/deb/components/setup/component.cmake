@@ -2,10 +2,12 @@ set(PACKAGES
     build-essential
     devscripts
     dh-make
+    dh-golang
     debhelper
     lintian
     fakeroot
     cmake
+    golang-any
 )
 
 add_custom_target(build.deb.package.setup
