@@ -1,0 +1,17 @@
+
+function(map_debarch_to_arch input_arch output_goarch)
+    if(${input_arch} STREQUAL ${DEB_ARCH_X86})
+        set(${output_goarch} ${ARCH_X86} PARENT_SCOPE)
+    elseif(${input_arch} STREQUAL ${DEB_ARCH_X86_64})
+        set(${output_goarch} ${ARCH_X86_64} PARENT_SCOPE)
+    elseif(${input_arch} STREQUAL ${DEB_ARCH_ARM})
+        set(${output_goarch} ${ARCH_ARM} PARENT_SCOPE)
+    elseif(${input_arch} STREQUAL ${DEB_ARCH_ARM64})
+        set(${output_goarch} ${ARCH_ARM64} PARENT_SCOPE)
+    else()
+        message(FATAL_ERROR "Unsupported architecture: ${input_arch}")
+    endif()
+endfunction()
+
+
+

@@ -1,7 +1,7 @@
 include("${CMAKE_SOURCE_DIR}/cmake/core/detect-os.cmake")
 
 set(CHANNEL test)
-set(CHANNEL_NUMBER_FILE .channel_number)
+set(CHANNEL_NUMBER_FILE ${CMAKE_SOURCE_DIR}/.channel_number)
 
 execute_process(
     COMMAND git describe --tags --abbrev=0
@@ -51,7 +51,6 @@ endif()
 
 set(APP_TAG ${GIT_TAG}-${CHANNEL}.${CHANNEL_NUMBER})
 
-
 if(IS_WINDOWS)
     # RAW_VERSION
     execute_process(
@@ -71,13 +70,6 @@ if(IS_WINDOWS)
     execute_process(
         COMMAND powershell -ExecutionPolicy Bypass -NoProfile -Command "'${RAW_VERSION}' -split '-' | Select-Object -Last 1"
         OUTPUT_VARIABLE APP_TAG_RELEASE
-        OUTPUT_STRIP_TRAILING_WHITESPACE
-    )
-    
-    # RELEASE_DATE_STD
-    execute_process(
-        COMMAND powershell -ExecutionPolicy Bypass -NoProfile -Command "[DateTime]::ParseExact('${RELEASE_DATE}', 'yyyy-MM-dd HH:mm:ss zzz', $null).ToString('yyyy-MM-dd')"
-        OUTPUT_VARIABLE RELEASE_DATE_STD
         OUTPUT_STRIP_TRAILING_WHITESPACE
     )
 elseif(IS_UNIX_BASED)
@@ -101,21 +93,13 @@ elseif(IS_UNIX_BASED)
         OUTPUT_VARIABLE APP_TAG_RELEASE
         OUTPUT_STRIP_TRAILING_WHITESPACE
     )
-
-    # RELEASE_DATE_STD
-    execute_process(
-        COMMAND bash -c "echo ${RELEASE_DATE} | awk '{print $1}'"
-        OUTPUT_VARIABLE RELEASE_DATE_STD
-        OUTPUT_STRIP_TRAILING_WHITESPACE
-    )
 endif()
 
 
 
-message(STATUS "CHANNEL_NUMBER: ${CHANNEL_NUMBER}")
-message(STATUS "RAW_VERSION: ${RAW_VERSION}")
-message(STATUS "APP_TAG_VERSION: ${APP_TAG_VERSION}")
-message(STATUS "APP_TAG_RELEASE: ${APP_TAG_RELEASE}")
-message(STATUS "RELEASE_DATE: ${RELEASE_DATE}")
-message(STATUS "RELEASE_DATE_STD: ${RELEASE_DATE_STD}")
-message(STATUS "IS_WINDOWS: ${IS_WINDOWS}")
+# message(STATUS "CHANNEL_NUMBER: ${CHANNEL_NUMBER}")
+# message(STATUS "RAW_VERSION: ${RAW_VERSION}")
+# message(STATUS "APP_TAG_VERSION: ${APP_TAG_VERSION}")
+# message(STATUS "APP_TAG_RELEASE: ${APP_TAG_RELEASE}")
+# message(STATUS "RELEASE_DATE: ${RELEASE_DATE}")
+# message(STATUS "IS_WINDOWS: ${IS_WINDOWS}")
