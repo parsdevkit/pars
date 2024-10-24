@@ -4,6 +4,6 @@ include("${CMAKE_SOURCE_DIR}/cmake/common/consts-system.cmake")
 include("${CMAKE_SOURCE_DIR}/cmake/common/consts-project.cmake")
 include("${CMAKE_SOURCE_DIR}/cmake/common/consts-app.cmake")
 include("${CMAKE_SOURCE_DIR}/cmake/common/release.cmake")
-# include("${CMAKE_SOURCE_DIR}/cmake/modules/build/ModuleConsts.cmake")
-# include("${CMAKE_SOURCE_DIR}/cmake/modules/build/ModuleFunctions.cmake")
-# include("${CMAKE_SOURCE_DIR}/cmake/modules/build/Module.cmake")
+
+include_module_files()
+
