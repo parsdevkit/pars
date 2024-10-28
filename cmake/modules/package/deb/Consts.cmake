@@ -12,6 +12,7 @@ set(DEB_PACK_TYPE "source")
 set(DEBARCH_LIST_LINUX "${DEB_ARCH_X86};${DEB_ARCH_X86_64};${DEB_ARCH_ARM};${DEB_ARCH_ARM64}")
 
 
+message(STATUS "RELEASE_DATE: ${RELEASE_DATE}")
 
 execute_process(
     COMMAND bash -c "date -d '${RELEASE_DATE}' '+%a, %d %b %Y 00:00:00 +0000'"
@@ -19,6 +20,7 @@ execute_process(
     OUTPUT_STRIP_TRAILING_WHITESPACE
 )
 
+message(STATUS "RELEASE_DATE_DEB: ${RELEASE_DATE_DEB}")
 
 set(PACKAGE_ROOT_DIR "${CMAKE_BINARY_DIR}/linux/pkg/deb/${APP_ARCH}/${APP_NAME}")
 set(DEB_ROOT_DIR "${CMAKE_BINARY_DIR}")
