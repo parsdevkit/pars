@@ -20,3 +20,4 @@ else()
 endif()
 
 
+message(WARNING "OS: ${IS_LINUX}")
