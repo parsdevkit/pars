@@ -11,5 +11,30 @@ if(NOT GIT_EXEC)
     message(FATAL_ERROR "Git executable not found!")
 endif()
 
+include("${CMAKE_SOURCE_DIR}/cmake/core/version.cmake")
+if(NOT DEFINED VERSION OR VERSION STREQUAL "")
+    set(VERSION "NONE")
+endif()
+generate_version_info(${VERSION} APP_TAG)
+
+
+string(REGEX MATCH "^([A-Za-z]*)([0-9]+\\.[0-9]+\\.[0-9]+)[-]?([a-zA-Z]+)?[\.]?([0-9]+)$" VERSION_MATCH ${APP_TAG})
+if(VERSION_MATCH)
+    set(VERSION_PREFIX ${CMAKE_MATCH_1})
+    set(VERSION_SEMVER ${CMAKE_MATCH_2})
+    set(VERSION_CHANNEL ${CMAKE_MATCH_3})
+    set(VERSION_RELEASE ${CMAKE_MATCH_4})
+else()
+    message(FATAL_ERROR "Invalid version format: ${APP_TAG}")
+endif()
+    
+message(STATUS "APP_TAG: ${APP_TAG}")
+message(STATUS "VERSION_PREFIX: ${VERSION_PREFIX}")
+message(STATUS "VERSION_SEMVER: ${VERSION_SEMVER}")
+message(STATUS "VERSION_CHANNEL: ${VERSION_CHANNEL}")
+message(STATUS "VERSION_RELEASE: ${VERSION_RELEASE}")
+
+
+
 
 add_subdirectory(cmake)
