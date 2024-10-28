@@ -18,12 +18,12 @@ endif()
 generate_version_info(${VERSION} APP_TAG)
 
 
-string(REGEX MATCH "^([A-Za-z]*)([0-9]+\\.[0-9]+\\.[0-9]+)[-]?([a-zA-Z]+)?[\.]?([0-9]+)$" VERSION_MATCH ${APP_TAG})
+string(REGEX MATCH "^([A-Za-z]*)([0-9]+\\.[0-9]+\\.[0-9]+)([-]([a-zA-Z]+)([\.]?([0-9]+))?)?$" VERSION_MATCH ${APP_TAG})
 if(VERSION_MATCH)
     set(VERSION_PREFIX ${CMAKE_MATCH_1})
     set(VERSION_SEMVER ${CMAKE_MATCH_2})
-    set(VERSION_CHANNEL ${CMAKE_MATCH_3})
-    set(VERSION_RELEASE ${CMAKE_MATCH_4})
+    set(VERSION_CHANNEL ${CMAKE_MATCH_4})
+    set(VERSION_RELEASE ${CMAKE_MATCH_6})
 else()
     message(FATAL_ERROR "Invalid version format: ${APP_TAG}")
 endif()
@@ -34,7 +34,18 @@ message(STATUS "VERSION_SEMVER: ${VERSION_SEMVER}")
 message(STATUS "VERSION_CHANNEL: ${VERSION_CHANNEL}")
 message(STATUS "VERSION_RELEASE: ${VERSION_RELEASE}")
 
+set(RAW_VERSION "${VERSION_SEMVER}")
+
+# VERSION_CHANNEL tanımlıysa RAW_VERSION'e ekle
+if(DEFINED VERSION_CHANNEL AND NOT "${VERSION_CHANNEL}" STREQUAL "")
+    set(RAW_VERSION "${RAW_VERSION}-${VERSION_CHANNEL}")
+endif()
+
+# VERSION_RELEASE tanımlıysa RAW_VERSION'e ekle
+if(DEFINED VERSION_RELEASE AND NOT "${VERSION_RELEASE}" STREQUAL "")
+    set(RAW_VERSION "${RAW_VERSION}.${VERSION_RELEASE}")
+endif()
+message(STATUS "RAW_VERSION: ${RAW_VERSION}")
 
 
-
-add_subdirectory(cmake)
+# add_subdirectory(cmake)
