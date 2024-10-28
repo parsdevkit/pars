@@ -18,6 +18,3 @@ else()
         COMMAND exit 1
     )
 endif()
-
-
-message(WARNING "OS: ${IS_LINUX}")

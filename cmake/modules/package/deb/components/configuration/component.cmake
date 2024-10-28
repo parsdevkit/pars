@@ -1,6 +1,7 @@
 set(COMMON_VARIABLES 
     PROJECT_NAME
     APP_NAME
+    APP_TAG
     RAW_VERSION
     DEB_SERIES
     CHANGELOG_PATH              # d
