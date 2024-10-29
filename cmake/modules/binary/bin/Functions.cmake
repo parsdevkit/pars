@@ -30,11 +30,42 @@ endfunction()
 # message(STATUS "GOARCH for ${ARCH_X86}: ${GO_ARCH}")
 
 function(build GOOS GOARCH EXT)
+map_goarch_to_arch(${GOARCH} APP_ARCH)
+set(GO_BUILD_ENV_COMMAND "")
+if(${HOST_SHELL} STREQUAL "powershell")
+    list(APPEND GO_BUILD_ENV_COMMAND $$env:GOOS='${GOOS}' \\\\\\\\\;)
+    list(APPEND GO_BUILD_ENV_COMMAND $$env:GOARCH='${GOARCH}' \\\\\\\\\;)
+else()
+    list(APPEND GO_BUILD_ENV_COMMAND GOOS=${GOOS})
+    list(APPEND GO_BUILD_ENV_COMMAND GOARCH=${GOARCH})
+endif()
+
+set(GO_BUILD_COMMAND ${GO_BUILD_ENV_COMMAND} go build -ldflags='-X parsdevkit.net/core/utils.version=${APP_TAG} -X parsdevkit.net/core/utils.stage=final -buildid=${APP_NAME}' -o ${CMAKE_SOURCE_DIR}/${DIST_ROOT_DIR}/${APP_TAG}/${GOOS}/bin/${APP_ARCH}/${APP_NAME}${EXT} ./pars.go)
+
+command_for_shell(${HOST_SHELL} "${GO_BUILD_COMMAND}" SHELL_GO_BUILD_COMMAND)
+
+
+add_custom_command(
+    OUTPUT ${CMAKE_SOURCE_DIR}/${DIST_ROOT_DIR}/${APP_TAG}/${GOOS}/bin/${APP_ARCH}/${APP_NAME}${EXT}
+    COMMAND ${SHELL_GO_BUILD_COMMAND}
+    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/src
+    COMMENT "Building for ${GOOS} ${APP_ARCH} with tag ${APP_TAG}..."
+)
+endfunction()
+
+function(build_vendor GOOS GOARCH EXT)
     map_goarch_to_arch(${GOARCH} APP_ARCH)
+    set(GO_BUILD_ENV_COMMAND "")
     if(${HOST_SHELL} STREQUAL "powershell")
-        set(GO_BUILD_ENV_COMMAND $$env:GOOS='${GOOS}' \\\\\\\\\; $$env:GOARCH='${GOARCH}' \\\\\\\\\;)
+        list(APPEND GO_BUILD_ENV_COMMAND $$env:GOOS='${GOOS}' \\\\\\\\\;)
+        list(APPEND GO_BUILD_ENV_COMMAND $$env:GOARCH='${GOARCH}' \\\\\\\\\;)
+        list(APPEND GO_BUILD_ENV_COMMAND $$env:GO111MODULE='on' \\\\\\\\\;)
+        list(APPEND GO_BUILD_ENV_COMMAND $$env:GOFLAGS='-mod=vendor' \\\\\\\\\;)
     else()
-        set(GO_BUILD_ENV_COMMAND GOOS=${GOOS} GOARCH=${GOARCH})
+        list(APPEND GO_BUILD_ENV_COMMAND GOOS=${GOOS})
+        list(APPEND GO_BUILD_ENV_COMMAND GOARCH=${GOARCH})
+        list(APPEND GO_BUILD_ENV_COMMAND GO111MODULE=on)
+        list(APPEND GO_BUILD_ENV_COMMAND GOFLAGS=-mod=vendor)
     endif()
 
     set(GO_BUILD_COMMAND ${GO_BUILD_ENV_COMMAND} go build -ldflags='-X parsdevkit.net/core/utils.version=${APP_TAG} -X parsdevkit.net/core/utils.stage=final -buildid=${APP_NAME}' -o ${CMAKE_SOURCE_DIR}/${DIST_ROOT_DIR}/${APP_TAG}/${GOOS}/bin/${APP_ARCH}/${APP_NAME}${EXT} ./pars.go)
@@ -43,7 +74,7 @@ function(build GOOS GOARCH EXT)
 
     
     add_custom_command(
-        OUTPUT ${CMAKE_SOURCE_DIR}/${DIST_ROOT_DIR}/${APP_TAG}/${GOOS}/bin/${APP_ARCH}/${APP_NAME}${EXT}
+        OUTPUT ${CMAKE_SOURCE_DIR}/${DIST_ROOT_DIR}/${APP_TAG}/${GOOS}/bin-vendor/${APP_ARCH}/${APP_NAME}${EXT}
         COMMAND ${SHELL_GO_BUILD_COMMAND}
         WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/src
         COMMENT "Building for ${GOOS} ${APP_ARCH} with tag ${APP_TAG}..."
