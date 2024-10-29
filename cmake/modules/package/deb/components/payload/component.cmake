@@ -1,3 +1,4 @@
+get_host_os(HOST_OS)
 set(PAYLOADS 
     .channel_number
     CMakeLists.txt
@@ -9,7 +10,7 @@ set(PAYLOADS
 
 foreach(DEBARCH ${DEBARCH_LIST_LINUX})
     map_debarch_to_arch(${DEBARCH} APP_ARCH)
-    set(DEB_PAYLOAD_DIR ${CMAKE_SOURCE_DIR}/${DIST_ROOT_DIR}/${APP_TAG}/linux/pkg/${APP_ARCH}/${APP_NAME})
+    set(DEB_PAYLOAD_DIR ${CMAKE_SOURCE_DIR}/${DIST_ROOT_DIR}/${APP_TAG}/${HOST_OS}/pkg/${APP_ARCH}/${APP_NAME})
 
     set(PAYLOAD_OUTPUTS "")
     foreach(PAYLOAD ${PAYLOADS})
@@ -31,7 +32,7 @@ add_custom_target(build.deb.package.${APP_ARCH}.payload DEPENDS check_env_for_de
 endforeach()
 
 set(DEBARCH any)
-set(DEB_PAYLOAD_DIR ${CMAKE_SOURCE_DIR}/${DIST_ROOT_DIR}/${APP_TAG}/linux/pkg/all/${APP_NAME})
+set(DEB_PAYLOAD_DIR ${CMAKE_SOURCE_DIR}/${DIST_ROOT_DIR}/${APP_TAG}/${HOST_OS}/pkg/all/${APP_NAME})
 
 
 set(PAYLOAD_OUTPUTS "")
