@@ -1,3 +1,4 @@
+get_host_os(HOST_OS)
 set(DEB_ARCH_X86 "i386")
 set(DEB_ARCH_X86_64 "amd64")
 set(DEB_ARCH_ARM "armhf")
@@ -22,7 +23,7 @@ execute_process(
 
 message(STATUS "RELEASE_DATE_DEB: ${RELEASE_DATE_DEB}")
 
-set(PACKAGE_ROOT_DIR "${CMAKE_BINARY_DIR}/linux/pkg/deb/${APP_ARCH}/${APP_NAME}")
+set(PACKAGE_ROOT_DIR "${CMAKE_BINARY_DIR}/${HOST_OS}/pkg/deb/${APP_ARCH}/${APP_NAME}")
 set(DEB_ROOT_DIR "${CMAKE_BINARY_DIR}")
 set(DEB_BUILD_ROOT_DIR "${DEB_ROOT_DIR}")
 set(DEB_BUILD_CONFIG_DIR "${DEB_ROOT_DIR}/debian")
