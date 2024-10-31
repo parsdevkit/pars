@@ -45,13 +45,17 @@ if(DEFINED VERSION_RELEASE AND NOT "${VERSION_RELEASE}" STREQUAL "")
 endif()
 message(STATUS "RAW_VERSION: ${RAW_VERSION}")
 
-execute_process(
-    COMMAND git log -1 --format=%cd --date=short
-    OUTPUT_VARIABLE GIT_COMMIT_DATE
-    OUTPUT_STRIP_TRAILING_WHITESPACE
-)
-set(GIT_DATE ${GIT_COMMIT_DATE})
+if(NOT DEFINED RELEASE_DATE OR RELEASE_DATE STREQUAL "")
 
-set(RELEASE_DATE ${GIT_DATE})
+    execute_process(
+        COMMAND git log -1 --format=%cd --date=short
+        OUTPUT_VARIABLE GIT_COMMIT_DATE
+        OUTPUT_STRIP_TRAILING_WHITESPACE
+    )
+    set(GIT_DATE ${GIT_COMMIT_DATE})
+
+    set(RELEASE_DATE ${GIT_DATE})
+
+endif()
 
 add_subdirectory(cmake)

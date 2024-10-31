@@ -23,14 +23,21 @@ set(COMMON_VARIABLES
 
 
 file(GLOB_RECURSE DEBIAN_FILES "${CMAKE_CURRENT_LIST_DIR}/debian-files/*")
-foreach(DEBARCH ${DEBARCH_LIST_LINUX})
-    map_debarch_to_arch(${DEBARCH} APP_ARCH)
+
+foreach(DEBARCH ${ALL_DEBARCH_LIST_LINUX})
+    map_debarch_to_arch_all(${DEBARCH} APP_ARCH)
     
     set(DEB_ROOT_DIR ${CMAKE_SOURCE_DIR}/${DIST_ROOT_DIR}/${APP_TAG}/${HOST_OS}/pkg/${APP_ARCH})
     set(DEB_PAYLOAD_DIR ${DEB_ROOT_DIR}/${APP_NAME})
     set(DEB_OUTPUT_DIR ${DEB_ROOT_DIR}/output)
     set(DEB_CONF_DIR ${DEB_ROOT_DIR}/${APP_NAME}/debian)
-    set(BIN_OUTPUT_FULL_PATH ${DEB_OUTPUT_DIR}/${APP_NAME}/dist/${APP_TAG}/${HOST_OS}/bin-vendor/${APP_ARCH}/${APP_NAME}${EXT})
+
+    if(${DEBARCH} STREQUAL ${DEB_ARCH_ALL})
+        get_host_arch(HOST_ARCH)
+        set(BIN_OUTPUT_FULL_PATH ${DEB_OUTPUT_DIR}/${APP_NAME}/dist/${APP_TAG}/${HOST_OS}/bin-vendor/${HOST_ARCH}/${APP_NAME}${EXT})
+    else()
+        set(BIN_OUTPUT_FULL_PATH ${DEB_OUTPUT_DIR}/${APP_NAME}/dist/${APP_TAG}/${HOST_OS}/bin-vendor/${APP_ARCH}/${APP_NAME}${EXT})
+    endif()
 
 
     list(APPEND COMMON_VARIABLES APP_ARCH)
@@ -56,37 +63,3 @@ foreach(DEBARCH ${DEBARCH_LIST_LINUX})
 
     add_custom_target(build.deb.package.${APP_ARCH}.configuration DEPENDS check_env_for_deb_packing ${DEBIAN_FILE_NAMES})
 endforeach()
-
-
-set(DEBARCH any)
-set(APP_ARCH all)
-get_host_arch(HOST_ARCH)
-
-set(DEB_ROOT_DIR ${CMAKE_SOURCE_DIR}/${DIST_ROOT_DIR}/${APP_TAG}/${HOST_OS}/pkg/all)
-set(DEB_PAYLOAD_DIR ${DEB_ROOT_DIR}/${APP_NAME})
-set(DEB_OUTPUT_DIR ${DEB_ROOT_DIR}/output)
-set(DEB_CONF_DIR ${DEB_ROOT_DIR}/${APP_NAME}/debian)
-set(BIN_OUTPUT_FULL_PATH ${DEB_OUTPUT_DIR}/${APP_NAME}/dist/${APP_TAG}/${HOST_OS}/bin-vendor/${HOST_ARCH}/${APP_NAME}${EXT})
-
-list(APPEND COMMON_VARIABLES APP_ARCH)
-list(APPEND COMMON_VARIABLES DEBARCH)
-list(APPEND COMMON_VARIABLES BIN_OUTPUT_FULL_PATH)
-
-set(DEBIAN_FILE_NAMES "")
-foreach(DEBIANFILE ${DEBIAN_FILES})
-    file(RELATIVE_PATH REL_FILE_PATH "${CMAKE_CURRENT_LIST_DIR}/debian-files" ${DEBIANFILE})
-
-    set(CONFIG_FILE_PATH "${DEB_CONF_DIR}/${REL_FILE_PATH}")
-    list(APPEND DEBIAN_FILE_NAMES ${CONFIG_FILE_PATH})
-    list(APPEND COMMON_VARIABLES CONFIG_FILE_PATH)
-
-    var_list_to_cmake_args(VARIABLES_TO_PASS "${COMMON_VARIABLES}")
-    add_custom_command(
-        OUTPUT ${CONFIG_FILE_PATH}
-        COMMAND ${CMAKE_COMMAND} -E echo "Generating ${DEBIANFILE} file..."
-        COMMAND ${CMAKE_COMMAND} ${VARIABLES_TO_PASS}  -P "${DEBIANFILE}"
-        COMMENT "Generating ${DEBIANFILE} to ${CONFIG_FILE_PATH}"
-    )
-endforeach()
-
-add_custom_target(build.deb.package.all.configuration DEPENDS check_env_for_deb_packing ${DEBIAN_FILE_NAMES})
