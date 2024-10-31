@@ -15,3 +15,14 @@ endfunction()
 
 
 
+
+function(map_debarch_to_arch_all input_arch output_goarch)
+    if(${input_arch} STREQUAL ${DEB_ARCH_ALL})
+        set(${output_goarch} ${ARCH_ALL} PARENT_SCOPE)
+    else()
+        map_debarch_to_arch(${input_arch} COMING_ARCH)
+        set(${output_goarch} ${COMING_ARCH} PARENT_SCOPE)
+    endif()
+endfunction()
+
+
