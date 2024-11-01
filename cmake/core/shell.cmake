@@ -75,15 +75,25 @@ function(command_for_shell shell command_to_run output_command)
     elseif(${shell_name} STREQUAL "pwsh")
         set(shell_command pwsh -Command \"${command_to_run}\")
     elseif(${shell_name} STREQUAL "bash")
-        set(shell_command bash -c \"${command_to_run}\")
+        set(shell_command "bash -c \"${command_to_run}\"")
     elseif(${shell_name} STREQUAL "zsh")
-        set(shell_command zsh -c \"${command_to_run}\")
+        set(shell_command "zsh -c \"${command_to_run}\"")
     elseif(${shell_name} STREQUAL "fish")
-        set(shell_command fish -c \"${command_to_run}\")
+        set(shell_command "fish -c \"${command_to_run}\"")
     else()
         message(FATAL_ERROR "Unsupported shell: ${shell_name}")
     endif()
 
     set(${output_command} ${shell_command} PARENT_SCOPE)
+
+endfunction()
+
+function(command_for_default_shell command_to_run output_command)
+
+    get_filename_component(shell_name ${HOST_SHELL} NAME)
+
+    command_for_shell(${HOST_SHELL} "${COMPRESS_COMMAND}" SHELL_COMPRESS_COMMAND)
+
+    set(${output_command} ${SHELL_COMPRESS_COMMAND} PARENT_SCOPE)
 
 endfunction()
