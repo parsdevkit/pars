@@ -2,6 +2,7 @@ get_host_os(HOST_OS)
 set(PAYLOADS 
     .channel_number
     CMakeLists.txt
+    .config
     cmake
     Makefile
     src
