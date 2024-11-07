@@ -17,4 +17,5 @@ build.cmake.windows.%:
 	@cmake -B build/$* -S . -G "MinGW Makefiles" -DVERSION=$* -DRELEASE_DATE=$(RELEASE_DATE)
 
 %:
+	$(MAKE) $(MAKEOVERRIDES) 
 	$(MAKE) -C build/$(if $(VERSION),$(VERSION),current) $@
