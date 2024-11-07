@@ -29,7 +29,7 @@ endfunction()
 # map_arch_to_goarch(${ARCH_X86} GO_ARCH)
 # message(STATUS "GOARCH for ${ARCH_X86}: ${GO_ARCH}")
 
-function(build GOOS GOARCH EXT IS_VENDOR)
+function(build GOOS GOARCH EXT IS_VENDOR OUTPUT_PATH)
     map_goarch_to_arch(${GOARCH} APP_ARCH)
     set(VENDOR_PATH_SUFFIX "")
     if(${IS_VENDOR})
@@ -52,14 +52,14 @@ function(build GOOS GOARCH EXT IS_VENDOR)
         endif()
     endif()
 
-    set(GO_BUILD_COMMAND ${GO_BUILD_ENV_COMMAND} go build -ldflags='-X parsdevkit.net/core/utils.version=${APP_TAG} -X parsdevkit.net/core/utils.stage=final -buildid=${APP_NAME}' -o ${CMAKE_SOURCE_DIR}/${DIST_ROOT_DIR}/${APP_TAG}/${GOOS}/bin${VENDOR_PATH_SUFFIX}/${APP_ARCH}/${APP_NAME}${EXT} ./pars.go)
+    set(GO_BUILD_COMMAND ${GO_BUILD_ENV_COMMAND} go build -ldflags='-X parsdevkit.net/core/utils.version=${APP_TAG} -X parsdevkit.net/core/utils.stage=final -buildid=${APP_NAME}' -o ${OUTPUT_PATH} ./pars.go)
 
-    command_for_shell(${HOST_SHELL} "${GO_BUILD_COMMAND}" SHELL_GO_BUILD_COMMAND)
+    command_for_default_shell("${GO_BUILD_COMMAND}" SHELL_GO_BUILD_COMMAND)
 
 
     
     add_custom_command(
-        OUTPUT ${CMAKE_SOURCE_DIR}/${DIST_ROOT_DIR}/${APP_TAG}/${GOOS}/bin${VENDOR_PATH_SUFFIX}/${APP_ARCH}/${APP_NAME}${EXT}
+        OUTPUT ${OUTPUT_PATH}
         COMMAND ${SHELL_GO_BUILD_COMMAND}
         WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/src
         COMMENT "Building for ${GOOS} ${APP_ARCH} with tag ${APP_TAG}..."
@@ -92,3 +92,23 @@ function(set_goos_arch_lists GOOS)
     endif()
 endfunction()
 
+function(set_build_output_from_arg default_path default_filename path_variable)
+    set(BASE_PATH "${CMAKE_SOURCE_DIR}/${DIST_ROOT_DIR}")
+    if(DEFINED ENV{OUTPUT} AND NOT "$ENV{OUTPUT}" STREQUAL "")
+        set(OUTPUT_PATH $ENV{OUTPUT})
+        string(REGEX REPLACE "/$" "" OUTPUT_PATH "${OUTPUT_PATH}")
+        cmake_path(IS_RELATIVE OUTPUT_PATH IS_RELATIVE_RESULT)
+
+        if(IS_RELATIVE_RESULT)
+            cmake_path(SET FINAL_PATH NORMALIZE "${BASE_PATH}/${OUTPUT_PATH}/${default_filename}")
+        else()
+            set(FINAL_PATH "${OUTPUT_PATH}/${default_filename}")
+        endif()
+        
+        string(REGEX REPLACE "/+" "/" FINAL_PATH "${FINAL_PATH}")
+        
+        set(${path_variable} "${FINAL_PATH}" PARENT_SCOPE)
+    else()
+        set(${path_variable} "${default_path}" PARENT_SCOPE)
+    endif()
+endfunction()
