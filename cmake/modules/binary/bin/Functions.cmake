@@ -29,12 +29,21 @@ endfunction()
 # map_arch_to_goarch(${ARCH_X86} GO_ARCH)
 # message(STATUS "GOARCH for ${ARCH_X86}: ${GO_ARCH}")
 
-function(build GOOS GOARCH EXT IS_VENDOR OUTPUT_PATH)
-    map_goarch_to_arch(${GOARCH} APP_ARCH)
-    set(VENDOR_PATH_SUFFIX "")
-    if(${IS_VENDOR})
-        set(VENDOR_PATH_SUFFIX "-vendor")
+function(build GOOS GOARCH OUTPUT_PATH)
+    if (EXISTS "${CMAKE_SOURCE_DIR}/src/vendor")
+        set(IS_VENDOR ON)
+    else()
+        set(IS_VENDOR OFF)
     endif()
+
+    
+    set(PATH_OUTPUT ${CMAKE_SOURCE_DIR}/${DIST_ROOT_DIR}/${APP_TAG}/${GOOS}/bin/${APP_ARCH}/${APP_NAME}${EXT})
+    if("${OUTPUT_PATH}" STREQUAL "")
+        set(OUTPUT_PATH ${PATH_OUTPUT})
+    endif()
+
+    map_goarch_to_arch(${GOARCH} APP_ARCH)
+
     set(GO_BUILD_ENV_COMMAND "")
     if(${HOST_SHELL} STREQUAL "powershell")
         list(APPEND GO_BUILD_ENV_COMMAND $$env:GOOS='${GOOS}' \\\\\\\\\;)
@@ -52,6 +61,7 @@ function(build GOOS GOARCH EXT IS_VENDOR OUTPUT_PATH)
         endif()
     endif()
 
+    message(STATUS "OUTPUT_PATH: ${OUTPUT_PATH}")
     set(GO_BUILD_COMMAND ${GO_BUILD_ENV_COMMAND} go build -ldflags='-X parsdevkit.net/core/utils.version=${APP_TAG} -X parsdevkit.net/core/utils.stage=final -buildid=${APP_NAME}' -o ${OUTPUT_PATH} ./pars.go)
 
     command_for_default_shell("${GO_BUILD_COMMAND}" SHELL_GO_BUILD_COMMAND)
@@ -59,7 +69,7 @@ function(build GOOS GOARCH EXT IS_VENDOR OUTPUT_PATH)
 
     
     add_custom_command(
-        OUTPUT ${OUTPUT_PATH}
+        OUTPUT ${PATH_OUTPUT}
         COMMAND ${SHELL_GO_BUILD_COMMAND}
         WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/src
         COMMENT "Building for ${GOOS} ${APP_ARCH} with tag ${APP_TAG}..."
@@ -92,23 +102,21 @@ function(set_goos_arch_lists GOOS)
     endif()
 endfunction()
 
-function(set_build_output_from_arg default_path default_filename path_variable)
-    set(BASE_PATH "${CMAKE_SOURCE_DIR}/${DIST_ROOT_DIR}")
+function(set_build_output_from_arg path_variable)
+    set(BASE_PATH "${CMAKE_SOURCE_DIR}")
     if(DEFINED ENV{OUTPUT} AND NOT "$ENV{OUTPUT}" STREQUAL "")
         set(OUTPUT_PATH $ENV{OUTPUT})
         string(REGEX REPLACE "/$" "" OUTPUT_PATH "${OUTPUT_PATH}")
         cmake_path(IS_RELATIVE OUTPUT_PATH IS_RELATIVE_RESULT)
 
         if(IS_RELATIVE_RESULT)
-            cmake_path(SET FINAL_PATH NORMALIZE "${BASE_PATH}/${OUTPUT_PATH}/${default_filename}")
+            cmake_path(SET FINAL_PATH NORMALIZE "${BASE_PATH}/${OUTPUT_PATH}")
         else()
-            set(FINAL_PATH "${OUTPUT_PATH}/${default_filename}")
+            set(FINAL_PATH "${OUTPUT_PATH}")
         endif()
         
         string(REGEX REPLACE "/+" "/" FINAL_PATH "${FINAL_PATH}")
         
         set(${path_variable} "${FINAL_PATH}" PARENT_SCOPE)
-    else()
-        set(${path_variable} "${default_path}" PARENT_SCOPE)
     endif()
 endfunction()

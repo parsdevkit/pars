@@ -34,9 +34,9 @@ foreach(DEBARCH ${ALL_DEBARCH_LIST_LINUX})
 
     if(${DEBARCH} STREQUAL ${DEB_ARCH_ALL})
         get_host_arch(HOST_ARCH)
-        set(BIN_OUTPUT_FULL_PATH ${DEB_OUTPUT_DIR}/${APP_NAME}/dist/${APP_TAG}/${HOST_OS}/bin/v_${HOST_ARCH}/${APP_NAME}${EXT})
+        set(BIN_OUTPUT_FULL_PATH ${DEB_OUTPUT_DIR}/${APP_NAME}/dist/${APP_TAG}/${HOST_OS}/bin/${HOST_ARCH}/${APP_NAME}${EXT})
     else()
-        set(BIN_OUTPUT_FULL_PATH ${DEB_OUTPUT_DIR}/${APP_NAME}/dist/${APP_TAG}/${HOST_OS}/bin/v_${APP_ARCH}/${APP_NAME}${EXT})
+        set(BIN_OUTPUT_FULL_PATH ${DEB_OUTPUT_DIR}/${APP_NAME}/dist/${APP_TAG}/${HOST_OS}/bin/${APP_ARCH}/${APP_NAME}${EXT})
     endif()
 
 
