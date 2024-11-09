@@ -6,7 +6,6 @@ foreach(DEBARCH ${ALL_DEBARCH_LIST_LINUX})
     set(DEB_PAYLOAD_DIR ${DEB_ROOT_DIR}/${APP_NAME})
     set(DEB_OUTPUT_DIR ${DEB_ROOT_DIR}/output)
 
-    message(STATUS "DPUT_CONFIG_PATH: ${DPUT_CONFIG_PATH}")
 
     add_custom_command(
         OUTPUT ${DEB_OUTPUT_DIR}/*source.ppa.upload
