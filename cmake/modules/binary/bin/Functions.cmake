@@ -29,7 +29,7 @@ endfunction()
 # map_arch_to_goarch(${ARCH_X86} GO_ARCH)
 # message(STATUS "GOARCH for ${ARCH_X86}: ${GO_ARCH}")
 
-function(build GOOS GOARCH EXT OUTPUT_PATH)
+function(build GOOS GOARCH OUTPUT_PATH)
     if (EXISTS "${CMAKE_SOURCE_DIR}/src/vendor")
         set(IS_VENDOR ON)
     else()
@@ -61,7 +61,6 @@ function(build GOOS GOARCH EXT OUTPUT_PATH)
         endif()
     endif()
 
-    message(STATUS "OUTPUT_PATH: ${OUTPUT_PATH}")
     set(GO_BUILD_COMMAND ${GO_BUILD_ENV_COMMAND} go build -ldflags='-X parsdevkit.net/core/utils.version=${APP_TAG} -X parsdevkit.net/core/utils.stage=final -buildid=${APP_NAME}' -o ${OUTPUT_PATH} ./pars.go)
 
     command_for_default_shell("${GO_BUILD_COMMAND}" SHELL_GO_BUILD_COMMAND)
