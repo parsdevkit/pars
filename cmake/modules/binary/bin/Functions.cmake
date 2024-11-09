@@ -29,7 +29,7 @@ endfunction()
 # map_arch_to_goarch(${ARCH_X86} GO_ARCH)
 # message(STATUS "GOARCH for ${ARCH_X86}: ${GO_ARCH}")
 
-function(build GOOS GOARCH OUTPUT_PATH)
+function(build GOOS GOARCH EXT OUTPUT_PATH)
     if (EXISTS "${CMAKE_SOURCE_DIR}/src/vendor")
         set(IS_VENDOR ON)
     else()

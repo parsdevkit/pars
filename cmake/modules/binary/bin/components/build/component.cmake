@@ -12,7 +12,7 @@ foreach(GOOS ${GOOS_LIST})
         
         set(PATH_OUTPUT ${CMAKE_SOURCE_DIR}/${DIST_ROOT_DIR}/${APP_TAG}/${GOOS}/bin/${APP_ARCH}/${APP_NAME}${EXT})
         set_build_output_from_arg(BUILD_OUTPUT_PATH)
-        build("${GOOS}" "${GOARCH}" "${BUILD_OUTPUT_PATH}/${APP_NAME}${EXT}")
+        build("${GOOS}" "${GOARCH}" "${EXT}" "${BUILD_OUTPUT_PATH}/${APP_NAME}${EXT}")
         add_custom_target(build.binary.${GOOS}.${APP_ARCH}
             DEPENDS ${PATH_OUTPUT}
         )
@@ -38,7 +38,7 @@ map_arch_to_goarch(${APP_ARCH} GOARCH)
 
 set(PATH_OUTPUT ${CMAKE_SOURCE_DIR}/${DIST_ROOT_DIR}/${APP_TAG}/${GOOS}/bin/${APP_ARCH}/${APP_NAME}${EXT})
 set_build_output_from_arg(BUILD_OUTPUT_PATH)
-build("${GOOS}" "${GOARCH}" "${BUILD_OUTPUT_PATH}/${APP_NAME}${EXT}")
+build("${GOOS}" "${GOARCH}" "${EXT}" "${BUILD_OUTPUT_PATH}/${APP_NAME}${EXT}")
 add_custom_target(build.binary
     DEPENDS ${PATH_OUTPUT}
 )
@@ -49,7 +49,7 @@ foreach(GOARCH ${ARCH_LIST})
 
     set(PATH_OUTPUT ${CMAKE_SOURCE_DIR}/${DIST_ROOT_DIR}/${APP_TAG}/${GOOS}/bin/${APP_ARCH}/${APP_NAME}${EXT})
     set_build_output_from_arg(BUILD_OUTPUT_PATH)
-    build("${GOOS}" "${GOARCH}" "${BUILD_OUTPUT_PATH}/${APP_NAME}${EXT}")
+    build("${GOOS}" "${GOARCH}" "${EXT}" "${BUILD_OUTPUT_PATH}/${APP_NAME}${EXT}")
     add_custom_target(build.binary.${APP_ARCH}
         DEPENDS ${PATH_OUTPUT}
     )
