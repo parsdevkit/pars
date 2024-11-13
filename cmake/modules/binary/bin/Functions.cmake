@@ -37,7 +37,7 @@ function(build GOOS GOARCH OUTPUT_PATH)
     endif()
 
     
-    set(PATH_OUTPUT ${CMAKE_SOURCE_DIR}/${DIST_ROOT_DIR}/${APP_TAG}/${GOOS}/bin/${APP_ARCH}/${APP_NAME}${EXT})
+    generate_build_output_path(PATH_OUTPUT)
     if("${OUTPUT_PATH}" STREQUAL "")
         set(OUTPUT_PATH ${PATH_OUTPUT})
     endif()
@@ -46,11 +46,11 @@ function(build GOOS GOARCH OUTPUT_PATH)
 
     set(GO_BUILD_ENV_COMMAND "")
     if(${HOST_SHELL} STREQUAL "powershell")
-        list(APPEND GO_BUILD_ENV_COMMAND $$env:GOOS='${GOOS}' \\\\\\\\\;)
-        list(APPEND GO_BUILD_ENV_COMMAND $$env:GOARCH='${GOARCH}' \\\\\\\\\;)
+        list(APPEND GO_BUILD_ENV_COMMAND "$$env:GOOS='${GOOS}' \\\\\\\\\;")
+        list(APPEND GO_BUILD_ENV_COMMAND "$$env:GOARCH='${GOARCH}' \\\\\\\\\;")
         if(${IS_VENDOR})
-            list(APPEND GO_BUILD_ENV_COMMAND $$env:GO111MODULE='on' \\\\\\\\\;)
-            list(APPEND GO_BUILD_ENV_COMMAND $$env:GOFLAGS='-mod=vendor' \\\\\\\\\;)
+            list(APPEND GO_BUILD_ENV_COMMAND "$$env:GO111MODULE='on' \\\\\\\\\;")
+            list(APPEND GO_BUILD_ENV_COMMAND "$$env:GOFLAGS='-mod=vendor' \\\\\\\\\;")
         endif()
     else()
         list(APPEND GO_BUILD_ENV_COMMAND GOOS=${GOOS})
@@ -61,12 +61,15 @@ function(build GOOS GOARCH OUTPUT_PATH)
         endif()
     endif()
 
-    set(GO_BUILD_COMMAND ${GO_BUILD_ENV_COMMAND} go build -ldflags='-X parsdevkit.net/core/utils.version=${APP_TAG} -X parsdevkit.net/core/utils.stage=final -buildid=${APP_NAME}' -o ${OUTPUT_PATH} ./pars.go)
-
+    # set(GO_BUILD_COMMAND ${GO_BUILD_ENV_COMMAND} go build -ldflags='-X parsdevkit.net/core/utils.version=${APP_TAG} -X parsdevkit.net/core/utils.stage=final -buildid=${APP_NAME}' -o ${OUTPUT_PATH} ./pars.go)
+    set(GO_BUILD_COMMAND "")
+    list(APPEND GO_BUILD_COMMAND ${GO_BUILD_ENV_COMMAND})
+    list(APPEND GO_BUILD_COMMAND "go build -ldflags=\\\"-X parsdevkit.net/core/utils.version=${APP_TAG} -X parsdevkit.net/core/utils.stage=final -buildid=${APP_NAME}\\\" -o ${OUTPUT_PATH} ./pars.go")
+    
     command_for_default_shell("${GO_BUILD_COMMAND}" SHELL_GO_BUILD_COMMAND)
 
 
-    
+    generate_build_output_path_tmp(PATH_OUTPUT)    
     add_custom_command(
         OUTPUT ${PATH_OUTPUT}
         COMMAND ${SHELL_GO_BUILD_COMMAND}
@@ -103,8 +106,8 @@ endfunction()
 
 function(set_build_output_from_arg path_variable)
     set(BASE_PATH "${CMAKE_SOURCE_DIR}")
-    if(DEFINED ENV{OUTPUT} AND NOT "$ENV{OUTPUT}" STREQUAL "")
-        set(OUTPUT_PATH $ENV{OUTPUT})
+    if(DEFINED OUTPUT AND NOT "${OUTPUT}" STREQUAL "")
+        set(OUTPUT_PATH "${OUTPUT}")
         string(REGEX REPLACE "/$" "" OUTPUT_PATH "${OUTPUT_PATH}")
         cmake_path(IS_RELATIVE OUTPUT_PATH IS_RELATIVE_RESULT)
 
@@ -118,4 +121,13 @@ function(set_build_output_from_arg path_variable)
         
         set(${path_variable} "${FINAL_PATH}" PARENT_SCOPE)
     endif()
+endfunction()
+
+
+
+function(generate_build_output_path path_variable)
+    set(${path_variable} "${CMAKE_SOURCE_DIR}/${DIST_ROOT_DIR}/${APP_TAG}/${GOOS}/bin/${APP_ARCH}/${APP_NAME}${EXT}" PARENT_SCOPE)
+endfunction()
+function(generate_build_output_path_tmp path_variable)
+    set(${path_variable} "${CMAKE_SOURCE_DIR}/${DIST_ROOT_DIR}/${APP_TAG}/${GOOS}/bin/${APP_ARCH}/tmp/${APP_NAME}${EXT}" PARENT_SCOPE)
 endfunction()

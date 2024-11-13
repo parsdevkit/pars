@@ -5,6 +5,7 @@
 /binaries/**
 /data/**
 /dist/**
+/tmp/**
 /temp/**
 /drafts/**
 /build/**
