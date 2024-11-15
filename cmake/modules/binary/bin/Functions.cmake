@@ -1,5 +1,3 @@
-
-
 function(map_arch_to_goarch input_arch output_goarch)
     if(${input_arch} STREQUAL ${ARCH_X86})
         set(${output_goarch} ${GO_ARCH_X86} PARENT_SCOPE)
