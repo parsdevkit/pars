@@ -6,8 +6,9 @@ set(DEB_ARCH_ARM64 "arm64")
 set(DEB_ARCH_ALL "any")
 
 
-set(DEB_SERIES noble)
+set(DEB_SERIES jammy) #focal
 set(DEB_PACKAGE_EXT .deb)
+set(DEB_PACKAGE_NAME deb)
 set(DEB_PACK_TYPE "source")
 
 set(DPUT_CONFIG_PATH "${CMAKE_SOURCE_DIR}/.config/dput.cf")
@@ -27,7 +28,7 @@ execute_process(
 
 message(STATUS "RELEASE_DATE_DEB: ${RELEASE_DATE_DEB}")
 
-set(PACKAGE_ROOT_DIR "${CMAKE_BINARY_DIR}/${HOST_OS}/pkg/deb/${APP_ARCH}/${APP_NAME}")
+set(PACKAGE_ROOT_DIR "${CMAKE_BINARY_DIR}/${HOST_OS}/pkg/${SNAP_PACKAGE_NAME}/${APP_ARCH}/${APP_NAME}")
 set(DEB_ROOT_DIR "${CMAKE_BINARY_DIR}")
 set(DEB_BUILD_ROOT_DIR "${DEB_ROOT_DIR}")
 set(DEB_BUILD_CONFIG_DIR "${DEB_ROOT_DIR}/debian")
