@@ -2,7 +2,7 @@ get_host_os(HOST_OS)
 
 foreach(DEBARCH ${ALL_DEBARCH_LIST_LINUX})
     map_debarch_to_arch_all(${DEBARCH} APP_ARCH)
-    set(DEB_ROOT_DIR ${CMAKE_SOURCE_DIR}/${DIST_ROOT_DIR}/${APP_TAG}/${HOST_OS}/pkg/${APP_ARCH})
+    set(DEB_ROOT_DIR ${CMAKE_SOURCE_DIR}/${DIST_ROOT_DIR}/${APP_TAG}/${HOST_OS}/pkg/${DEB_PACKAGE_NAME}/${APP_ARCH})
     set(DEB_PAYLOAD_DIR ${DEB_ROOT_DIR}/${APP_NAME})
     set(DEB_OUTPUT_DIR ${DEB_ROOT_DIR}/output)
 
