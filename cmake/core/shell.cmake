@@ -64,36 +64,41 @@ get_shell(HOST_SHELL)
 
 
 
-
-function(command_for_shell shell command_to_run output_variable_name)
+function(command_for_shell shell command_list output_variable_name)
     get_filename_component(shell_name ${shell} NAME)
 
-    # if(${shell_name} STREQUAL ${HOST_SHELL})
-    #     set(shell_command "${command_to_run}")
-    # elseif()
-        if(${shell_name} STREQUAL "cmd")
-            set(shell_command cmd /c \"${command_to_run}\")
-        elseif(${shell_name} STREQUAL "powershell")
-            set(shell_command powershell -ExecutionPolicy Bypass -Command \"${command_to_run}\")
-        elseif(${shell_name} STREQUAL "pwsh")
-            set(shell_command pwsh -Command \"${command_to_run}\")
-        elseif(${shell_name} STREQUAL "bash")
-            set(shell_command bash -c \"${command_to_run}\")
-        elseif(${shell_name} STREQUAL "zsh")
-            set(shell_command zsh -c \"${command_to_run}\")
-        elseif(${shell_name} STREQUAL "fish")
-            set(shell_command fish -c \"${command_to_run}\")
-        else()
-            message(FATAL_ERROR "Unsupported shell: ${shell_name}")
-        endif()
-    # endif()
+    
+    if(${shell_name} STREQUAL "powershell" OR ${shell_name} STREQUAL "pwsh")
+        set(separator " \\\\\\\; ")
+    else()
+        set(separator " && ")
+    endif()
+
+    string(JOIN "${separator}" command_to_run ${command_list})
+
+    if(${shell_name} STREQUAL "${HOST_SHELL}") 
+        set(shell_command ${command_to_run})
+    elseif(${shell_name} STREQUAL "cmd")
+        set(shell_command cmd /c ${command_to_run})
+    elseif(${shell_name} STREQUAL "powershell")
+        set(shell_command powershell -ExecutionPolicy Bypass -Command ${command_to_run})
+    elseif(${shell_name} STREQUAL "pwsh")
+        set(shell_command pwsh -Command ${command_to_run})
+    elseif(${shell_name} STREQUAL "bash")
+        set(shell_command bash -c ${command_to_run})
+    elseif(${shell_name} STREQUAL "zsh")
+        set(shell_command zsh -c ${command_to_run})
+    elseif(${shell_name} STREQUAL "fish")
+        set(shell_command fish -c ${command_to_run})
+    else()
+        message(FATAL_ERROR "Unsupported shell: ${shell_name}")
+    endif()
 
     set(${output_variable_name} ${shell_command} PARENT_SCOPE)
-
 endfunction()
 
-function(command_for_default_shell command_to_run output_variable_name)
-    command_for_shell(${HOST_SHELL} "${command_to_run}" shell_command)
+function(command_for_default_shell command_list output_variable_name)
+    command_for_shell(${HOST_SHELL} "${command_list}" shell_command)
 
     set(${output_variable_name} ${shell_command} PARENT_SCOPE)
 
