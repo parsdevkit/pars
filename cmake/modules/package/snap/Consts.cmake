@@ -3,7 +3,7 @@ set(SNAP_ARCH_X86 "i386")
 set(SNAP_ARCH_X86_64 "amd64")
 set(SNAP_ARCH_ARM "armhf")
 set(SNAP_ARCH_ARM64 "arm64")
-set(SNAP_ARCH_ALL "any")
+set(SNAP_ARCH_ALL "all")
 
 
 set(SNAP_SERIES jammy) #focal
