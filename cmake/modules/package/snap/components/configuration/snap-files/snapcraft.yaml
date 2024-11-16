@@ -1,6 +1,6 @@
 file(APPEND ${CONFIG_FILE_PATH} "name: ${APP_NAME}\n")
 file(APPEND ${CONFIG_FILE_PATH} "version: '${RAW_VERSION}'\n")
-file(APPEND ${CONFIG_FILE_PATH} "summary: ${SUMMARY}\n")
+file(APPEND ${CONFIG_FILE_PATH} "summary: ${PROJECT_SUMMARY}\n")
 file(APPEND ${CONFIG_FILE_PATH} "description: ${PROJECT_DESCRIPTION}\n\n")
 file(APPEND ${CONFIG_FILE_PATH} "base: ${SNAP_BASE}\n")
 file(APPEND ${CONFIG_FILE_PATH} "grade: stable\n")
