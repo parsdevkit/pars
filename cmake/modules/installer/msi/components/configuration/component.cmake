@@ -1,10 +1,11 @@
 get_host_os(HOST_OS)
+set_os_ext(${HOST_OS} EXT)
 set(CMAKE_SOURCE_DIR_PATH ${CMAKE_SOURCE_DIR})
 set(COMMON_VARIABLES 
     PROJECT_NAME
     APP_NAME
     APP_TAG
-    RAW_VERSION
+    VERSION_SEMVER
     CHANGELOG_PATH
     PROJECT_GIT
     PROJECT_MAINTANER
@@ -20,16 +21,15 @@ set(COMMON_VARIABLES
     EXT
     )
 
-
 file(GLOB_RECURSE MSI_FILES "${CMAKE_CURRENT_LIST_DIR}/msi-files/*")
 
-foreach(MSIARCH ${ALL_MSIARCH_LIST_LINUX})
+foreach(MSIARCH ${ALL_MSIARCH_LIST_WINDOWS})
     map_msiarch_to_arch_all(${MSIARCH} APP_ARCH)
     
-    set(MSI_ROOT_DIR ${CMAKE_SOURCE_DIR}/${DIST_ROOT_DIR}/${APP_TAG}/${HOST_OS}/pkg/${MSI_PACKAGE_NAME}/${APP_ARCH})
+    set(MSI_ROOT_DIR ${CMAKE_SOURCE_DIR}/${DIST_ROOT_DIR}/${APP_TAG}/${HOST_OS}/ins/${MSI_PACKAGE_NAME}/${APP_ARCH})
     set(MSI_PAYLOAD_DIR ${MSI_ROOT_DIR}/${APP_NAME})
     set(MSI_OUTPUT_DIR ${MSI_ROOT_DIR}/output)
-    set(MSI_CONF_DIR ${MSI_ROOT_DIR}/${APP_NAME}/msi)
+    set(MSI_CONF_DIR ${MSI_ROOT_DIR}/${APP_NAME})
 
     if(${MSIARCH} STREQUAL ${MSI_ARCH_ALL})
         get_host_arch(HOST_ARCH)
@@ -52,7 +52,6 @@ foreach(MSIARCH ${ALL_MSIARCH_LIST_LINUX})
         list(APPEND COMMON_VARIABLES CONFIG_FILE_PATH)
 
         var_list_to_cmake_args(VARIABLES_TO_PASS "${COMMON_VARIABLES}")
-        message(WARNING ${VARIABLES_TO_PASS})
         add_custom_command(
             OUTPUT ${CONFIG_FILE_PATH}
             COMMAND ${CMAKE_COMMAND} -E echo "Generating ${MSIFILE} file..."

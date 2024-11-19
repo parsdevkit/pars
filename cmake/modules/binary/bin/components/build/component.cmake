@@ -2,7 +2,7 @@ set(ALL_TARGETS "")
 set(ALL_TARGETS_VENDOR "")
 foreach(GOOS ${GOOS_LIST})
 
-    set_goos_ext(${GOOS})
+    set_os_ext(${GOOS} EXE)
     set_goos_arch_lists(${GOOS})
 
     set(OS_ALL_TARGETS "")
@@ -30,7 +30,7 @@ add_custom_target(build.binary.all
 
 
 get_host_os(GOOS)
-set_goos_ext(${GOOS})
+set_os_ext(${GOOS} EXE)
 
 get_host_arch(APP_ARCH)
 map_arch_to_goarch(${APP_ARCH} GOARCH)

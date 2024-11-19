@@ -1,6 +1,6 @@
 file(WRITE ${CONFIG_FILE_PATH} "<?xml version='1.0'?>\n")
 file(APPEND ${CONFIG_FILE_PATH} "<Wix xmlns='http://wixtoolset.org/schemas/v4/wxs'>\n")
-file(APPEND ${CONFIG_FILE_PATH} "    <Package Name='${APP_NAME}' Language='1033' Version='${APP_TAG}' Manufacturer='${PROJECT_ORGANIZATION}' UpgradeCode='6d171ec4-2a37-5a83-b686-7f2df79cc931' InstallerVersion='500'>\n")
+file(APPEND ${CONFIG_FILE_PATH} "    <Package Name='${APP_NAME}' Language='1033' Version='${VERSION_SEMVER}' Manufacturer='${PROJECT_ORGANIZATION}' UpgradeCode='6d171ec4-2a37-5a83-b686-7f2df79cc931' InstallerVersion='500'>\n")
 file(APPEND ${CONFIG_FILE_PATH} "        <MajorUpgrade DowngradeErrorMessage='A newer version of ${APP_NAME} is already installed.' />\n")
 file(APPEND ${CONFIG_FILE_PATH} "        <Feature Id='ProductFeature' Title='MsiPackage'>\n")
 file(APPEND ${CONFIG_FILE_PATH} "            <ComponentGroupRef Id='ProductComponents' />\n")

@@ -65,13 +65,6 @@ function(build GOOS GOARCH OUTPUT_PATH)
 endfunction()
 
 
-function(set_goos_ext GOOS)
-    if(${GOOS} STREQUAL ${OS_WINDOWS})
-        set(EXT ".exe" PARENT_SCOPE)
-    else()
-        set(EXT "" PARENT_SCOPE)
-    endif()
-endfunction()
 function(set_goos_arch_lists GOOS)
     if(${GOOS} STREQUAL ${OS_WINDOWS})
         set(ARCH_LIST "${GOARCH_LIST_WINDOWS}" PARENT_SCOPE)
