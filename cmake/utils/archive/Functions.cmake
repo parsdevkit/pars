@@ -36,14 +36,11 @@ function(compress_folder format base_path output_path output_filename)
     endif()
 
     command_for_default_shell(${COMPRESS_COMMAND} SHELL_COMPRESS_COMMAND)
-    message(STATUS "SHELL_COMPRESS_COMMAND: ${SHELL_COMPRESS_COMMAND}")
 
-    message(STATUS "Before command")
     add_custom_command(
         OUTPUT ${output_path}/${output_filename}
         COMMAND "${SHELL_COMPRESS_COMMAND}"
         WORKING_DIRECTORY ${base_path}
         COMMENT "Compressing ${base_path} to ${output_path} in format ${format}..."
     )
-    message(STATUS "After command")
 endfunction()
