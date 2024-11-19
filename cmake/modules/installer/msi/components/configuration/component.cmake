@@ -23,6 +23,7 @@ set(COMMON_VARIABLES
 
 file(GLOB_RECURSE MSI_FILES "${CMAKE_CURRENT_LIST_DIR}/msi-files/*")
 
+set(MSI_CONFIG_VARIABLES ${COMMON_VARIABLES})
 foreach(MSIARCH ${ALL_MSIARCH_LIST_WINDOWS})
     map_msiarch_to_arch_all(${MSIARCH} APP_ARCH)
     
@@ -31,17 +32,11 @@ foreach(MSIARCH ${ALL_MSIARCH_LIST_WINDOWS})
     set(MSI_OUTPUT_DIR ${MSI_ROOT_DIR}/output)
     set(MSI_CONF_DIR ${MSI_ROOT_DIR}/${APP_NAME})
 
-    if(${MSIARCH} STREQUAL ${MSI_ARCH_ALL})
-        get_host_arch(HOST_ARCH)
-        set(BIN_OUTPUT_FULL_PATH ${MSI_OUTPUT_DIR}/${APP_NAME}/${DIST_ROOT_DIR}/${APP_TAG}/${HOST_OS}/bin/${HOST_ARCH}/${APP_NAME}${EXT})
-    else()
-        set(BIN_OUTPUT_FULL_PATH ${MSI_OUTPUT_DIR}/${APP_NAME}/${DIST_ROOT_DIR}/${APP_TAG}/${HOST_OS}/bin/${APP_ARCH}/${APP_NAME}${EXT})
-    endif()
+    set(BIN_OUTPUT_FULL_PATH ${MSI_OUTPUT_DIR}/${APP_NAME}/${DIST_ROOT_DIR}/${APP_TAG}/${HOST_OS}/bin/${APP_ARCH}/${APP_NAME}${EXT})
 
-
-    list(APPEND COMMON_VARIABLES APP_ARCH)
-    list(APPEND COMMON_VARIABLES MSIARCH)
-    list(APPEND COMMON_VARIABLES BIN_OUTPUT_FULL_PATH)
+    list(APPEND MSI_CONFIG_VARIABLES APP_ARCH)
+    list(APPEND MSI_CONFIG_VARIABLES MSIARCH)
+    list(APPEND MSI_CONFIG_VARIABLES BIN_OUTPUT_FULL_PATH)
 
     set(MSI_FILE_NAMES "")
     foreach(MSIFILE ${MSI_FILES})
@@ -49,9 +44,9 @@ foreach(MSIARCH ${ALL_MSIARCH_LIST_WINDOWS})
 
         set(CONFIG_FILE_PATH "${MSI_CONF_DIR}/${REL_FILE_PATH}")
         list(APPEND MSI_FILE_NAMES ${CONFIG_FILE_PATH})
-        list(APPEND COMMON_VARIABLES CONFIG_FILE_PATH)
+        list(APPEND MSI_CONFIG_VARIABLES CONFIG_FILE_PATH)
 
-        var_list_to_cmake_args(VARIABLES_TO_PASS "${COMMON_VARIABLES}")
+        var_list_to_cmake_args(VARIABLES_TO_PASS "${MSI_CONFIG_VARIABLES}")
         add_custom_command(
             OUTPUT ${CONFIG_FILE_PATH}
             COMMAND ${CMAKE_COMMAND} -E echo "Generating ${MSIFILE} file..."
@@ -60,6 +55,5 @@ foreach(MSIARCH ${ALL_MSIARCH_LIST_WINDOWS})
         )
     endforeach()
 
-    add_custom_target(test.run.${APP_ARCH} DEPENDS ${CONFIG_FILE_PATH})
     add_custom_target(build.msi.package.${APP_ARCH}.configuration DEPENDS check_env_for_msi_packing ${MSI_FILE_NAMES})
 endforeach()

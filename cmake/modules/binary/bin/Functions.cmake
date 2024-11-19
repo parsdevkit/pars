@@ -1,4 +1,5 @@
-
+get_host_os(HOST_OS)
+set_os_ext(${HOST_OS} EXT)
 
 function(map_arch_to_goarch input_arch output_goarch)
     if(${input_arch} STREQUAL ${ARCH_X86})
@@ -49,7 +50,7 @@ function(build GOOS GOARCH OUTPUT_PATH)
 
     set(GO_BUILD_COMMAND "")
     list(APPEND GO_BUILD_COMMAND ${BASH_ENV_COMMAND})
-    list(APPEND GO_BUILD_COMMAND "go build -ldflags=\"-X parsdevkit.net/core/utils.version=${APP_TAG} -X parsdevkit.net/core/utils.stage=final -buildid=${APP_NAME}\" -o ${OUTPUT_PATH} ./pars.go")
+    list(APPEND GO_BUILD_COMMAND "go build -ldflags=\"-X parsdevkit.net/core/utils.version=${APP_TAG} -X parsdevkit.net/core/utils.stage=${VERSION_CHANNEL} -buildid=${APP_NAME}\" -o ${OUTPUT_PATH} ./pars.go")
     
     command_for_shell("${HOST_SHELL}" "${GO_BUILD_COMMAND}" SHELL_GO_BUILD_COMMAND)
 
