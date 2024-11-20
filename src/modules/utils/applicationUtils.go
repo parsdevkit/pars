@@ -23,15 +23,15 @@ var (
 type StageType string
 
 var StageTypes = struct {
-	None  StageType
-	Dev   StageType
-	Test  StageType
-	Final StageType
+	None   StageType
+	Dev    StageType
+	Test   StageType
+	Stabil StageType
 }{
-	None:  "none",
-	Dev:   "dev",
-	Test:  "test",
-	Final: "final",
+	None:   "none",
+	Dev:    "dev",
+	Test:   "test",
+	Stabil: "stabil",
 }
 
 func getDefaultPlatformApplicationDir() string {
