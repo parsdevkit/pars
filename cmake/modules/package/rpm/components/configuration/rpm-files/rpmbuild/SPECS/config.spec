@@ -1,11 +1,11 @@
-file(APPEND ${CONFIG_FILE_PATH} "Name: ${APPLICATION_NAME}\n")
-file(APPEND ${CONFIG_FILE_PATH} "Version: ${APP_TAG_VERSION}\n")
-file(APPEND ${CONFIG_FILE_PATH} "Release: ${APP_TAG_RELEASE}%{?dist}\n")
-file(APPEND ${CONFIG_FILE_PATH} "Summary: ${SUMMARY}\n")
-file(APPEND ${CONFIG_FILE_PATH} "License: ${LICENCE_TYPE}\n")
-file(APPEND ${CONFIG_FILE_PATH} "URL: ${HOMEPAGE}\n")
+file(WRITE ${CONFIG_FILE_PATH} "Name: ${APP_NAME}\n")
+file(APPEND ${CONFIG_FILE_PATH} "Version: ${VERSION_SEMVER}\n")
+file(APPEND ${CONFIG_FILE_PATH} "Release: ${VERSION_CHANNEL}.${VERSION_RELEASE}%{?dist}\n")
+file(APPEND ${CONFIG_FILE_PATH} "Summary: ${PROJECT_SUMMARY}\n")
+file(APPEND ${CONFIG_FILE_PATH} "License: ${PROJECT_LICENCE_TYPE}\n")
+file(APPEND ${CONFIG_FILE_PATH} "URL: ${PROJECT_HOMEPAGE}\n")
 file(APPEND ${CONFIG_FILE_PATH} "Source0: %{name}-%{version}.tar.gz\n")
-file(APPEND ${CONFIG_FILE_PATH} "BuildArch: ${RPM_PACK_ARCH}\n\n")
+file(APPEND ${CONFIG_FILE_PATH} "BuildArch: ${RPMARCH}\n\n")
 
 # Uncomment if BuildRequires is needed
 # file(APPEND ${CONFIG_FILE_PATH} "BuildRequires: \n")
@@ -13,7 +13,7 @@ file(APPEND ${CONFIG_FILE_PATH} "BuildArch: ${RPM_PACK_ARCH}\n\n")
 file(APPEND ${CONFIG_FILE_PATH} "Requires: glibc\n\n")
 
 file(APPEND ${CONFIG_FILE_PATH} "%description\n")
-file(APPEND ${CONFIG_FILE_PATH} "${DESCRIPTION}\n\n")
+file(APPEND ${CONFIG_FILE_PATH} "${PROJECT_DESCRIPTION}\n\n")
 
 file(APPEND ${CONFIG_FILE_PATH} "%prep\n")
 # Uncomment if specific setup is needed
@@ -23,7 +23,8 @@ file(APPEND ${CONFIG_FILE_PATH} "%prep\n")
 file(APPEND ${CONFIG_FILE_PATH} "tar -xzf %{SOURCE0} -C %{_builddir}\n\n")
 
 file(APPEND ${CONFIG_FILE_PATH} "%build\n")
-file(APPEND ${CONFIG_FILE_PATH} "${MAKE} build.binary.linux.vendor TAG=${APP_TAG}\n")
+file(APPEND ${CONFIG_FILE_PATH} "\$(MAKE) build.cmake.linux VERSION=${APP_TAG}\n")
+file(APPEND ${CONFIG_FILE_PATH} "\$(MAKE) build.binary OUTPUT=${LINUX_APP_BINARY_DIR}/${APP_NAME}\n")
 file(APPEND ${CONFIG_FILE_PATH} "echo %{buildroot}\n\n")
 
 file(APPEND ${CONFIG_FILE_PATH} "%install\n")
@@ -47,8 +48,8 @@ file(APPEND ${CONFIG_FILE_PATH} "/${LINUX_APP_DOCS_DIR}/*\n\n")
 file(APPEND ${CONFIG_FILE_PATH} "%changelog\n")
 file(APPEND ${CONFIG_FILE_PATH} "* ${RPM_RELEASE_DATE_FORMAT} ${MAINTANER} - ${APP_TAG}\n")
 
-file(APPEND ${CONFIG_FILE_PATH} "
-execute_process(
-    COMMAND bash -c \"if [ -f ${CHANGELOG_PATH} ]; then sed 's/^\*/-/' ${CHANGELOG_PATH} >> ${CONFIG_FILE_PATH}; else echo '- Not specified any changes' >> ${CONFIG_FILE_PATH}; fi\"
-)\n
-")
+# file(APPEND ${CONFIG_FILE_PATH} "
+# execute_process(
+#     COMMAND bash -c \"if [ -f ${CHANGELOG_PATH} ]; then sed 's/^\*/-/' ${CHANGELOG_PATH} >> ${CONFIG_FILE_PATH}; else echo '- Not specified any changes' >> ${CONFIG_FILE_PATH}; fi\"
+# )\n
+# ")
