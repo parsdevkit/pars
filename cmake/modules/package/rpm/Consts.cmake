@@ -8,8 +8,6 @@ set(RPM_ARCH_ALL "all")
 
 set(RPM_PACKAGE_EXT .rpm)
 set(RPM_PACKAGE_NAME rpm)
-set(RPM_PACK_TYPE "source")
-set(RPM_BASE "core22")
 
 set(RPMARCH_LIST_LINUX "${RPM_ARCH_X86};${RPM_ARCH_X86_64};${RPM_ARCH_ARM};${RPM_ARCH_ARM64}")
 set(ALL_RPMARCH_LIST_LINUX ${RPMARCH_LIST_LINUX})
@@ -19,7 +17,7 @@ list(APPEND ALL_RPMARCH_LIST_LINUX ${RPM_ARCH_ALL})
 message(STATUS "RELEASE_DATE: ${RELEASE_DATE}")
 
 execute_process(
-    COMMAND bash -c "date -d '${RELEASE_DATE}' '+%a, %d %b %Y 00:00:00 +0000'"
+    COMMAND bash -c "date -d '${RELEASE_DATE}' '+%a %b %d %Y'"
     OUTPUT_VARIABLE RELEASE_DATE_RPM
     OUTPUT_STRIP_TRAILING_WHITESPACE
 )

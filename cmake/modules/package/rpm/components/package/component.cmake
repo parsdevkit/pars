@@ -5,14 +5,13 @@ foreach(RPMARCH ${ALL_RPMARCH_LIST_LINUX})
     set(RPM_ROOT_DIR ${CMAKE_SOURCE_DIR}/${DIST_ROOT_DIR}/${APP_TAG}/${HOST_OS}/pkg/${RPM_PACKAGE_NAME}/${APP_ARCH})
     set(RPM_PAYLOAD_DIR ${RPM_ROOT_DIR}/${APP_NAME})
     set(RPM_OUTPUT_DIR ${RPM_ROOT_DIR}/output)
+    set(RPM_CONF_DIR ${RPM_ROOT_DIR}/${APP_NAME})
 
     add_custom_command(
         OUTPUT ${RPM_OUTPUT_DIR}
         COMMAND ${CMAKE_COMMAND} -E echo "Building source files."
-        COMMAND rpmbuild --define "_topdir $(CURDIR)/$(RPM_BUILD_CONFIG_RPM_DIR)" -ba $(RPM_BUILD_CONFIG_SPECS_SPECFILE_PATH)
-        COMMAND mkdir -p ${RPM_OUTPUT_DIR}
-        COMMAND mv ${RPM_ROOT_DIR}/${APP_NAME}/${APP_NAME}_*.rpm ${RPM_OUTPUT_DIR}/
-        WORKING_DIRECTORY ${RPM_PAYLOAD_DIR} 
+        COMMAND rpmbuild --define "_topdir ${RPM_PAYLOAD_DIR}" -ba ${RPM_CONF_DIR}/SPECS/config.spec
+        WORKING_DIRECTORY ${RPM_PAYLOAD_DIR}
         COMMENT "Building .rpm package"
     )
 
