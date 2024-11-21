@@ -16,7 +16,6 @@
 /node_modules/**
 /.VSCodeCounter/**
 pars*.db
-.channel_number
 
 *.exe
 *.exe~
