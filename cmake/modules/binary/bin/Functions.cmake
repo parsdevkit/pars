@@ -31,11 +31,6 @@ endfunction()
 # message(STATUS "GOARCH for ${ARCH_X86}: ${GO_ARCH}")
 
 function(build GOOS GOARCH OUTPUT_PATH)
-    if (EXISTS "${CMAKE_SOURCE_DIR}/src/vendor")
-        set(IS_VENDOR ON)
-    else()
-        set(IS_VENDOR OFF)
-    endif()
 
     
     generate_build_output_path(PATH_OUTPUT)
@@ -46,11 +41,20 @@ function(build GOOS GOARCH OUTPUT_PATH)
     map_goarch_to_arch(${GOARCH} APP_ARCH)
 
     set(env_vars "GOOS=${GOOS}" "GOARCH=${GOARCH}")
+
+
+    if(IS_LINUX)
+        set(build_mode "-buildmode=pie")
+    endif()
+    if (EXISTS "${CMAKE_SOURCE_DIR}/src/vendor")
+        set(mod "-mod=vendor")
+    endif()
+
     env_command_for_shell("${HOST_SHELL}" "${env_vars}" BASH_ENV_COMMAND)
 
     set(GO_BUILD_COMMAND "")
     list(APPEND GO_BUILD_COMMAND ${BASH_ENV_COMMAND})
-    list(APPEND GO_BUILD_COMMAND "go build -ldflags=\"-X parsdevkit.net/core/utils.version=${APP_TAG} -X parsdevkit.net/core/utils.stage=${VERSION_CHANNEL} -buildid=${APP_NAME}\" -o ${OUTPUT_PATH} ./pars.go")
+    list(APPEND GO_BUILD_COMMAND "go build ${mod} ${build_mode} -ldflags=\"-X parsdevkit.net/core/utils.version=${APP_TAG} -X parsdevkit.net/core/utils.stage=${VERSION_CHANNEL} -buildid=${APP_NAME}\" -o ${OUTPUT_PATH} ./pars.go")
     
     command_for_shell("${HOST_SHELL}" "${GO_BUILD_COMMAND}" SHELL_GO_BUILD_COMMAND)
 
