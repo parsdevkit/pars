@@ -8,21 +8,21 @@ module.exports = {
                 preset: "conventionalcommits",
                 presetConfig: {
                     writerOpts: {
-                        // Commit bilgilerini özelleştirme
                         commitPartial: `
-                - {{#if subject}}**{{subject}}**{{/if}}
-                {{#if authorName}} (by @{{authorName}}){{/if}}
-                {{#if hash}} ([commit]({{repoUrl}}/commit/{{hash}})){{/if}}
-              `
+              - {{#if subject}}**{{subject}}**{{/if}}
+              {{#if authorName}} (by @{{authorName}}){{/if}}
+              {{#if hash}} ([commit]({{repoUrl}}/commit/{{hash}})){{/if}}
+            `
                     }
                 }
             }
         ],
-        "@semantic-release/changelog",
+        "@semantic-release/changelog", // Sadece CHANGELOG.md'yi günceller
+        // "@semantic-release/changelog",
         // [
         //     "@semantic-release/git",
         //     {
-        //         assets: ["CHANGELOG.md"],
+        //         assets: ["CHANGELOG.md"], // Güncellenen dosyaları commit eder
         //         message: "chore(release): ${nextRelease.version} [skip ci]\n\n${nextRelease.notes}"
         //     }
         // ],
