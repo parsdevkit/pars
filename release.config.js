@@ -8,11 +8,12 @@ module.exports = {
                 preset: "conventionalcommits",
                 presetConfig: {
                     writerOpts: {
+                        // Commit bilgilerini özelleştirme
                         commitPartial: `
-              - {{#if subject}}**{{subject}}**{{/if}}
-              {{#if authorName}} (by @{{authorName}}){{/if}}
-              {{#if hash}} ([commit]({{repoUrl}}/commit/{{hash}})){{/if}}
-            `
+                - {{#if subject}}**{{subject}}**{{/if}}
+                {{#if authorName}} (by @{{authorName}}){{/if}}
+                {{#if hash}} ([commit]({{repoUrl}}/commit/{{hash}})){{/if}}
+              `
                     }
                 }
             }
