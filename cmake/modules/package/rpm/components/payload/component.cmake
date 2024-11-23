@@ -1,7 +1,6 @@
 get_host_os(HOST_OS)
 set_os_ext(${HOST_OS} EXT)
 set(PAYLOADS 
-    .channel_number
     CMakeLists.txt
     .config
     cmake
