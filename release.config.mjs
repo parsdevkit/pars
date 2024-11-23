@@ -131,12 +131,12 @@ async function generateCustomNotes(pluginConfig, context) {
             const body = commit.body ? `\n\n    ${commit.body.replace(/\n/g, '\n      ')}` : '';
 
             const notes = commit.notes
-            .filter(note => note.title !== 'BREAKING CHANGES')
-            .map(note => {
-                const noteTitle = note.title || 'Note';
-                return `\n\n    **${noteTitle}:**\n    - ${note.text.replace(/\n/g, '\n    - ')}`;
-            })
-            .join('');
+                .filter(note => note.title !== 'BREAKING CHANGES')
+                .map(note => {
+                    const noteTitle = note.title || 'Note';
+                    return `\n\n    **${noteTitle}:**\n    - ${note.text.replace(/\n/g, '\n    - ')}`;
+                })
+                .join('');
 
             return `- ${scope}${subject}${author}${hash}${issueLink}${body}${notes}\n`;
         },
@@ -175,7 +175,10 @@ const plugins = [
 
 
 export default {
-    branches: ["main"],
+    branches: [
+        { name: 'main' },
+        { name: 'dev', prerelease: true },
+    ],
     repositoryUrl: repoUrl,
     tagFormat: "v${version}",
     plugins: plugins,
