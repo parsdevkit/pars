@@ -6,7 +6,7 @@
 import { generateNotes as defaultGenerateNotes } from "@semantic-release/release-notes-generator";
 const profileUrlCache = new Map();
 const repoUrl = "https://github.com/parsdevkit/pars"
-
+console.log("Semantic Release Config Loaded");
 async function prepareProfileUrls(commits) {
     for (const commit of commits) {
         if (commit.author && commit.author.email) {
@@ -155,26 +155,22 @@ const branches = [
 ];
 
 import { execSync } from "child_process";
-function getCurrentGitBranch() {
+const currentBranch = (() => {
     try {
-        const branch = execSync("git rev-parse --abbrev-ref HEAD", { encoding: "utf-8" }).trim();
-        return branch;
+        return execSync("git rev-parse --abbrev-ref HEAD", { encoding: "utf-8" }).trim();
     } catch (error) {
         console.error("Failed to get the current Git branch:", error);
         return null;
     }
-}
+})();
 
-const getBranchConfig = () => {
+const branchConfig = branches.find(branch => branch.name === currentBranch);
+const isPreRelease = branchConfig && branchConfig.prerelease;
+
+console.log(`Current Branch: ${currentBranch}`);
+console.log(`Is Pre-release: ${isPreRelease}`);
 
 
-    const currentBranch = getCurrentGitBranch();
-    const branchConfig = branches.find(branch => branch.name === currentBranch);
-
-    return branchConfig && branchConfig.prerelease ? true : false;
-};
-
-const isPreRelease = getBranchConfig();
 
 const plugins = [
     [
@@ -192,7 +188,13 @@ const plugins = [
         },
     ],
     ["@semantic-release/release-notes-generator"],
-    ...(isPreRelease ? [] : ["@semantic-release/changelog"]),
+    ...(
+        isPreRelease ? [] : [
+            "@semantic-release/changelog",
+            {
+                changelogFile: "CHANGELOG.md",
+            },]
+    ),
 ];
 
 
