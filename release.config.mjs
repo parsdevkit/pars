@@ -169,7 +169,6 @@ const getBranchConfig = () => {
 
 
     const currentBranch = getCurrentGitBranch();
-    console.log(`currentBranch: ${currentBranch}`)
     const branchConfig = branches.find(branch => branch.name === currentBranch);
 
     return branchConfig && branchConfig.prerelease ? true : false;
