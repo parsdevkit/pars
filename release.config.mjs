@@ -145,6 +145,38 @@ async function generateCustomNotes(pluginConfig, context) {
 
     return defaultGenerateNotes(pluginConfig, context);
 }
+
+
+const branches = [
+    { name: 'main' },
+    { name: 'dev', prerelease: true },
+    { name: 'test', prerelease: true },
+    { name: 'release', prerelease: true },
+];
+
+import { execSync } from "child_process";
+function getCurrentGitBranch() {
+    try {
+        const branch = execSync("git rev-parse --abbrev-ref HEAD", { encoding: "utf-8" }).trim();
+        return branch;
+    } catch (error) {
+        console.error("Failed to get the current Git branch:", error);
+        return null;
+    }
+}
+
+const getBranchConfig = () => {
+
+
+    const currentBranch = getCurrentGitBranch();
+    console.log(`currentBranch: ${currentBranch}`)
+    const branchConfig = branches.find(branch => branch.name === currentBranch);
+
+    return branchConfig && branchConfig.prerelease ? true : false;
+};
+
+const isPreRelease = getBranchConfig();
+
 const plugins = [
     [
         "@semantic-release/commit-analyzer",
@@ -160,25 +192,13 @@ const plugins = [
             // ],
         },
     ],
-    [
-        "@semantic-release/release-notes-generator",
-        {
-        }
-    ],
-    [
-        "@semantic-release/changelog",
-        {
-            changelogFile: "CHANGELOG.md",
-        },
-    ],
+    ["@semantic-release/release-notes-generator"],
+    ...(isPreRelease ? [] : ["@semantic-release/changelog"]),
 ];
 
 
 export default {
-    branches: [
-        { name: 'main' },
-        { name: 'dev', prerelease: true },
-    ],
+    branches: branches,
     repositoryUrl: repoUrl,
     tagFormat: "v${version}",
     plugins: plugins,
