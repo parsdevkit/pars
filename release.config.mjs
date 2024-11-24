@@ -6,7 +6,7 @@
 import { generateNotes as defaultGenerateNotes } from "@semantic-release/release-notes-generator";
 const profileUrlCache = new Map();
 const repoUrl = "https://github.com/parsdevkit/pars"
-
+console.log("Semantic Release Config Loaded");
 async function prepareProfileUrls(commits) {
     for (const commit of commits) {
         if (commit.author && commit.author.email) {
@@ -145,6 +145,33 @@ async function generateCustomNotes(pluginConfig, context) {
 
     return defaultGenerateNotes(pluginConfig, context);
 }
+
+
+const branches = [
+    { name: 'main' },
+    { name: 'dev', prerelease: true },
+    { name: 'test', prerelease: true },
+    { name: 'release', prerelease: true },
+];
+
+import { execSync } from "child_process";
+const currentBranch = (() => {
+    try {
+        return execSync("git rev-parse --abbrev-ref HEAD", { encoding: "utf-8" }).trim();
+    } catch (error) {
+        console.error("Failed to get the current Git branch:", error);
+        return null;
+    }
+})();
+
+const branchConfig = branches.find(branch => branch.name === currentBranch);
+const isPreRelease = branchConfig && branchConfig.prerelease;
+
+console.log(`Current Branch: ${currentBranch}`);
+console.log(`Is Pre-release: ${isPreRelease}`);
+
+
+
 const plugins = [
     [
         "@semantic-release/commit-analyzer",
@@ -160,25 +187,19 @@ const plugins = [
             // ],
         },
     ],
-    [
-        "@semantic-release/release-notes-generator",
-        {
-        }
-    ],
-    [
-        "@semantic-release/changelog",
-        {
-            changelogFile: "CHANGELOG.md",
-        },
-    ],
+    ["@semantic-release/release-notes-generator"],
+    ...(
+        isPreRelease ? [] : [
+            "@semantic-release/changelog",
+            {
+                changelogFile: "CHANGELOG.md",
+            },]
+    ),
 ];
 
 
 export default {
-    branches: [
-        { name: 'main' },
-        { name: 'dev', prerelease: true },
-    ],
+    branches: branches,
     repositoryUrl: repoUrl,
     tagFormat: "v${version}",
     plugins: plugins,
