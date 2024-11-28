@@ -150,9 +150,9 @@ async function generateCustomNotes(pluginConfig, context) {
 
 const branches = [
     { name: 'main' },
-    { name: 'dev', channel: 'dev', prerelease: 'dev' },
-    { name: 'test', channel: 'test', prerelease: 'test' },
-    { name: 'release/*', channel: 'preview', prerelease: 'preview' }, 
+    { name: 'dev', channel: 'dev', prerelease: true },
+    { name: 'test', channel: 'test', prerelease: true },
+    { name: 'release/*', channel: 'preview', prerelease: true },
 ];
 
 import { execSync } from "child_process";
