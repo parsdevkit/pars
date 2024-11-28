@@ -1,0 +1,20 @@
+{
+    "name": "pars",
+    "version": "1.0.0",
+    "description": "Pars is a powerful generating tool",
+    "main": "index.js",
+    "type": "module",
+    "scripts": {
+        "test": "echo \"No test specified\" && exit 1"
+    },
+    "author": "Your Name",
+    "license": "MIT",
+    "devDependencies": {
+        "@semantic-release/changelog": "^6.0.3",
+        "@semantic-release/git": "^10.0.1",
+        "@semantic-release/github": "^11.0.1",
+        "@semantic-release/release-notes-generator": "^14.0.1",
+        "conventional-changelog-conventionalcommits": "^8.0.0",
+        "semantic-release": "^24.2.0"
+    }
+}

@@ -1,0 +1,11 @@
+set(PROJECT_NAME "Pars")
+set(PROJECT_ORGANIZATION "Pars Dev Kit")
+set(PROJECT_MAINTANER "Pars Dev Kit <parsdevkit@gmail.com>")
+set(PROJECT_OWNER "Ahmet Soner <ahmettsoner@gmail.com>")
+set(PROJECT_HOMEPAGE "https://parsdevkit.net")
+set(PROJECT_GIT "https://github.com/parsdevkit/pars")
+set(PROJECT_LICENCE_TYPE "Apache-2.0")
+set(PROJECT_SUMMARY "${PROJECT_NAME} is a simple utility.")
+set(PROJECT_DESCRIPTION "${PROJECT_NAME} is a simple utility.")
+
+set(DIST_ROOT_DIR dist)
