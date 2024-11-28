@@ -33,8 +33,11 @@ set(RAW_VERSION "${VERSION_SEMVER}")
 if(DEFINED VERSION_CHANNEL AND NOT "${VERSION_CHANNEL}" STREQUAL "")
     if(NOT VERSION_CHANNEL STREQUAL "none" AND
     NOT VERSION_CHANNEL STREQUAL "dev" AND
-    NOT VERSION_CHANNEL STREQUAL "test")
-        message(FATAL_ERROR "Invalid version channel: ${VERSION_CHANNEL}. Allowed values are 'none', 'dev', 'test'.")
+    NOT VERSION_CHANNEL STREQUAL "test" AND
+    NOT VERSION_CHANNEL STREQUAL "alpha" AND
+    NOT VERSION_CHANNEL STREQUAL "beta" AND
+    NOT VERSION_CHANNEL STREQUAL "preview")
+        message(FATAL_ERROR "Invalid version channel: ${VERSION_CHANNEL}. Allowed values are 'none', 'dev', 'test', 'alpha', 'beta', 'preview'.")
     endif()
     
     set(RAW_VERSION "${RAW_VERSION}-${VERSION_CHANNEL}")

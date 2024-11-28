@@ -5,6 +5,7 @@
 
 import { generateNotes as defaultGenerateNotes } from "@semantic-release/release-notes-generator";
 const profileUrlCache = new Map();
+const githubUrl = "https://github.com/"
 const repoUrl = "https://github.com/parsdevkit/pars"
 
 async function prepareProfileUrls(commits) {
@@ -12,12 +13,12 @@ async function prepareProfileUrls(commits) {
         if (commit.author && commit.author.email) {
             if (!profileUrlCache.has(commit.author.email)) {
                 const profileUrl = await getGitHubProfileUrl(commit.author.email, process.env.GITHUB_TOKEN);
-                profileUrlCache.set(commit.author.email, profileUrl || commit.root.host);
+                profileUrlCache.set(commit.author.email, profileUrl || githubUrl);
             }
             commit.author.profileUrl = profileUrlCache.get(commit.author.email);
         } else {
             commit.author = commit.author || {};
-            commit.author.profileUrl = commit.root.host;
+            commit.author.profileUrl = githubUrl;
         }
     }
 }
@@ -53,6 +54,7 @@ async function getGitHubProfileUrl(email, token) {
 
 async function generateCustomNotes(pluginConfig, context) {
     const commits = context.commits;
+    // console.log(`contexttttt: ${JSON.stringify(context)}`)
     await prepareProfileUrls(commits);
 
     pluginConfig.preset = "conventionalcommits"
@@ -109,23 +111,23 @@ async function generateCustomNotes(pluginConfig, context) {
         noteKeywords: [
             "BREAKING CHANGES",
             "BREAKING CHANGE",
-            "BREAKING",
+            "BREAKING"
         ],
     };
     pluginConfig.writerOpts = {
         ...pluginConfig.writerOpts,
         commitsSort: ["subject", "scope"],
         commitPartial: (commit, context) => {
-            console.log(`commit: ${JSON.stringify(commit)}`)
+            // console.log(`commit: ${JSON.stringify(commit)}`)
             const scope = commit.scope ? ` **${commit.scope}**: ` : '';
             const subject = commit.subject ? `${commit.subject}` : '';
             const authorName = commit.author?.name || "🌀 **Phantom Ninja** 🥷";
-            const authorProfileUrl = commit.author?.profileUrl || commit.root.host;
+            const authorProfileUrl = commit.author?.profileUrl || githubUrl;
             const author = ` (by [@${authorName}](${authorProfileUrl}))`;
             const shortHash = commit.hash ? commit.hash.slice(0, 7) : null;
-            const hash = shortHash ? ` ([${shortHash}](${commit.root.host}/${commit.root.owner}/${commit.root.repository}/commit/${commit.hash}))` : '';
+            const hash = shortHash ? ` ([${shortHash}](${githubUrl}/${commit.root.owner}/${commit.root.repository}/commit/${commit.hash}))` : '';
             const issueLink = commit.references.length > 0
-                ? ` ([#${commit.references[0].issue}](${commit.root.host}/${commit.root.owner}/${commit.root.repository}/issues/${commit.references[0].issue}))`
+                ? ` ([#${commit.references[0].issue}](${githubUrl}/${commit.root.owner}/${commit.root.repository}/issues/${commit.references[0].issue}))`
                 : '';
             const body = commit.body ? `\n\n    ${commit.body.replace(/\n/g, '\n      ')}` : '';
 
@@ -148,12 +150,13 @@ async function generateCustomNotes(pluginConfig, context) {
 
 const branches = [
     { name: 'main' },
-    { name: 'dev', prerelease: true },
-    { name: 'test', prerelease: true },
-    { name: 'release', prerelease: true },
+    { name: 'dev', channel: 'dev', prerelease: 'dev' },
+    { name: 'test', channel: 'test', prerelease: 'test' },
+    { name: 'release/*', channel: 'preview', prerelease: 'preview' }, 
 ];
 
 import { execSync } from "child_process";
+import { channel } from "diagnostics_channel";
 function getCurrentGitBranch() {
     try {
         const branch = execSync("git rev-parse --abbrev-ref HEAD", { encoding: "utf-8" }).trim();
@@ -192,6 +195,13 @@ const plugins = [
     ],
     ["@semantic-release/release-notes-generator"],
     ...(isPreRelease ? [] : ["@semantic-release/changelog"]),
+    // [
+    //     "@semantic-release/git",
+    //     {
+    //         "assets": ["CHANGELOG.md", "package.json"],
+    //         "message": "chore(release): ${nextRelease.version} [skip ci]"
+    //     }
+    // ]
 ];
 
 
