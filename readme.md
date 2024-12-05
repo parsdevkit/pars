@@ -25,30 +25,48 @@ To begin with Pars, follow our detailed [Getting Started Guide](https://docs.par
     git clone https://github.com/parsdevkit/pars.git
     cd pars
     ```
-2. Follow the setup instructions provided in the [documentation](https://docs.parsdevkit.net/).
+2. Follow the setup instructions provided in the [Installation Guide](https://github.com/parsdevkit/pars/blob/main/docs/installation.md).
 
-### Contribution Guidelines
+## Documentation and Guides
+
+Explore our documentation and guides for a seamless experience:
+
+- 🛠️ [Installation Guide](https://github.com/parsdevkit/pars/blob/main/docs/installation.md)
+- 📘 [User Guide](https://github.com/parsdevkit/pars/blob/main/docs/user-guide.md)
+- 🛡️ [Troubleshooting](https://github.com/parsdevkit/pars/blob/main/docs/troubleshooting.md)
+- ❓ [FAQs](https://github.com/parsdevkit/pars/blob/main/docs/faq.md)
+
+## Community and Resources
+
+Join our community and explore related resources:
+
+- 🏠 [Home Page](https://www.parsdevkit.net)
+- 🌐 [Project Repository](https://github.com/parsdevkit/pars)
+- 📖 [README](https://github.com/parsdevkit/pars#readme)
+- 💬 [Discussion Forum](https://github.com/parsdevkit/pars/discussions)
+- 💖 [Sponsors and Backers](https://github.com/parsdevkit/pars/blob/main/docs/sponsors.md)
+- 🚩 [Milestones](https://github.com/parsdevkit/pars/milestones)
+- 🗂️ [Project Board](https://github.com/parsdevkit/pars/projects)
+
+## Social Media
+
+Stay connected and up-to-date:
+
+- 🐦 [Twitter](https://twitter.com/parsdevkit)
+- 📘 [Facebook](https://facebook.com/parsdevkit)
+- 💼 [LinkedIn](https://linkedin.com/company/parsdevkit)
+- 🎥 [YouTube](https://www.youtube.com/parsdevkit)
+
+## Contribution Guidelines
 
 We welcome contributions! Please refer to our [Contributing Guide](./CONTRIBUTING.md) for details on how to get involved.
 
-## Documentation
-
-Comprehensive documentation is available at [docs.parsdevkit.net](https://docs.parsdevkit.net/). It covers everything from basic setup to advanced usage.
-
 ## License
 
-This project is licensed under the **[Apache-2.0 License](LICENSE)**. Feel free to use, modify, and distribute the code in compliance with the license terms.
-
-## Community and Support
-
-Join our community for discussions, support, and updates:
-
-- **Website**: [parsdevkit.net](https://parsdevkit.net)
-- **Documentation**: [docs.parsdevkit.net](https://docs.parsdevkit.net)
-- **Issues**: [GitHub Issues](https://github.com/parsdevkit/pars/issues)
+This project is licensed under the **[Apache-2.0 License](https://github.com/parsdevkit/pars/blob/main/LICENSE)**. Feel free to use, modify, and distribute the code in compliance with the license terms.
 
 ---
 
 ### Conclusion
 
-Pars Dev Kit is built to empower developers with tools
+Pars Dev Kit is built to empower developers with tools for high-quality development and scalable workflows. Explore the resources and become part of our growing community!

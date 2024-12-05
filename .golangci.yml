@@ -13,6 +13,5 @@ run:
   skip-dirs:
     - "vendor"
 
-  # src altındaki tüm dizinlerdeki dosyaları kontrol et
   include:
     - "src/**/*.go"

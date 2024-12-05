@@ -2,7 +2,7 @@ function(generate_version_info custom_version version_tag)
     if(NOT custom_version STREQUAL "NONE")
         set(${version_tag} "${custom_version}" PARENT_SCOPE)
     else()
-        set(DEFAULT_VERSION "v1.0.0-beta.1")
+        set(DEFAULT_VERSION "v1.0.0-test.1")
 
         execute_process(
             COMMAND date "+%Y.%m.%d"

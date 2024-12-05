@@ -36,9 +36,6 @@ project.lock.json
 .DS_Store
 *.pyc
 
-# Visual Studio Code
-.vscode
-
 # User-specific files
 *.suo
 *.user
