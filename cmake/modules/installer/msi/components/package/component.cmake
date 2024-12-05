@@ -18,7 +18,7 @@ foreach(MSIARCH ${ALL_MSIARCH_LIST_WINDOWS})
         COMMAND ${CMAKE_COMMAND} -E echo "Building source files."
         COMMAND wix build -o ${MSI_OUTPUT_DIR}/${APP_NAME}.msi ./config.wxs
         WORKING_DIRECTORY ${MSI_PAYLOAD_DIR}
-        COMMENT "Building .msi package"
+        COMMENT "Building .msi installer"
     )
 
     add_custom_target(build.msi.package.${APP_ARCH}.package DEPENDS check_env_for_msi_packing ${MSI_OUTPUT_DIR} ${MSI_OUTPUT_DIR}/${APP_NAME}.msi)
