@@ -14,6 +14,10 @@ endfunction()
 
 
 function(map_chocoarch_to_arch_all input_arch output_goarch)
-    map_chocoarch_to_arch(${input_arch} COMING_ARCH)
-    set(${output_goarch} ${COMING_ARCH} PARENT_SCOPE)
+    if(${input_arch} STREQUAL ${CHOCO_ARCH_ALL})
+        set(${output_goarch} ${ARCH_ALL} PARENT_SCOPE)
+    else()
+        map_chocoarch_to_arch(${input_arch} COMING_ARCH)
+        set(${output_goarch} ${COMING_ARCH} PARENT_SCOPE)
+    endif()
 endfunction()

@@ -1,10 +1,12 @@
 get_host_os(HOST_OS)
+set_os_ext(${HOST_OS} EXT)
 set(CMAKE_SOURCE_DIR_PATH ${CMAKE_SOURCE_DIR})
 set(COMMON_VARIABLES 
     PROJECT_NAME
     APP_NAME
     APP_TAG
     VERSION_SEMVER
+    RAW_VERSION
     CHANGELOG_PATH
     PROJECT_GIT
     PROJECT_MAINTANER
@@ -23,6 +25,8 @@ set(COMMON_VARIABLES
     GOOS
     EXT
 )
+
+
 
 
 file(GLOB_RECURSE CHOCO_FILES "${CMAKE_CURRENT_LIST_DIR}/choco-files/*")
@@ -63,6 +67,7 @@ foreach(CHOCOARCH ${ALL_CHOCOARCH_LIST_LINUX})
             COMMENT "Generating ${CHOCOFILE} to ${CONFIG_FILE_PATH}"
         )
     endforeach()
+
 
     add_custom_target(build.choco.package.${APP_ARCH}.configuration DEPENDS check_env_for_choco_packing ${CHOCO_FILE_NAMES})
 endforeach()
