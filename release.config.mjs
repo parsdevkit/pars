@@ -5,7 +5,6 @@
 
 import { generateNotes as defaultGenerateNotes } from "@semantic-release/release-notes-generator";
 const profileUrlCache = new Map();
-const githubUrl = "https://github.com/"
 const repoUrl = "https://github.com/parsdevkit/pars"
 
 async function prepareProfileUrls(commits) {
@@ -13,12 +12,14 @@ async function prepareProfileUrls(commits) {
         if (commit.author && commit.author.email) {
             if (!profileUrlCache.has(commit.author.email)) {
                 const profileUrl = await getGitHubProfileUrl(commit.author.email, process.env.GITHUB_TOKEN);
-                profileUrlCache.set(commit.author.email, profileUrl || githubUrl);
+                profileUrlCache.set(commit.author.email, profileUrl || "https://github.com");
             }
+            // Commit'in author nesnesine profileUrl ekle
             commit.author.profileUrl = profileUrlCache.get(commit.author.email);
         } else {
+            // Eğer email veya author bilgisi yoksa default bir profil URL'si ekle
             commit.author = commit.author || {};
-            commit.author.profileUrl = githubUrl;
+            commit.author.profileUrl = "https://github.com";
         }
     }
 }
@@ -54,7 +55,6 @@ async function getGitHubProfileUrl(email, token) {
 
 async function generateCustomNotes(pluginConfig, context) {
     const commits = context.commits;
-    // console.log(`contexttttt: ${JSON.stringify(context)}`)
     await prepareProfileUrls(commits);
 
     pluginConfig.preset = "conventionalcommits"
@@ -62,48 +62,48 @@ async function generateCustomNotes(pluginConfig, context) {
         types: [
             {
                 type: "feat",
-                section: "✨ Features & Improvements",
+                section: "✨ Features & Improvements", // Yeni özellikler ve iyileştirmeler
                 hidden: false
             },
             {
-                type: "fix",
-                section: "🐞 Bug Fixes",
-                hidden: false
+                "type": "fix",
+                "section": "🐞 Bug Fixes", // Hata düzeltmeleri
+                "hidden": false
             },
             {
-                type: "docs",
-                section: "📚 Documentation",
-                hidden: false
+                "type": "docs",
+                "section": "📚 Documentation", // Belgelendirme
+                "hidden": false
             },
             {
-                type: "style",
-                section: "🎨 Code Style",
-                hidden: false
+                "type": "style",
+                "section": "🎨 Code Style", // Kod stili ile ilgili değişiklikler
+                "hidden": false
             },
             {
-                type: "refactor",
-                section: "♻️ Refactoring",
-                hidden: false
+                "type": "refactor",
+                "section": "♻️ Refactoring", // Kodun yeniden düzenlenmesi
+                "hidden": false
             },
             {
-                type: "perf",
-                section: "🚀 Performance Improvements",
-                hidden: false
+                "type": "perf",
+                "section": "🚀 Performance Improvements", // Performans iyileştirmeleri
+                "hidden": false
             },
             {
-                type: "test",
-                section: "🧪 Tests",
-                hidden: false
+                "type": "test",
+                "section": "🧪 Tests", // Testler
+                "hidden": false
             },
             {
-                type: "ci",
-                section: "🔄 CI/CD",
-                hidden: false
+                "type": "ci",
+                "section": "🔄 CI/CD", // CI/CD işlemleri
+                "hidden": false
             },
             {
-                type: "chore",
-                section: "🔧 Maintenance Tasks",
-                hidden: true
+                "type": "chore",
+                "section": "🔧 Maintenance Tasks", // Bakım işleri
+                "hidden": true
             }
         ]
     };
@@ -111,23 +111,22 @@ async function generateCustomNotes(pluginConfig, context) {
         noteKeywords: [
             "BREAKING CHANGES",
             "BREAKING CHANGE",
-            "BREAKING"
+            "BREAKING",
         ],
     };
     pluginConfig.writerOpts = {
         ...pluginConfig.writerOpts,
         commitsSort: ["subject", "scope"],
         commitPartial: (commit, context) => {
-            // console.log(`commit: ${JSON.stringify(commit)}`)
             const scope = commit.scope ? ` **${commit.scope}**: ` : '';
             const subject = commit.subject ? `${commit.subject}` : '';
             const authorName = commit.author?.name || "🌀 **Phantom Ninja** 🥷";
-            const authorProfileUrl = commit.author?.profileUrl || githubUrl;
+            const authorProfileUrl = commit.author?.profileUrl || "https://github.com";
             const author = ` (by [@${authorName}](${authorProfileUrl}))`;
             const shortHash = commit.hash ? commit.hash.slice(0, 7) : null;
-            const hash = shortHash ? ` ([${shortHash}](${githubUrl}/${commit.root.owner}/${commit.root.repository}/commit/${commit.hash}))` : '';
+            const hash = shortHash ? ` ([${shortHash}](${context.repoUrl}/commit/${commit.hash}))` : '';
             const issueLink = commit.references.length > 0
-                ? ` ([#${commit.references[0].issue}](${githubUrl}/${commit.root.owner}/${commit.root.repository}/issues/${commit.references[0].issue}))`
+                ? ` ([#${commit.references[0].issue}](${context.repoUrl}/issues/${commit.references[0].issue}))`
                 : '';
             const body = commit.body ? `\n\n    ${commit.body.replace(/\n/g, '\n      ')}` : '';
 
@@ -146,67 +145,40 @@ async function generateCustomNotes(pluginConfig, context) {
 
     return defaultGenerateNotes(pluginConfig, context);
 }
-
-
-const branches = [
-    { name: 'main' },
-    { name: 'dev', channel: 'dev', prerelease: true },
-    { name: 'test', channel: 'test', prerelease: true },
-    { name: 'release/*', channel: 'preview', prerelease: true },
-];
-
-import { execSync } from "child_process";
-import { channel } from "diagnostics_channel";
-function getCurrentGitBranch() {
-    try {
-        const branch = execSync("git rev-parse --abbrev-ref HEAD", { encoding: "utf-8" }).trim();
-        return branch;
-    } catch (error) {
-        console.error("Failed to get the current Git branch:", error);
-        return null;
-    }
-}
-
-const getBranchConfig = () => {
-
-
-    const currentBranch = getCurrentGitBranch();
-    const branchConfig = branches.find(branch => branch.name === currentBranch);
-
-    return branchConfig && branchConfig.prerelease ? true : false;
-};
-
-const isPreRelease = getBranchConfig();
-
 const plugins = [
     [
         "@semantic-release/commit-analyzer",
         {
             preset: "conventionalcommits",
             // releaseRules: [
-            //     { type: "docs", scope: "README", release: "patch" },
-            //     { type: "refactor", release: "patch" },
-            //     { type: "style", release: "patch" },
-            //     { tag: "breaking", release: "major" },
-            //     { subject: "no-release", release: false },
-            //     { subject: "!no-release", release: "patch" },
+            //     { "type": "docs", "scope": "README", "release": "patch" },
+            //     { "type": "refactor", "release": "patch" },
+            //     { "type": "style", "release": "patch" },
+            //     { "tag": "breaking", "release": "major" },
+            //     { "subject": "no-release", "release": false },
+            //     { "subject": "!no-release", "release": "patch" },
             // ],
         },
     ],
-    ["@semantic-release/release-notes-generator"],
-    ...(isPreRelease ? [] : ["@semantic-release/changelog"]),
-    // [
-    //     "@semantic-release/git",
-    //     {
-    //         "assets": ["CHANGELOG.md", "package.json"],
-    //         "message": "chore(release): ${nextRelease.version} [skip ci]"
-    //     }
-    // ]
+    [
+        "@semantic-release/release-notes-generator",
+        {
+        }
+    ],
+    [
+        "@semantic-release/changelog",
+        {
+            changelogFile: "CHANGELOG.md",
+        },
+    ],
 ];
 
 
 export default {
-    branches: branches,
+    branches: [
+        { name: 'main' },
+        { name: 'dev', prerelease: true },
+    ],
     repositoryUrl: repoUrl,
     tagFormat: "v${version}",
     plugins: plugins,
