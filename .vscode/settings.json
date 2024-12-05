@@ -1,0 +1,17 @@
+{
+    "go.toolsEnvVars": {
+        "GOFLAGS": "-mod=readonly"
+    },
+    "go.lintOnSave": "workspace",
+    "go.formatTool": "gofmt",
+    "go.useLanguageServer": true,
+    "[go]": {
+        "editor.formatOnSave": true,
+        "editor.codeActionsOnSave": {
+            "source.organizeImports": true
+        }
+    },
+    "files.exclude": {
+        "**/vendor": true
+    }
+}
