@@ -1,3 +1,6 @@
+🌐 [🇺🇸 English](README.md) [🇹🇷 Türkçe](README/tr.md) [🇷🇺 Русский](README/ru.md) [🇸🇦 العربية](README/sa.md) [🇫🇷 Français](README/fr.md) [🇨🇳 中文](README/cn.md) [🇪🇸 Español](README/es.md) [🇮🇳 हिन्दी](README/in.md)
+
+
 # Pars Dev Kit
 
 Welcome to the **Pars** project! This repository provides tools and resources to simplify development and streamline workflows for your software projects.
