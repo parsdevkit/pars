@@ -1,4 +1,5 @@
-🌐 [🇺🇸 English](../README.md) [🇹🇷 Türkçe](tr.md) [🇷🇺 Русский](ru.md) [🇸🇦 العربية](sa.md) [🇫🇷 Français](fr.md) [🇨🇳 中文](cn.md) [🇪🇸 Español](es.md) [🇮🇳 हिन्दी](in.md)
+🌐 [🇺🇸 English](../../../README.md) [🇹🇷 Türkçe](../tr/README.md) [🇷🇺 Русский](../ru/README.md) [🇸🇦 العربية](../sa/README.md) [🇫🇷 Français](../fr/README.md) [🇨🇳 中文](../cn/README.md) [🇪🇸 Español](../es/README.md) [🇮🇳 हिन्दी](../in/README.md)
+
 
 # Pars Dev Kit
 
@@ -71,4 +72,4 @@ Bu proje **[Apache-2.0 Lisansı](https://github.com/parsdevkit/pars/blob/main/LI
 
 ### Sonuç
 
-Pars Dev Kit, geliştiricileri yüksek kaliteli geliştirme ve ölçeklenebilir iş akışları için araçlarla güçlendirmek üzere oluşturulmuştur. Kaynakları keşfedin ve büyüyen topluluğumuzun bir parçası olun!
+Pars Dev Kit, geliştiricileri yüksek kaliteli geliştirme ve ölçeklenebilir iş akışları için araçlarla güçlendirmek üzere oluşturulmuştur. Kaynakları keşfedin ve büyüyen topluluğumuzun bir parçası olun!`
