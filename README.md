@@ -1,4 +1,4 @@
-🌐 [🇺🇸 English](README.md) [🇹🇷 Türkçe](README/tr.md) [🇷🇺 Русский](README/ru.md) [🇸🇦 العربية](README/sa.md) [🇫🇷 Français](README/fr.md) [🇨🇳 中文](README/cn.md) [🇪🇸 Español](README/es.md) [🇮🇳 हिन्दी](README/in.md)
+🌐 [🇺🇸 English](README.md) [🇹🇷 Türkçe](docs/i18n/tr/README.md) [🇷🇺 Русский](docs/i18n/ru/README.md) [🇸🇦 العربية](docs/i18n/sa/README.md) [🇫🇷 Français](docs/i18n/fr/README.md) [🇨🇳 中文](docs/i18n/cn/README.md) [🇪🇸 Español](docs/i18n/es/README.md) [🇮🇳 हिन्दी](docs/i18n/in/README.md)
 
 
 # Pars Dev Kit
