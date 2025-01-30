@@ -1,6 +1,5 @@
 🌐 [🇺🇸 English](../../../README.md) [🇹🇷 Türkçe](../tr/README.md) [🇷🇺 Русский](../ru/README.md) [🇸🇦 العربية](../sa/README.md) [🇫🇷 Français](../fr/README.md) [🇨🇳 中文](../cn/README.md) [🇪🇸 Español](../es/README.md) [🇮🇳 हिन्दी](../in/README.md)
 
-
 # Pars Dev Kit
 
 **Pars** projesine hoş geldiniz! Bu depo, yazılım projeleriniz için geliştirme süreçlerini basitleştiren ve iş akışlarını düzenleyen araçlar ve kaynaklar sunar.
@@ -11,11 +10,11 @@
 
 ## Temel Özellikler
 
-- **Çekirdek İşlevsellik**: Temel geliştirme görevleri için sağlam çerçeveler ve kütüphaneler.
-- **Kapsamlı Analiz**: Kod kalitesini ve performansını analiz etmek ve optimize etmek için araçlar.
-- **Düzenlenmiş CI/CD**: Verimli entegrasyon ve teslimat süreçleri için önceden tanımlanmış yapılandırmalar.
-- **Kapsamlı Dokümantasyon**: Başlamanıza ve ileri düzey kavramları öğrenmenize yardımcı olacak net ve detaylı kılavuzlar.
-- **Modüler Tasarım**: Yalnızca ihtiyacınız olanı entegre etmenize olanak sağlayan esnek mimari.
+-   **Çekirdek İşlevsellik**: Temel geliştirme görevleri için sağlam çerçeveler ve kütüphaneler.
+-   **Kapsamlı Analiz**: Kod kalitesini ve performansını analiz etmek ve optimize etmek için araçlar.
+-   **Düzenlenmiş CI/CD**: Verimli entegrasyon ve teslimat süreçleri için önceden tanımlanmış yapılandırmalar.
+-   **Kapsamlı Dokümantasyon**: Başlamanıza ve ileri düzey kavramları öğrenmenize yardımcı olacak net ve detaylı kılavuzlar.
+-   **Modüler Tasarım**: Yalnızca ihtiyacınız olanı entegre etmenize olanak sağlayan esnek mimari.
 
 ## Başlarken
 
@@ -34,31 +33,32 @@ Pars ile başlamak için detaylı [Başlangıç Kılavuzu](https://docs.parsdevk
 
 Sorunsuz bir deneyim için dokümantasyon ve kılavuzlarımızı inceleyin:
 
-- 🛠️ [Kurulum Kılavuzu](https://github.com/parsdevkit/pars/blob/main/docs/installation.md)
-- 📘 [Kullanım Kılavuzu](https://github.com/parsdevkit/pars/blob/main/docs/user-guide.md)
-- 🛡️ [Sorun Giderme](https://github.com/parsdevkit/pars/blob/main/docs/troubleshooting.md)
-- ❓ [Sık Sorulan Sorular](https://github.com/parsdevkit/pars/blob/main/docs/faq.md)
+-   🛠️ [Kurulum Kılavuzu](https://github.com/parsdevkit/pars/blob/main/docs/installation.md)
+-   📘 [Kullanım Kılavuzu](https://github.com/parsdevkit/pars/blob/main/docs/user-guide.md)
+-   🛡️ [Sorun Giderme](https://github.com/parsdevkit/pars/blob/main/docs/troubleshooting.md)
+-   ❓ [Sık Sorulan Sorular](https://github.com/parsdevkit/pars/blob/main/docs/faq.md)
+-   📖 [Sürüm Geçmişi](./CHANGELOG.md)
 
 ## Topluluk ve Kaynaklar
 
 Topluluğumuza katılın ve ilgili kaynakları keşfedin:
 
-- 🏠 [Ana Sayfa](https://www.parsdevkit.net)
-- 🌐 [Proje Deposu](https://github.com/parsdevkit/pars)
-- 📖 [README](https://github.com/parsdevkit/pars#readme)
-- 💬 [Tartışma Forumu](https://github.com/parsdevkit/pars/discussions)
-- 💖 [Sponsorlar ve Destekçiler](https://github.com/parsdevkit/pars/blob/main/docs/sponsors.md)
-- 🚩 [Dönüm Noktaları](https://github.com/parsdevkit/pars/milestones)
-- 🗂️ [Proje Panosu](https://github.com/parsdevkit/pars/projects)
+-   🏠 [Ana Sayfa](https://www.parsdevkit.net)
+-   🌐 [Proje Deposu](https://github.com/parsdevkit/pars)
+-   📖 [README](https://github.com/parsdevkit/pars#readme)
+-   💬 [Tartışma Forumu](https://github.com/parsdevkit/pars/discussions)
+-   💖 [Sponsorlar ve Destekçiler](https://github.com/parsdevkit/pars/blob/main/docs/sponsors.md)
+-   🚩 [Dönüm Noktaları](https://github.com/parsdevkit/pars/milestones)
+-   🗂️ [Proje Panosu](https://github.com/parsdevkit/pars/projects)
 
 ## Sosyal Medya
 
 Bağlantıda kalın ve güncel bilgileri takip edin:
 
-- 🐦 [Twitter](https://twitter.com/parsdevkit)
-- 📘 [Facebook](https://facebook.com/parsdevkit)
-- 💼 [LinkedIn](https://linkedin.com/company/parsdevkit)
-- 🎥 [YouTube](https://www.youtube.com/parsdevkit)
+-   🐦 [Twitter](https://twitter.com/parsdevkit)
+-   📘 [Facebook](https://facebook.com/parsdevkit)
+-   💼 [LinkedIn](https://linkedin.com/company/parsdevkit)
+-   🎥 [YouTube](https://www.youtube.com/parsdevkit)
 
 ## Katkıda Bulunma Kılavuzu
 
