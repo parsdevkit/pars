@@ -27,7 +27,16 @@ if(VERSION_MATCH)
 else()
     message(FATAL_ERROR "Invalid version format: ${APP_TAG}")
 endif()
-    
+
+string(REGEX MATCH "([0-9]+)\\.([0-9]+)\\.([0-9]+)" SEMVER_MATCH ${VERSION_SEMVER})
+if(SEMVER_MATCH)
+    set(VERSION_MAJOR ${CMAKE_MATCH_1})
+    set(VERSION_MINOR ${CMAKE_MATCH_2})
+    set(VERSION_PATCH ${CMAKE_MATCH_3})
+else()
+    message(FATAL_ERROR "Invalid semver format: ${VERSION_SEMVER}")
+endif()
+
 set(RAW_VERSION "${VERSION_SEMVER}")
 
 set(PRE_RELEASE_CHANNELS "none" "dev" "test" "alpha" "beta" "preview")

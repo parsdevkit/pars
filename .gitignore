@@ -1,3 +1,5 @@
+.scannerwork/
+.pnotes/
 /bin/**
 /bins/**
 /packages/**

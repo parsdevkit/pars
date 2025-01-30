@@ -59,8 +59,8 @@ func executeFunc(cmd *cobra.Command, args []string) {
 	path := fmt.Sprintf("Path:\t\t%v", group.Specifications.Path)
 	fmt.Println(path)
 
-	_package := fmt.Sprintf("Package:\t%v", group.Specifications.GetPackageString())
-	fmt.Println(_package)
+	packageName := fmt.Sprintf("Package:\t%v", group.Specifications.GetPackageString())
+	fmt.Println(packageName)
 
 	projectService := services.NewApplicationProjectService(utils.GetEnvironment())
 	projectList, err := projectService.ListByGroupName(group.Name)
