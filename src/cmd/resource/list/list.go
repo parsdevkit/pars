@@ -96,5 +96,4 @@ func executeFunc(cmd *cobra.Command, args []string) {
 
 }
 
-func init() {
-}
+

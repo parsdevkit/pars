@@ -40,7 +40,7 @@ func Div(x, y interface{}) float64 {
 	if y == 0 {
 		panic("division by zero")
 	}
-	return toFloat64(x) / toFloat64(x)
+	return toFloat64(x) / toFloat64(y)
 }
 
 func Max(x, y interface{}) float64 {

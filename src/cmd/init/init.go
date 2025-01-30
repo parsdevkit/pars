@@ -82,8 +82,7 @@ func executeFunc(cmd *cobra.Command, args []string) {
 	fmt.Printf("New workspace (%v) created at: %v\n", workspace.Specifications.Name, workspace.Specifications.Path)
 }
 
-func init() {
-}
+
 
 func validArguments(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
 	if len(args) == 0 {

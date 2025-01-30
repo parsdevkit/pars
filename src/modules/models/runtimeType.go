@@ -50,8 +50,6 @@ func RuntimeTypeEnumFromString(enum string) (RuntimeType, error) {
 		return RuntimeTypes.GO, nil
 	case strings.ToLower("NodeJS"):
 		return RuntimeTypes.NodeJS, nil
-	case strings.ToLower("NodeJS"):
-		return RuntimeTypes.NodeJS, nil
 	default:
 		return "Unknown", fmt.Errorf("unknown state: %s", enum)
 	}

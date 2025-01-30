@@ -44,8 +44,6 @@ func LanguageTypeEnumFromString(enum string) (LanguageType, error) {
 		return LanguageTypes.GO, nil
 	case strings.ToLower("TypeScript"):
 		return LanguageTypes.TypeScript, nil
-	case strings.ToLower("TypeScript"):
-		return LanguageTypes.TypeScript, nil
 	default:
 		return "Unknown", fmt.Errorf("unknown state: %s", enum)
 	}

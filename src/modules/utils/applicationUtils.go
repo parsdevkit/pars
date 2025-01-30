@@ -328,9 +328,9 @@ func GetCodeBaseLocation() string {
 		}
 		return project_root
 	} else if GetStage() == string(StageTypes.Dev) {
-		project_root := os.Getenv("PARS_PROJECT_ROOT")
+		projectRoot := os.Getenv("PARS_PROJECT_ROOT")
 
-		return project_root
+		return projectRoot
 	}
 
 	return ""
