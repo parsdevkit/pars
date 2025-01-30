@@ -1,4 +1,5 @@
 {
+    "editor.formatOnSave": true,
     "go.toolsEnvVars": {
         "GOFLAGS": "-mod=readonly"
     },
@@ -13,5 +14,9 @@
     },
     "files.exclude": {
         "**/vendor": true
+    },
+    "sonarlint.connectedMode.project": {
+        "connectionId": "http-localhost-9000",
+        "projectKey": "pars"
     }
 }
